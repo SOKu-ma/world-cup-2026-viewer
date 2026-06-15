@@ -1,0 +1,1821 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex,nofollow,noarchive,noimageindex">
+    <meta name="googlebot" content="noindex,nofollow,noarchive,noimageindex">
+    <title>World Cup 2026 FACT / Simulator</title>
+    <style>
+        :root {
+            --ink: #1f2933;
+            --muted: #65758b;
+            --line: #d7dde6;
+            --panel: #ffffff;
+            --canvas: #f4f6f9;
+            --navy: #17324d;
+            --green: #0f8a5f;
+            --green-soft: #dff7ec;
+            --amber: #a16207;
+            --amber-soft: #fff3c4;
+            --red: #c93535;
+            --red-soft: #ffe4e4;
+            --blue-soft: #e8f1ff;
+            --shadow: 0 12px 26px rgba(20, 32, 48, 0.08);
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            background: var(--canvas);
+            color: var(--ink);
+            font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
+            letter-spacing: 0;
+        }
+
+        .page {
+            max-width: 1500px;
+            margin: 0 auto;
+            padding: 22px;
+        }
+
+        .app-header {
+            background: var(--panel);
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            padding: 18px 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .header-row {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 18px;
+            flex-wrap: wrap;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: clamp(24px, 3vw, 36px);
+            line-height: 1.1;
+        }
+
+        .subtitle {
+            margin: 8px 0 0;
+            color: var(--muted);
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .mode-switch {
+            display: inline-grid;
+            grid-template-columns: repeat(2, minmax(118px, 1fr));
+            gap: 4px;
+            padding: 4px;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: #eef2f7;
+        }
+
+        .mode-button,
+        .action-button,
+        .primary-button {
+            min-height: 40px;
+            border: 1px solid transparent;
+            border-radius: 6px;
+            padding: 0 14px;
+            font: inherit;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.16s, border 0.16s, color 0.16s, transform 0.16s;
+        }
+
+        .mode-button {
+            background: transparent;
+            color: var(--muted);
+        }
+
+        .mode-button:focus-visible,
+        .action-button:focus-visible,
+        .primary-button:focus-visible {
+            outline: 3px solid rgba(23, 50, 77, 0.24);
+            outline-offset: 2px;
+        }
+
+        .mode-button.is-active {
+            background: var(--panel);
+            border-color: var(--line);
+            color: var(--navy);
+            box-shadow: 0 2px 8px rgba(31, 41, 51, 0.08);
+        }
+
+        .action-button {
+            background: var(--panel);
+            border-color: var(--line);
+            color: var(--ink);
+        }
+
+        .primary-button {
+            background: var(--navy);
+            color: #fff;
+        }
+
+        button:hover { transform: translateY(-1px); }
+
+        main { margin-top: 18px; }
+
+        .toolbar {
+            position: sticky;
+            top: 10px;
+            z-index: 20;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+            padding: 12px;
+            background: rgba(244, 246, 249, 0.94);
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            backdrop-filter: blur(10px);
+        }
+
+        .toolbar-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+        }
+
+        .source-line {
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.4;
+        }
+
+        .source-line strong { color: var(--ink); }
+
+        .section-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            gap: 16px;
+            margin: 24px 0 12px;
+        }
+
+        h2 {
+            margin: 0;
+            font-size: 22px;
+            line-height: 1.2;
+        }
+
+        .section-note {
+            margin: 0;
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.45;
+            text-align: right;
+        }
+
+        .legend {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 12px;
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .legend-item {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .swatch {
+            width: 14px;
+            height: 14px;
+            border: 1px solid var(--line);
+            border-radius: 3px;
+        }
+
+        .swatch.green { background: var(--green-soft); }
+        .swatch.amber { background: var(--amber-soft); }
+        .swatch.blue { background: var(--blue-soft); }
+
+        .groups-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+            gap: 14px;
+            align-items: start;
+        }
+
+        .group-card,
+        .stage-panel,
+        .empty-panel {
+            background: var(--panel);
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            box-shadow: 0 4px 14px rgba(20, 32, 48, 0.05);
+        }
+
+        .group-card {
+            padding: 12px;
+            overflow: hidden;
+        }
+
+        .group-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--line);
+        }
+
+        .group-title h3 {
+            margin: 0;
+            font-size: 17px;
+        }
+
+        .group-meta {
+            color: var(--muted);
+            font-size: 12px;
+            white-space: nowrap;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+            font-size: 12px;
+        }
+
+        th, td {
+            padding: 6px 4px;
+            border-bottom: 1px solid #edf0f5;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        th {
+            color: var(--muted);
+            background: #f0f3f7;
+            font-size: 11px;
+            font-weight: 800;
+        }
+
+        .rank-col { width: 28px; }
+        .team-col { width: auto; }
+        .num-col { width: 33px; }
+
+        .team-name,
+        .team-cell {
+            text-align: left;
+            overflow-wrap: anywhere;
+        }
+
+        .team-cell {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            min-width: 0;
+        }
+
+        .team-flag {
+            flex: 0 0 auto;
+            width: 22px;
+            height: 18px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(31, 41, 51, 0.18);
+            border-radius: 3px;
+            background: #fff;
+            font-size: 15px;
+            line-height: 1;
+            box-shadow: 0 1px 2px rgba(20, 32, 48, 0.08);
+        }
+
+        .team-code {
+            flex: 0 0 auto;
+            min-width: 34px;
+            color: var(--muted);
+            font-size: 11px;
+            font-weight: 800;
+        }
+
+        .qualified-top2 { background: var(--green-soft); font-weight: 800; }
+        .qualified-third { background: var(--amber-soft); font-weight: 800; }
+        .incomplete-rank { background: var(--blue-soft); }
+
+        .match-list {
+            display: grid;
+            gap: 7px;
+            margin-top: 12px;
+        }
+
+        .fact-match-row,
+        .bracket-match-card,
+        .sim-match-card {
+            border: 1px solid var(--line);
+            border-radius: 6px;
+            background: #fbfcfe;
+        }
+
+        .fact-match-row {
+            display: grid;
+            grid-template-columns: minmax(54px, 0.5fr) minmax(0, 1fr) auto minmax(0, 1fr) auto;
+            align-items: center;
+            gap: 7px;
+            padding: 7px;
+            min-height: 46px;
+        }
+
+        .match-date {
+            color: var(--muted);
+            font-size: 11px;
+            line-height: 1.25;
+        }
+
+        .match-team {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            min-width: 0;
+            font-size: 12px;
+            font-weight: 700;
+            overflow-wrap: anywhere;
+        }
+
+        .match-team.home {
+            justify-content: flex-end;
+            text-align: right;
+        }
+
+        .match-team.away {
+            justify-content: flex-start;
+            text-align: left;
+        }
+
+        .match-team-name {
+            min-width: 0;
+            overflow-wrap: anywhere;
+        }
+
+        .score-display {
+            display: grid;
+            grid-template-columns: 28px 8px 28px;
+            align-items: center;
+            gap: 3px;
+            padding: 5px 7px;
+            border-radius: 999px;
+            background: #eef2f7;
+            color: var(--ink);
+            font-size: 13px;
+            font-weight: 900;
+            white-space: nowrap;
+        }
+
+        .score-display span {
+            color: var(--muted);
+            text-align: center;
+            font-weight: 800;
+        }
+
+        .score-value { text-align: center; }
+
+        .status-pill {
+            justify-self: end;
+            min-width: 44px;
+            padding: 4px 7px;
+            border-radius: 999px;
+            font-size: 10px;
+            font-weight: 900;
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        .status-final { color: var(--green); background: var(--green-soft); }
+        .status-live { color: var(--red); background: var(--red-soft); }
+        .status-scheduled { color: var(--muted); background: #eef2f7; }
+
+        .bracket-tree-shell {
+            background: var(--panel);
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        .bracket-tree-toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 14px;
+            border-bottom: 1px solid var(--line);
+            background: #f8fafc;
+            color: var(--muted);
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .bracket-tree-viewport {
+            overflow-x: auto;
+            overflow-y: hidden;
+            padding: 14px;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .bracket-tree {
+            position: relative;
+            width: var(--tree-width);
+            height: var(--tree-height);
+            min-width: var(--tree-width);
+            background:
+                linear-gradient(90deg, rgba(215, 221, 230, 0.38) 1px, transparent 1px) 0 0 / 200px 100%,
+                linear-gradient(180deg, #fff 0%, #fbfcfe 100%);
+            border-radius: 8px;
+        }
+
+        .tree-lines {
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .tree-edge {
+            fill: none;
+            stroke: #26313f;
+            stroke-width: 2;
+            stroke-linecap: square;
+            stroke-linejoin: round;
+        }
+
+        .tree-edge.is-active {
+            stroke: #ef233c;
+            stroke-width: 4;
+        }
+
+        .tree-stage-label {
+            position: absolute;
+            z-index: 3;
+            top: 16px;
+            color: var(--muted);
+            font-size: 11px;
+            font-weight: 900;
+            text-align: center;
+            letter-spacing: 0;
+        }
+
+        .tree-node {
+            position: absolute;
+            z-index: 2;
+            display: grid;
+            grid-template-rows: auto 1fr;
+            gap: 4px;
+            padding: 6px;
+            border: 2px solid #1f2933;
+            border-radius: 8px;
+            background: #fff;
+            box-shadow: 0 5px 12px rgba(20, 32, 48, 0.12);
+        }
+
+        .tree-node.is-center {
+            z-index: 4;
+            border-color: #ef233c;
+            border-width: 4px;
+            text-align: center;
+            background: #fff;
+        }
+
+        .tree-node.is-third {
+            border-color: #8da0b7;
+            background: #fbfcfe;
+        }
+
+        .tree-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 6px;
+            color: var(--muted);
+            font-size: 10px;
+            font-weight: 900;
+            line-height: 1.1;
+        }
+
+        .tree-node.is-center .tree-meta {
+            justify-content: center;
+            color: var(--red);
+            font-size: 12px;
+        }
+
+        .tree-teams {
+            display: grid;
+            gap: 3px;
+            min-width: 0;
+        }
+
+        .tree-team-row {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto;
+            align-items: center;
+            gap: 6px;
+            min-width: 0;
+            min-height: 20px;
+            padding: 2px 5px;
+            border-radius: 5px;
+        }
+
+        .tree-team-row.is-winner {
+            background: var(--red-soft);
+            color: #9f1d1d;
+            font-weight: 900;
+        }
+
+        .tree-team-name {
+            min-width: 0;
+            font-size: 12px;
+            font-weight: 900;
+            line-height: 1.15;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .tree-team-sub {
+            display: block;
+            margin-top: 1px;
+            color: var(--muted);
+            font-size: 9px;
+            font-weight: 700;
+            line-height: 1.1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .tree-score {
+            min-width: 28px;
+            padding: 1px 5px;
+            border-radius: 999px;
+            background: #edf0f5;
+            color: var(--ink);
+            font-size: 11px;
+            font-weight: 900;
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        .tree-inline-score {
+            flex: 0 1 auto;
+            max-width: 84px;
+            padding: 2px 6px;
+            border-radius: 999px;
+            background: #1f2933;
+            color: #fff;
+            font-size: 11px;
+            font-weight: 900;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .tree-center-title {
+            margin: 1px 0 3px;
+            font-size: 13px;
+            font-weight: 900;
+        }
+
+        .tree-champion {
+            margin-top: 4px;
+            color: var(--red);
+            font-size: 15px;
+            font-weight: 900;
+            line-height: 1.15;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .champion-panel,
+        .empty-panel {
+            padding: 18px;
+            text-align: center;
+        }
+
+        .champion-panel {
+            border: 1px solid rgba(15, 138, 95, 0.4);
+            background: var(--green-soft);
+            border-radius: 8px;
+            font-size: 22px;
+            font-weight: 900;
+        }
+
+        .loading {
+            padding: 28px;
+            color: var(--muted);
+            text-align: center;
+            background: var(--panel);
+            border: 1px solid var(--line);
+            border-radius: 8px;
+        }
+
+        .error-box {
+            padding: 12px;
+            border: 1px solid rgba(201, 53, 53, 0.35);
+            background: var(--red-soft);
+            border-radius: 8px;
+            color: #8f2424;
+            font-weight: 700;
+        }
+
+        @media (max-width: 720px) {
+            .page { padding: 12px; }
+            .toolbar { position: static; align-items: stretch; flex-direction: column; }
+            .toolbar-actions { justify-content: stretch; }
+            .toolbar-actions button { flex: 1 1 140px; }
+            .section-head { align-items: flex-start; flex-direction: column; }
+            .section-note { text-align: left; }
+            .groups-container { grid-template-columns: 1fr; }
+            th:nth-child(4),
+            td:nth-child(4),
+            th:nth-child(5),
+            td:nth-child(5),
+            th:nth-child(6),
+            td:nth-child(6),
+            th:nth-child(7),
+            td:nth-child(7),
+            th:nth-child(8),
+            td:nth-child(8) {
+                display: none;
+            }
+            .team-code { display: none; }
+            .fact-match-row {
+                grid-template-columns: minmax(42px, 0.45fr) minmax(0, 1fr) auto minmax(0, 1fr);
+            }
+            .status-pill {
+                grid-column: 1 / -1;
+                justify-self: start;
+            }
+            .mode-switch {
+                width: 100%;
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="page">
+    <header class="app-header">
+        <div class="header-row">
+            <div>
+                <h1>World Cup 2026</h1>
+                <p class="subtitle">FACT とシミュレーションを切り替えて、グループリーグと決勝トーナメントを同じページで確認できます。</p>
+            </div>
+            <div class="mode-switch" role="tablist" aria-label="表示モード">
+                <button class="mode-button is-active" type="button" data-mode="fact">FACT</button>
+                <button class="mode-button" type="button" data-mode="simulation">SIM</button>
+            </div>
+        </div>
+    </header>
+
+    <main id="app">
+        <div class="loading">FACT データを読み込んでいます。</div>
+    </main>
+</div>
+
+<script>
+const SNAPSHOT_URL = "data/fifa-2026-snapshot.json";
+
+const GROUPS = "ABCDEFGHIJKL".split("");
+const THIRD_PLACE_SLOTS = new Set(["3ABCDF", "3CDFGH", "3CEFHI", "3EHIJK", "3BEFIJ", "3AEHIJ", "3EFGIJ", "3DEIJL"]);
+
+const TEAM_NAME_JA = {
+    "Algeria": "アルジェリア",
+    "Argentina": "アルゼンチン",
+    "Australia": "オーストラリア",
+    "Austria": "オーストリア",
+    "Belgium": "ベルギー",
+    "Bosnia and Herzegovina": "ボスニア・ヘルツェゴビナ",
+    "Brazil": "ブラジル",
+    "Cabo Verde": "カーボベルデ",
+    "Canada": "カナダ",
+    "Colombia": "コロンビア",
+    "Congo DR": "コンゴ民主共和国",
+    "Côte d'Ivoire": "コートジボワール",
+    "Croatia": "クロアチア",
+    "Curaçao": "キュラソー",
+    "Czechia": "チェコ",
+    "Ecuador": "エクアドル",
+    "Egypt": "エジプト",
+    "England": "イングランド",
+    "France": "フランス",
+    "Germany": "ドイツ",
+    "Ghana": "ガーナ",
+    "Haiti": "ハイチ",
+    "IR Iran": "イラン",
+    "Iraq": "イラク",
+    "Japan": "日本",
+    "Jordan": "ヨルダン",
+    "Korea Republic": "韓国",
+    "Mexico": "メキシコ",
+    "Morocco": "モロッコ",
+    "Netherlands": "オランダ",
+    "New Zealand": "ニュージーランド",
+    "Norway": "ノルウェー",
+    "Panama": "パナマ",
+    "Paraguay": "パラグアイ",
+    "Portugal": "ポルトガル",
+    "Qatar": "カタール",
+    "Saudi Arabia": "サウジアラビア",
+    "Scotland": "スコットランド",
+    "Senegal": "セネガル",
+    "South Africa": "南アフリカ",
+    "Spain": "スペイン",
+    "Sweden": "スウェーデン",
+    "Switzerland": "スイス",
+    "Tunisia": "チュニジア",
+    "Türkiye": "トルコ",
+    "Uruguay": "ウルグアイ",
+    "USA": "アメリカ",
+    "Uzbekistan": "ウズベキスタン"
+};
+
+const TEAM_FLAG_CODE = {
+    "アルジェリア": "DZ",
+    "アルゼンチン": "AR",
+    "オーストラリア": "AU",
+    "オーストリア": "AT",
+    "ベルギー": "BE",
+    "ボスニア・ヘルツェゴビナ": "BA",
+    "ブラジル": "BR",
+    "カーボベルデ": "CV",
+    "カナダ": "CA",
+    "コロンビア": "CO",
+    "コンゴ民主共和国": "CD",
+    "コートジボワール": "CI",
+    "クロアチア": "HR",
+    "キュラソー": "CW",
+    "チェコ": "CZ",
+    "エクアドル": "EC",
+    "エジプト": "EG",
+    "イングランド": "GB-ENG",
+    "フランス": "FR",
+    "ドイツ": "DE",
+    "ガーナ": "GH",
+    "ハイチ": "HT",
+    "イラン": "IR",
+    "イラク": "IQ",
+    "日本": "JP",
+    "ヨルダン": "JO",
+    "韓国": "KR",
+    "メキシコ": "MX",
+    "モロッコ": "MA",
+    "オランダ": "NL",
+    "ニュージーランド": "NZ",
+    "ノルウェー": "NO",
+    "パナマ": "PA",
+    "パラグアイ": "PY",
+    "ポルトガル": "PT",
+    "カタール": "QA",
+    "サウジアラビア": "SA",
+    "スコットランド": "GB-SCT",
+    "セネガル": "SN",
+    "南アフリカ": "ZA",
+    "スペイン": "ES",
+    "スウェーデン": "SE",
+    "スイス": "CH",
+    "チュニジア": "TN",
+    "トルコ": "TR",
+    "ウルグアイ": "UY",
+    "アメリカ": "US",
+    "ウズベキスタン": "UZ"
+};
+
+const FIFA_FLAG_CODE = {
+    ALG: "DZ",
+    ARG: "AR",
+    AUS: "AU",
+    AUT: "AT",
+    BEL: "BE",
+    BIH: "BA",
+    BRA: "BR",
+    CAN: "CA",
+    CIV: "CI",
+    COD: "CD",
+    COL: "CO",
+    CPV: "CV",
+    CRO: "HR",
+    CUW: "CW",
+    CZE: "CZ",
+    ECU: "EC",
+    EGY: "EG",
+    ENG: "GB-ENG",
+    ESP: "ES",
+    FRA: "FR",
+    GER: "DE",
+    GHA: "GH",
+    HAI: "HT",
+    IRN: "IR",
+    IRQ: "IQ",
+    JOR: "JO",
+    JPN: "JP",
+    KOR: "KR",
+    KSA: "SA",
+    MAR: "MA",
+    MEX: "MX",
+    NED: "NL",
+    NOR: "NO",
+    NZL: "NZ",
+    PAN: "PA",
+    PAR: "PY",
+    POR: "PT",
+    QAT: "QA",
+    RSA: "ZA",
+    SCO: "GB-SCT",
+    SEN: "SN",
+    SUI: "CH",
+    SWE: "SE",
+    TUN: "TN",
+    TUR: "TR",
+    URU: "UY",
+    USA: "US",
+    UZB: "UZ"
+};
+
+const TEAM_RATINGS = {
+    "メキシコ": 80, "南アフリカ": 73, "韓国": 77, "チェコ": 77,
+    "カナダ": 76, "ボスニア・ヘルツェゴビナ": 74, "カタール": 75, "スイス": 81,
+    "ブラジル": 89, "モロッコ": 82, "ハイチ": 68, "スコットランド": 76,
+    "アメリカ": 79, "パラグアイ": 75, "オーストラリア": 76, "トルコ": 78,
+    "ドイツ": 88, "キュラソー": 65, "コートジボワール": 78, "エクアドル": 80,
+    "オランダ": 86, "日本": 82, "スウェーデン": 79, "チュニジア": 74,
+    "ベルギー": 85, "エジプト": 77, "イラン": 78, "ニュージーランド": 71,
+    "スペイン": 89, "カーボベルデ": 72, "サウジアラビア": 74, "ウルグアイ": 84,
+    "フランス": 91, "セネガル": 80, "イラク": 73, "ノルウェー": 79,
+    "アルゼンチン": 92, "アルジェリア": 77, "オーストリア": 81, "ヨルダン": 72,
+    "ポルトガル": 88, "コンゴ民主共和国": 74, "ウズベキスタン": 75, "コロンビア": 83,
+    "イングランド": 90, "クロアチア": 83, "ガーナ": 75, "パナマ": 73
+};
+
+const SIM_GROUPS = {
+    A: ["メキシコ", "南アフリカ", "韓国", "チェコ"],
+    B: ["カナダ", "ボスニア・ヘルツェゴビナ", "カタール", "スイス"],
+    C: ["ブラジル", "モロッコ", "ハイチ", "スコットランド"],
+    D: ["アメリカ", "パラグアイ", "オーストラリア", "トルコ"],
+    E: ["ドイツ", "キュラソー", "コートジボワール", "エクアドル"],
+    F: ["オランダ", "日本", "スウェーデン", "チュニジア"],
+    G: ["ベルギー", "エジプト", "イラン", "ニュージーランド"],
+    H: ["スペイン", "カーボベルデ", "サウジアラビア", "ウルグアイ"],
+    I: ["フランス", "セネガル", "イラク", "ノルウェー"],
+    J: ["アルゼンチン", "アルジェリア", "オーストリア", "ヨルダン"],
+    K: ["ポルトガル", "コンゴ民主共和国", "ウズベキスタン", "コロンビア"],
+    L: ["イングランド", "クロアチア", "ガーナ", "パナマ"]
+};
+
+const FALLBACK_BRACKET = [
+    { stage: "Round of 32", number: 73, date: "2026-06-28T19:00:00Z", a: "2A", b: "2B" },
+    { stage: "Round of 32", number: 74, date: "2026-06-29T20:30:00Z", a: "1E", b: "3ABCDF" },
+    { stage: "Round of 32", number: 75, date: "2026-06-30T01:00:00Z", a: "1F", b: "2C" },
+    { stage: "Round of 32", number: 76, date: "2026-06-29T17:00:00Z", a: "1C", b: "2F" },
+    { stage: "Round of 32", number: 77, date: "2026-06-30T21:00:00Z", a: "1I", b: "3CDFGH" },
+    { stage: "Round of 32", number: 78, date: "2026-06-30T17:00:00Z", a: "2E", b: "2I" },
+    { stage: "Round of 32", number: 79, date: "2026-07-01T01:00:00Z", a: "1A", b: "3CEFHI" },
+    { stage: "Round of 32", number: 80, date: "2026-07-01T16:00:00Z", a: "1L", b: "3EHIJK" },
+    { stage: "Round of 32", number: 81, date: "2026-07-02T00:00:00Z", a: "1D", b: "3BEFIJ" },
+    { stage: "Round of 32", number: 82, date: "2026-07-01T20:00:00Z", a: "1G", b: "3AEHIJ" },
+    { stage: "Round of 32", number: 83, date: "2026-07-02T23:00:00Z", a: "2K", b: "2L" },
+    { stage: "Round of 32", number: 84, date: "2026-07-02T19:00:00Z", a: "1H", b: "2J" },
+    { stage: "Round of 32", number: 85, date: "2026-07-03T03:00:00Z", a: "1B", b: "3EFGIJ" },
+    { stage: "Round of 32", number: 86, date: "2026-07-03T22:00:00Z", a: "1J", b: "2H" },
+    { stage: "Round of 32", number: 87, date: "2026-07-04T01:30:00Z", a: "1K", b: "3DEIJL" },
+    { stage: "Round of 32", number: 88, date: "2026-07-03T18:00:00Z", a: "2D", b: "2G" },
+    { stage: "Round of 16", number: 89, date: "2026-07-04T21:00:00Z", a: "W74", b: "W77" },
+    { stage: "Round of 16", number: 90, date: "2026-07-04T17:00:00Z", a: "W73", b: "W75" },
+    { stage: "Round of 16", number: 91, date: "2026-07-05T20:00:00Z", a: "W76", b: "W78" },
+    { stage: "Round of 16", number: 92, date: "2026-07-06T00:00:00Z", a: "W79", b: "W80" },
+    { stage: "Round of 16", number: 93, date: "2026-07-06T19:00:00Z", a: "W83", b: "W84" },
+    { stage: "Round of 16", number: 94, date: "2026-07-07T00:00:00Z", a: "W81", b: "W82" },
+    { stage: "Round of 16", number: 95, date: "2026-07-07T16:00:00Z", a: "W86", b: "W88" },
+    { stage: "Round of 16", number: 96, date: "2026-07-07T20:00:00Z", a: "W85", b: "W87" },
+    { stage: "Quarter-final", number: 97, date: "2026-07-09T20:00:00Z", a: "W89", b: "W90" },
+    { stage: "Quarter-final", number: 98, date: "2026-07-10T19:00:00Z", a: "W93", b: "W94" },
+    { stage: "Quarter-final", number: 99, date: "2026-07-11T21:00:00Z", a: "W91", b: "W92" },
+    { stage: "Quarter-final", number: 100, date: "2026-07-12T01:00:00Z", a: "W95", b: "W96" },
+    { stage: "Semi-final", number: 101, date: "2026-07-14T19:00:00Z", a: "W97", b: "W98" },
+    { stage: "Semi-final", number: 102, date: "2026-07-15T19:00:00Z", a: "W99", b: "W100" },
+    { stage: "Play-off for third place", number: 103, date: "2026-07-18T21:00:00Z", a: "RU101", b: "RU102" },
+    { stage: "Final", number: 104, date: "2026-07-19T19:00:00Z", a: "W101", b: "W102" }
+];
+
+const STAGE_ORDER = ["Round of 32", "Round of 16", "Quarter-final", "Semi-final", "Play-off for third place", "Final"];
+const STAGE_LABELS = {
+    "Round of 32": "ラウンド32",
+    "Round of 16": "ラウンド16",
+    "Quarter-final": "準々決勝",
+    "Semi-final": "準決勝",
+    "Play-off for third place": "3位決定戦",
+    "Final": "決勝"
+};
+
+const BRACKET_TREE = {
+    width: 1860,
+    height: 1040,
+    cardWidth: 172,
+    cardHeight: 108,
+    finalWidth: 230,
+    finalHeight: 140,
+    thirdWidth: 172,
+    thirdHeight: 130,
+    top: 60,
+    rowGap: 8,
+    leftColumns: {
+        "Round of 32": 24,
+        "Round of 16": 224,
+        "Quarter-final": 424,
+        "Semi-final": 624
+    },
+    centerX: 815,
+    rightColumns: {
+        "Semi-final": 1064,
+        "Quarter-final": 1264,
+        "Round of 16": 1464,
+        "Round of 32": 1664
+    }
+};
+
+let state = {
+    mode: "fact",
+    factLoading: true,
+    factError: "",
+    matches: [],
+    standingsOrder: {},
+    bracket: [...FALLBACK_BRACKET],
+    sourceLabel: "",
+    simulation: null
+};
+
+const app = document.getElementById("app");
+
+document.querySelectorAll("[data-mode]").forEach((button) => {
+    button.addEventListener("click", () => {
+        state.mode = button.dataset.mode;
+        document.querySelectorAll("[data-mode]").forEach((item) => item.classList.toggle("is-active", item.dataset.mode === state.mode));
+        render();
+    });
+});
+
+app.addEventListener("click", (event) => {
+    const action = event.target.closest("[data-action]");
+    if (!action) return;
+
+    if (action.dataset.action === "refresh-fact") loadFactData();
+    if (action.dataset.action === "simulate") {
+        state.simulation = runSimulation();
+        renderSimulation();
+    }
+});
+
+loadFactData();
+
+async function loadFactData() {
+    state.factLoading = true;
+    state.factError = "";
+    render();
+
+    try {
+        const snapshot = await fetchJson(SNAPSHOT_URL);
+
+        state.matches = snapshot.matches || [];
+        state.standingsOrder = snapshot.standingsOrder || {};
+        state.bracket = snapshot.bracket?.length ? snapshot.bracket : [...FALLBACK_BRACKET];
+        state.sourceLabel = `同梱データ作成: ${formatDateTime(snapshot.fetchedAt)}`;
+    } catch (error) {
+        state.factError = "同梱データを読み込めませんでした。時間を置いて再読み込みしてください。";
+        state.bracket = [...FALLBACK_BRACKET];
+    } finally {
+        state.factLoading = false;
+        render();
+    }
+}
+
+async function fetchJson(url) {
+    const response = await fetch(url, { cache: "no-store" });
+    if (!response.ok) throw new Error(`${response.status} ${url}`);
+    return response.json();
+}
+
+function render() {
+    if (state.mode === "fact") renderFact();
+    else renderSimulation();
+}
+
+function renderFact() {
+    if (state.factLoading) {
+        app.innerHTML = `<div class="loading">FACT データを読み込んでいます。</div>`;
+        return;
+    }
+
+    const groupData = computeStandings(state.matches, state.standingsOrder);
+    app.innerHTML = `
+        <div class="toolbar">
+            <div class="source-line">
+                <strong>FACT モード</strong><br>
+                ${escapeHtml(state.sourceLabel || "同梱データ未読み込み")} / 非公式・非商用サイト / FIFAとは関係ありません / データ出典:
+                <a href="https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026" target="_blank" rel="noopener noreferrer">FIFA.com</a>
+            </div>
+            <div class="toolbar-actions">
+                <button class="action-button" type="button" data-action="refresh-fact">同梱データ再読み込み</button>
+            </div>
+        </div>
+        ${state.factError ? `<div class="error-box">${escapeHtml(state.factError)}</div>` : ""}
+        <section>
+            <div class="section-head">
+                <h2>グループリーグ</h2>
+                <p class="section-note">FIFA.com の公開情報を元にした同梱データだけを表示します。</p>
+            </div>
+            <div class="legend">
+                <span class="legend-item"><span class="swatch green"></span>上位2チーム</span>
+                <span class="legend-item"><span class="swatch amber"></span>3位の上位8枠</span>
+                <span class="legend-item"><span class="swatch blue"></span>未消化を含む暫定順位</span>
+            </div>
+            <div class="groups-container">
+                ${GROUPS.map((group) => renderFactGroup(group, groupData[group] || [])).join("")}
+            </div>
+        </section>
+        <section>
+            <div class="section-head">
+                <h2>決勝トーナメント</h2>
+                <p class="section-note">Match 73-104 の公開枠順で表示しています。</p>
+            </div>
+            ${renderFactBracket(groupData)}
+        </section>
+    `;
+}
+
+function renderFactGroup(group, teams) {
+    const matches = state.matches.filter((match) => match.group === group);
+    const completeCount = matches.filter((match) => hasScore(match)).length;
+    return `
+        <article class="group-card">
+            <div class="group-title">
+                <h3>グループ ${group}</h3>
+                <span class="group-meta">${completeCount}/6 試合反映</span>
+            </div>
+            <table aria-label="グループ${group}順位表">
+                <thead>
+                    <tr>
+                        <th class="rank-col">順</th>
+                        <th class="team-col team-name">チーム</th>
+                        <th class="num-col">試</th>
+                        <th class="num-col">勝</th>
+                        <th class="num-col">分</th>
+                        <th class="num-col">敗</th>
+                        <th class="num-col">得</th>
+                        <th class="num-col">失</th>
+                        <th class="num-col">差</th>
+                        <th class="num-col">点</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${teams.map((team, index) => renderStandingRow(team, index, completeCount < 6)).join("")}
+                </tbody>
+            </table>
+            <div class="match-list">
+                ${matches.map(renderFactMatchRow).join("")}
+            </div>
+        </article>
+    `;
+}
+
+function renderStandingRow(team, index, incomplete) {
+    let rowClass = "";
+    if (index < 2) rowClass = "qualified-top2";
+    else if (index === 2) rowClass = "qualified-third";
+    else if (incomplete) rowClass = "incomplete-rank";
+
+    return `
+        <tr class="${rowClass}">
+            <td>${index + 1}</td>
+            <td class="team-name">
+                <span class="team-cell">${renderTeamIdentity(team.name, team.code)}</span>
+            </td>
+            <td>${team.played}</td>
+            <td>${team.win}</td>
+            <td>${team.draw}</td>
+            <td>${team.loss}</td>
+            <td>${team.gf}</td>
+            <td>${team.ga}</td>
+            <td>${formatSigned(team.gd)}</td>
+            <td><strong>${team.points}</strong></td>
+        </tr>
+    `;
+}
+
+function renderFactMatchRow(match) {
+    const statusClass = `status-${match.status}`;
+    const statusText = statusLabel(match);
+    return `
+        <div class="fact-match-row">
+            <div class="match-date">M${match.number}<br>${formatShortDate(match.date)}</div>
+            <div class="match-team home">${renderMatchTeam(match.home, match.homeCode)}</div>
+            <div class="score-display" aria-label="${escapeHtml(match.home)} ${scoreValue(match.homeScore)} - ${scoreValue(match.awayScore)} ${escapeHtml(match.away)}">
+                <strong class="score-value">${scoreValue(match.homeScore)}</strong>
+                <span>-</span>
+                <strong class="score-value">${scoreValue(match.awayScore)}</strong>
+            </div>
+            <div class="match-team away">${renderMatchTeam(match.away, match.awayCode)}</div>
+            <div class="status-pill ${statusClass}">${escapeHtml(statusText)}</div>
+        </div>
+    `;
+}
+
+function renderTeamIdentity(name, code = "") {
+    const flag = getTeamFlag(name, code);
+    return `
+        ${flag ? `<span class="team-flag" aria-hidden="true">${flag}</span>` : ""}
+        <span class="team-code">${escapeHtml(code || "")}</span>
+        <span class="team-label-text">${escapeHtml(name)}</span>
+    `;
+}
+
+function renderMatchTeam(name, code = "") {
+    const flag = getTeamFlag(name, code);
+    return `
+        ${flag ? `<span class="team-flag" aria-hidden="true">${flag}</span>` : ""}
+        <span class="match-team-name">${escapeHtml(name)}</span>
+    `;
+}
+
+function renderFactBracket(groupData) {
+    const standings = Object.fromEntries(Object.entries(groupData).map(([group, teams]) => [group, teams]));
+    return renderBracketTree({
+        mode: "fact",
+        matches: state.bracket,
+        getMatchView: (match) => createFactMatchView(match, standings)
+    });
+}
+
+function renderBracketTree({ mode, matches, getMatchView, champion = "" }) {
+    const model = buildBracketTreeModel(matches, mode);
+    if (!model) return `<div class="empty-panel">トーナメント表を表示できませんでした。</div>`;
+
+    return `
+        <div class="bracket-tree-shell">
+            <div class="bracket-tree-toolbar">
+                <span>枝葉型トーナメント表</span>
+                <span>Match 73-104</span>
+            </div>
+            <div class="bracket-tree-viewport" tabindex="0" aria-label="決勝トーナメント表">
+                <div class="bracket-tree" style="--tree-width: ${BRACKET_TREE.width}px; --tree-height: ${BRACKET_TREE.height}px;">
+                    <svg class="tree-lines" viewBox="0 0 ${BRACKET_TREE.width} ${BRACKET_TREE.height}" aria-hidden="true">
+                        ${model.edges.map(renderTreeEdge).join("")}
+                    </svg>
+                    ${renderTreeStageLabels()}
+                    ${model.nodes.map((node) => renderTreeNode(node, getMatchView, champion)).join("")}
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+function buildBracketTreeModel(matches, mode) {
+    const byNumber = new Map(matches.map((match) => [Number(match.number), match]));
+    const final = matches.find((match) => match.stage === "Final") || byNumber.get(104);
+    if (!final) return null;
+
+    const leftRoot = getWinnerSourceMatch(final.a, byNumber);
+    const rightRoot = getWinnerSourceMatch(final.b, byNumber);
+    if (!leftRoot || !rightRoot) return null;
+
+    const left = buildBracketSide(leftRoot, "left", byNumber);
+    const right = buildBracketSide(rightRoot, "right", byNumber);
+    const finalCenterY = (left.rootCenterY + right.rootCenterY) / 2;
+    const finalNode = {
+        id: Number(final.number),
+        type: "final",
+        match: final,
+        x: BRACKET_TREE.centerX,
+        y: finalCenterY - BRACKET_TREE.finalHeight / 2,
+        w: BRACKET_TREE.finalWidth,
+        h: BRACKET_TREE.finalHeight
+    };
+    const third = matches.find((match) => match.stage === "Play-off for third place");
+    const thirdNode = third ? {
+        id: Number(third.number),
+        type: "third",
+        match: third,
+        x: BRACKET_TREE.centerX + (BRACKET_TREE.finalWidth - BRACKET_TREE.thirdWidth) / 2,
+        y: BRACKET_TREE.height - BRACKET_TREE.thirdHeight - 26,
+        w: BRACKET_TREE.thirdWidth,
+        h: BRACKET_TREE.thirdHeight
+    } : null;
+
+    const nodes = [...left.nodes, ...right.nodes, finalNode, ...(thirdNode ? [thirdNode] : [])];
+    const nodesById = new Map(nodes.map((node) => [node.id, node]));
+    const edges = [
+        ...left.edges.map((edge) => ({ ...edge, active: mode === "simulation" })),
+        ...right.edges.map((edge) => ({ ...edge, active: mode === "simulation" })),
+        { from: Number(leftRoot.number), to: Number(final.number), active: mode === "simulation" },
+        { from: Number(rightRoot.number), to: Number(final.number), active: mode === "simulation" }
+    ].map((edge) => ({ ...edge, path: makeTreeEdgePath(nodesById.get(edge.from), nodesById.get(edge.to)) })).filter((edge) => edge.path);
+
+    return { nodes, edges };
+}
+
+function buildBracketSide(root, side, byNumber) {
+    const leaves = collectLeafMatches(root, byNumber);
+    const leafCenterByMatch = new Map();
+    const stepY = BRACKET_TREE.cardHeight + BRACKET_TREE.rowGap;
+    leaves.forEach((match, index) => {
+        leafCenterByMatch.set(Number(match.number), BRACKET_TREE.top + BRACKET_TREE.cardHeight / 2 + index * stepY);
+    });
+
+    const nodes = [];
+    const edges = [];
+
+    function place(match) {
+        const children = getWinnerChildMatches(match, byNumber);
+        const childCenters = children.map(place);
+        const centerY = childCenters.length
+            ? childCenters.reduce((sum, value) => sum + value, 0) / childCenters.length
+            : leafCenterByMatch.get(Number(match.number));
+        const x = side === "left" ? BRACKET_TREE.leftColumns[match.stage] : BRACKET_TREE.rightColumns[match.stage];
+
+        nodes.push({
+            id: Number(match.number),
+            type: "match",
+            side,
+            match,
+            x,
+            y: centerY - BRACKET_TREE.cardHeight / 2,
+            w: BRACKET_TREE.cardWidth,
+            h: BRACKET_TREE.cardHeight
+        });
+
+        children.forEach((child) => {
+            edges.push({ from: Number(child.number), to: Number(match.number), active: false });
+        });
+
+        return centerY;
+    }
+
+    return { nodes, edges, rootCenterY: place(root) };
+}
+
+function collectLeafMatches(match, byNumber) {
+    const children = getWinnerChildMatches(match, byNumber);
+    if (!children.length) return [match];
+    return children.flatMap((child) => collectLeafMatches(child, byNumber));
+}
+
+function getWinnerChildMatches(match, byNumber) {
+    return [match.a, match.b].map((slot) => getWinnerSourceMatch(slot, byNumber)).filter(Boolean);
+}
+
+function getWinnerSourceMatch(slot, byNumber) {
+    const match = /^W(\d+)$/.exec(slot || "");
+    return match ? byNumber.get(Number(match[1])) : null;
+}
+
+function makeTreeEdgePath(from, to) {
+    if (!from || !to) return "";
+    const fromCenterY = from.y + from.h / 2;
+    const toCenterY = to.y + to.h / 2;
+    const movingRight = from.x < to.x;
+    const startX = movingRight ? from.x + from.w : from.x;
+    const endX = movingRight ? to.x : to.x + to.w;
+    const midX = startX + (endX - startX) / 2;
+    return `M ${startX} ${fromCenterY} H ${midX} V ${toCenterY} H ${endX}`;
+}
+
+function renderTreeEdge(edge) {
+    return `<path class="tree-edge ${edge.active ? "is-active" : ""}" d="${edge.path}"></path>`;
+}
+
+function renderTreeStageLabels() {
+    const labels = [
+        ...Object.entries(BRACKET_TREE.leftColumns).map(([stage, x]) => ({ label: STAGE_LABELS[stage], x, w: BRACKET_TREE.cardWidth })),
+        { label: "決勝", x: BRACKET_TREE.centerX, w: BRACKET_TREE.finalWidth },
+        ...Object.entries(BRACKET_TREE.rightColumns).map(([stage, x]) => ({ label: STAGE_LABELS[stage], x, w: BRACKET_TREE.cardWidth }))
+    ];
+
+    return labels.map((item) => `
+        <div class="tree-stage-label" style="left: ${item.x}px; width: ${item.w}px;">${escapeHtml(item.label)}</div>
+    `).join("");
+}
+
+function renderTreeNode(node, getMatchView, champion) {
+    const view = getMatchView(node.match);
+    const nodeClass = node.type === "final" ? "tree-node is-center" : (node.type === "third" ? "tree-node is-third" : "tree-node");
+    const title = node.type === "final" ? `<div class="tree-center-title">優勝決定戦</div>` : (node.type === "third" ? `<div class="tree-center-title">3位決定戦</div>` : "");
+    const score = view.score ? `<span class="tree-inline-score">${escapeHtml(compactScoreLabel(view.score))}</span>` : "";
+    const championText = node.type === "final" && champion ? `<div class="tree-champion">優勝: ${escapeHtml(champion)}</div>` : "";
+
+    return `
+        <article class="${nodeClass}" style="left: ${node.x}px; top: ${node.y}px; width: ${node.w}px; height: ${node.h}px;">
+            <div class="tree-meta">
+                <span>M${node.match.number}</span>
+                ${score}
+                <span>${escapeHtml(formatShortDate(node.match.date))}</span>
+            </div>
+            ${title}
+            <div class="tree-teams">
+                ${view.teams.map(renderTreeTeamRow).join("")}
+            </div>
+            ${championText}
+        </article>
+    `;
+}
+
+function renderTreeTeamRow(team) {
+    return `
+        <div class="tree-team-row ${team.winner ? "is-winner" : ""}">
+            <div>
+                <span class="tree-team-name">${escapeHtml(team.name)}</span>
+                ${team.sub ? `<span class="tree-team-sub">${escapeHtml(team.sub)}</span>` : ""}
+            </div>
+            ${team.score ? `<span class="tree-score">${escapeHtml(team.score)}</span>` : ""}
+        </div>
+    `;
+}
+
+function createFactMatchView(match, standings) {
+    const left = resolveFactSlot(match.a, standings);
+    const right = resolveFactSlot(match.b, standings);
+    return {
+        teams: [
+            { name: left.main, sub: left.sub },
+            { name: right.main, sub: right.sub }
+        ]
+    };
+}
+
+function compactScoreLabel(score) {
+    return score.replace(" 延長", " 延").replace(" PK ", " PK");
+}
+
+function computeStandings(matches, officialOrder = {}) {
+    const groups = {};
+
+    matches.forEach((match) => {
+        if (!groups[match.group]) groups[match.group] = {};
+        ensureTeam(groups[match.group], match.home, match.homeCode, match.homeSeed);
+        ensureTeam(groups[match.group], match.away, match.awayCode, match.awaySeed);
+    });
+
+    matches.filter(hasScore).forEach((match) => {
+        const group = groups[match.group];
+        const home = group[match.home];
+        const away = group[match.away];
+        home.played++;
+        away.played++;
+        home.gf += match.homeScore;
+        home.ga += match.awayScore;
+        away.gf += match.awayScore;
+        away.ga += match.homeScore;
+        home.gd = home.gf - home.ga;
+        away.gd = away.gf - away.ga;
+
+        if (match.homeScore > match.awayScore) {
+            home.points += 3;
+            home.win++;
+            away.loss++;
+        } else if (match.homeScore < match.awayScore) {
+            away.points += 3;
+            away.win++;
+            home.loss++;
+        } else {
+            home.points++;
+            away.points++;
+            home.draw++;
+            away.draw++;
+        }
+    });
+
+    return Object.fromEntries(GROUPS.map((group) => {
+        const teams = Object.values(groups[group] || {}).sort((a, b) => {
+            const officialA = officialOrder[group]?.[a.name] || {};
+            const officialB = officialOrder[group]?.[b.name] || {};
+            return b.points - a.points
+                || b.gd - a.gd
+                || b.gf - a.gf
+                || (officialA.position || 99) - (officialB.position || 99)
+                || (officialA.order || 999) - (officialB.order || 999)
+                || a.seed.localeCompare(b.seed);
+        });
+        return [group, teams];
+    }));
+}
+
+function ensureTeam(group, name, code, seed) {
+    if (!group[name]) {
+        group[name] = { name, code, seed, points: 0, played: 0, win: 0, draw: 0, loss: 0, gf: 0, ga: 0, gd: 0 };
+    }
+}
+
+function resolveFactSlot(slot, standings) {
+    if (!slot) return { main: "未定", sub: "" };
+    if (/^W\d+$/.test(slot)) return { main: `M${slot.slice(1)} 勝者`, sub: "" };
+    if (/^RU\d+$/.test(slot)) return { main: `M${slot.slice(2)} 敗者`, sub: "" };
+
+    const rank = slot[0];
+    if ((rank === "1" || rank === "2") && slot.length === 2) {
+        const group = slot[1];
+        return {
+            main: `${group}組${rank}位`,
+            sub: ""
+        };
+    }
+
+    if (rank === "3") {
+        const letters = slot.slice(1).split("");
+        return {
+            main: `${letters.join("/")}組 3位枠`,
+            sub: ""
+        };
+    }
+
+    return { main: slot, sub: "" };
+}
+
+function renderSimulation() {
+    const sim = state.simulation;
+    app.innerHTML = `
+        <div class="toolbar">
+            <div class="source-line"><strong>SIM モード</strong><br>公開されている大会形式・枠順を使ってランダムに大会を進めます。</div>
+            <div class="toolbar-actions">
+                <button class="primary-button" type="button" data-action="simulate">大会をシミュレートする</button>
+            </div>
+        </div>
+        <section>
+            <div class="section-head">
+                <h2>グループリーグ</h2>
+                <p class="section-note">上位2チームと3位上位8チームがラウンド32へ進みます。</p>
+            </div>
+            <div class="legend">
+                <span class="legend-item"><span class="swatch green"></span>上位2チーム</span>
+                <span class="legend-item"><span class="swatch amber"></span>3位の上位8枠</span>
+            </div>
+            <div class="groups-container">
+                ${sim ? GROUPS.map((group) => renderSimGroup(group, sim.groups[group], sim.bestThirdTeams)).join("") : renderInitialSimGroups()}
+            </div>
+        </section>
+        <section>
+            <div class="section-head">
+                <h2>決勝トーナメント</h2>
+                <p class="section-note">ラウンド32以降も公開枠順で表示します。</p>
+            </div>
+            ${sim ? renderSimBracket(sim) : `<div class="empty-panel">シミュレーションを実行すると結果が表示されます。</div>`}
+        </section>
+        ${sim ? `<div class="champion-panel">優勝: ${escapeHtml(sim.champion.name)}</div>` : ""}
+    `;
+}
+
+function renderInitialSimGroups() {
+    return GROUPS.map((group) => {
+        const teams = SIM_GROUPS[group].map((name, index) => ({
+            name,
+            code: "",
+            played: 0,
+            win: 0,
+            draw: 0,
+            loss: 0,
+            gf: 0,
+            ga: 0,
+            gd: 0,
+            points: 0,
+            seed: `${group}${index + 1}`
+        }));
+        return renderSimGroup(group, teams, []);
+    }).join("");
+}
+
+function renderSimGroup(group, teams, bestThirdTeams) {
+    const bestThirdNames = new Set(bestThirdTeams.map((team) => team.name));
+    return `
+        <article class="group-card">
+            <div class="group-title">
+                <h3>グループ ${group}</h3>
+                <span class="group-meta">SIM</span>
+            </div>
+            <table aria-label="シミュレーショングループ${group}順位表">
+                <thead>
+                    <tr>
+                        <th class="rank-col">順</th>
+                        <th class="team-col team-name">チーム</th>
+                        <th class="num-col">試</th>
+                        <th class="num-col">勝</th>
+                        <th class="num-col">分</th>
+                        <th class="num-col">敗</th>
+                        <th class="num-col">得</th>
+                        <th class="num-col">失</th>
+                        <th class="num-col">差</th>
+                        <th class="num-col">点</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${teams.map((team, index) => {
+                        const rowClass = index < 2 ? "qualified-top2" : (index === 2 && bestThirdNames.has(team.name) ? "qualified-third" : "");
+                        return `
+                            <tr class="${rowClass}">
+                                <td>${index + 1}</td>
+                                <td class="team-name"><span class="team-cell">${renderTeamIdentity(team.name, team.code)}</span></td>
+                                <td>${team.played}</td>
+                                <td>${team.win}</td>
+                                <td>${team.draw}</td>
+                                <td>${team.loss}</td>
+                                <td>${team.gf}</td>
+                                <td>${team.ga}</td>
+                                <td>${formatSigned(team.gd)}</td>
+                                <td><strong>${team.points}</strong></td>
+                            </tr>
+                        `;
+                    }).join("")}
+                </tbody>
+            </table>
+        </article>
+    `;
+}
+
+function runSimulation() {
+    const groups = {};
+    const first = {};
+    const second = {};
+    const thirds = [];
+
+    GROUPS.forEach((group) => {
+        groups[group] = SIM_GROUPS[group].map((name, index) => createSimTeam(name, group, index + 1));
+        for (let i = 0; i < groups[group].length; i++) {
+            for (let j = i + 1; j < groups[group].length; j++) {
+                simulateGroupMatch(groups[group][i], groups[group][j]);
+            }
+        }
+        groups[group].sort(sortSimTeams);
+        groups[group].forEach((team, index) => team.seed = `${group}${index + 1}`);
+        first[group] = groups[group][0];
+        second[group] = groups[group][1];
+        thirds.push(groups[group][2]);
+    });
+
+    const bestThirdTeams = thirds.sort(sortSimTeams).slice(0, 8);
+    const thirdAssignments = assignThirdTeams(bestThirdTeams);
+    const winners = {};
+    const runnersUp = {};
+    const stageResults = {};
+
+    STAGE_ORDER.forEach((stage) => {
+        const stageMatches = state.bracket.filter((match) => match.stage === stage);
+        stageResults[stage] = stageMatches.map((match) => {
+            const teamA = resolveSimSlot(match.a, { first, second, thirdAssignments, winners, runnersUp, matchNumber: match.number });
+            const teamB = resolveSimSlot(match.b, { first, second, thirdAssignments, winners, runnersUp, matchNumber: match.number });
+            const result = simulateKnockoutMatch(teamA, teamB);
+            winners[match.number] = result.winner;
+            runnersUp[match.number] = result.loser;
+            return { ...match, teamA, teamB, result };
+        });
+    });
+
+    const final = stageResults.Final[0];
+    return { groups, bestThirdTeams, stageResults, champion: final.result.winner };
+}
+
+function createSimTeam(name, group, drawPosition) {
+    return {
+        name,
+        rating: TEAM_RATINGS[name] || 75,
+        group,
+        seed: `${group}${drawPosition}`,
+        points: 0,
+        played: 0,
+        win: 0,
+        draw: 0,
+        loss: 0,
+        gf: 0,
+        ga: 0,
+        gd: 0
+    };
+}
+
+function simulateGroupMatch(teamA, teamB) {
+    const score = getGoals(teamA.rating, teamB.rating);
+    teamA.played++;
+    teamB.played++;
+    teamA.gf += score.gf;
+    teamA.ga += score.ga;
+    teamB.gf += score.ga;
+    teamB.ga += score.gf;
+    teamA.gd = teamA.gf - teamA.ga;
+    teamB.gd = teamB.gf - teamB.ga;
+
+    if (score.gf > score.ga) {
+        teamA.points += 3;
+        teamA.win++;
+        teamB.loss++;
+    } else if (score.gf < score.ga) {
+        teamB.points += 3;
+        teamB.win++;
+        teamA.loss++;
+    } else {
+        teamA.points++;
+        teamB.points++;
+        teamA.draw++;
+        teamB.draw++;
+    }
+}
+
+function getGoals(ratingA, ratingB) {
+    const diff = (ratingA - ratingB) / 10;
+    const baseA = Math.max(0.3, 1.25 + diff);
+    const baseB = Math.max(0.3, 1.25 - diff);
+    return {
+        gf: Math.floor(Math.random() * (baseA + 1.5)) + (Math.random() > 0.75 ? 1 : 0),
+        ga: Math.floor(Math.random() * (baseB + 1.5)) + (Math.random() > 0.75 ? 1 : 0)
+    };
+}
+
+function simulateKnockoutMatch(teamA, teamB) {
+    let score = getGoals(teamA.rating, teamB.rating);
+    let label = `${score.gf}-${score.ga}`;
+
+    if (score.gf === score.ga) {
+        score.gf += Math.random() > 0.72 ? 1 : 0;
+        score.ga += Math.random() > 0.72 ? 1 : 0;
+        label = `${score.gf}-${score.ga} 延長`;
+
+        if (score.gf === score.ga) {
+            const pkA = 3 + Math.floor(Math.random() * 3);
+            const pkB = pkA === 5 ? 4 : (Math.random() > 0.5 ? pkA + 1 : pkA - 1);
+            label = `${label} PK ${pkA}-${pkB}`;
+            return pkA > pkB ? { winner: teamA, loser: teamB, score: label } : { winner: teamB, loser: teamA, score: label };
+        }
+    }
+
+    return score.gf > score.ga ? { winner: teamA, loser: teamB, score: label } : { winner: teamB, loser: teamA, score: label };
+}
+
+function assignThirdTeams(bestThirdTeams) {
+    const slots = state.bracket
+        .filter((match) => match.stage === "Round of 32")
+        .flatMap((match) => [match.a, match.b].map((slot) => ({ matchNumber: match.number, slot })))
+        .filter(({ slot }) => THIRD_PLACE_SLOTS.has(slot));
+
+    const assignments = {};
+    const used = new Set();
+
+    function backtrack(index) {
+        if (index >= slots.length) return true;
+        const current = slots[index];
+        const allowed = current.slot.slice(1).split("");
+        for (const team of bestThirdTeams) {
+            if (used.has(team.group) || !allowed.includes(team.group)) continue;
+            used.add(team.group);
+            assignments[`${current.matchNumber}:${current.slot}`] = team;
+            if (backtrack(index + 1)) return true;
+            used.delete(team.group);
+            delete assignments[`${current.matchNumber}:${current.slot}`];
+        }
+        return false;
+    }
+
+    backtrack(0);
+    return assignments;
+}
+
+function resolveSimSlot(slot, context) {
+    if (/^1[A-L]$/.test(slot)) return context.first[slot[1]];
+    if (/^2[A-L]$/.test(slot)) return context.second[slot[1]];
+    if (THIRD_PLACE_SLOTS.has(slot)) return context.thirdAssignments[`${context.matchNumber}:${slot}`] || context.thirdAssignments[Object.keys(context.thirdAssignments).find((key) => key.endsWith(`:${slot}`))];
+    if (/^W\d+$/.test(slot)) return context.winners[Number(slot.slice(1))];
+    if (/^RU\d+$/.test(slot)) return context.runnersUp[Number(slot.slice(2))];
+    return { name: slot, rating: 70, seed: slot };
+}
+
+function renderSimBracket(sim) {
+    const matches = STAGE_ORDER.flatMap((stage) => sim.stageResults[stage] || []);
+    return renderBracketTree({
+        mode: "simulation",
+        matches,
+        champion: sim.champion.name,
+        getMatchView: createSimMatchView
+    });
+}
+
+function createSimMatchView(match) {
+    return {
+        score: match.result.score,
+        teams: [
+            {
+                name: match.teamA.name,
+                sub: match.teamA.seed || match.a,
+                winner: match.result.winner.name === match.teamA.name
+            },
+            {
+                name: match.teamB.name,
+                sub: match.teamB.seed || match.b,
+                winner: match.result.winner.name === match.teamB.name
+            }
+        ]
+    };
+}
+
+function sortSimTeams(a, b) {
+    return b.points - a.points || b.gd - a.gd || b.gf - a.gf || b.rating - a.rating || a.name.localeCompare(b.name);
+}
+
+function getText(value) {
+    return value?.[0]?.Description || "";
+}
+
+function getTeamName(team) {
+    return getText(team?.TeamName) || team?.ShortClubName || "";
+}
+
+function localizeTeam(name) {
+    return TEAM_NAME_JA[name] || name || "未定";
+}
+
+function getTeamFlag(name, code = "") {
+    const normalizedCode = String(code || "").toUpperCase();
+    const flagCode = FIFA_FLAG_CODE[normalizedCode] || TEAM_FLAG_CODE[name] || TEAM_FLAG_CODE[localizeTeam(name)];
+    if (!flagCode) return "";
+    return flagCodeToEmoji(flagCode);
+}
+
+function flagCodeToEmoji(code) {
+    if (code === "GB-ENG") return "\u{1F3F4}\u{E0067}\u{E0062}\u{E0065}\u{E006E}\u{E0067}\u{E007F}";
+    if (code === "GB-SCT") return "\u{1F3F4}\u{E0067}\u{E0062}\u{E0073}\u{E0063}\u{E0074}\u{E007F}";
+    if (!/^[A-Z]{2}$/.test(code)) return "";
+    return String.fromCodePoint(...[...code].map((char) => 127397 + char.charCodeAt(0)));
+}
+
+function normalizeScore(score) {
+    return Number.isFinite(score) ? score : null;
+}
+
+function hasScore(match) {
+    return Number.isFinite(match.homeScore) && Number.isFinite(match.awayScore);
+}
+
+function getFactStatus(match) {
+    if (match.ResultType === 1 || match.MatchStatus === 0) return "final";
+    if (Number.isFinite(match.HomeTeamScore) && Number.isFinite(match.AwayTeamScore)) return "live";
+    return "scheduled";
+}
+
+function statusLabel(match) {
+    if (match.status === "final") return "FT";
+    if (match.status === "live") return match.matchTime ? `LIVE ${match.matchTime}` : "LIVE";
+    return "予定";
+}
+
+function formatSigned(value) {
+    return value > 0 ? `+${value}` : `${value}`;
+}
+
+function scoreValue(score) {
+    return Number.isFinite(score) ? String(score) : "–";
+}
+
+function formatShortDate(value) {
+    if (!value) return "";
+    const date = new Date(value);
+    return new Intl.DateTimeFormat("ja-JP", {
+        month: "numeric",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit"
+    }).format(date);
+}
+
+function formatDateTime(value) {
+    return new Intl.DateTimeFormat("ja-JP", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit"
+    }).format(new Date(value));
+}
+
+function escapeHtml(value) {
+    return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+}
+
+</script>
+</body>
+</html>
