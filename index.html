@@ -56,6 +56,14 @@
             flex-wrap: wrap;
         }
 
+        .header-controls {
+            display: flex;
+            align-items: flex-end;
+            justify-content: flex-end;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
         h1 {
             margin: 0;
             font-size: clamp(24px, 3vw, 36px);
@@ -80,6 +88,7 @@
         }
 
         .mode-button,
+        .update-button,
         .action-button,
         .primary-button {
             min-height: 40px;
@@ -92,19 +101,52 @@
             transition: background 0.16s, border 0.16s, color 0.16s, transform 0.16s;
         }
 
-        .mode-button {
+        .mode-button,
+        .update-button {
             background: transparent;
             color: var(--muted);
         }
 
+        .update-panel {
+            display: grid;
+            gap: 4px;
+            justify-items: end;
+        }
+
+        .update-label,
+        .refresh-status {
+            color: var(--muted);
+            font-size: 11px;
+            font-weight: 800;
+            line-height: 1.2;
+        }
+
+        .update-switch {
+            display: inline-grid;
+            grid-template-columns: repeat(2, minmax(72px, 1fr));
+            gap: 4px;
+            padding: 4px;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: #eef2f7;
+        }
+
+        .update-button {
+            min-height: 32px;
+            padding: 0 10px;
+            font-size: 12px;
+        }
+
         .mode-button:focus-visible,
+        .update-button:focus-visible,
         .action-button:focus-visible,
         .primary-button:focus-visible {
             outline: 3px solid rgba(23, 50, 77, 0.24);
             outline-offset: 2px;
         }
 
-        .mode-button.is-active {
+        .mode-button.is-active,
+        .update-button.is-active {
             background: var(--panel);
             border-color: var(--line);
             color: var(--navy);
@@ -913,6 +955,18 @@
                 width: 100%;
                 grid-template-columns: repeat(3, minmax(0, 1fr));
             }
+            .header-controls,
+            .update-panel,
+            .update-switch {
+                width: 100%;
+            }
+            .update-panel {
+                justify-items: stretch;
+            }
+            .refresh-status,
+            .update-label {
+                text-align: left;
+            }
             .mode-button {
                 padding: 0 8px;
                 font-size: 13px;
@@ -931,10 +985,20 @@
                 <h1>World Cup 2026</h1>
                 <p class="subtitle">FACT、シミュレーション、日本の勝ち上がりルートを切り替えて、グループリーグと決勝トーナメントを確認できます。</p>
             </div>
-            <div class="mode-switch" role="tablist" aria-label="表示モード">
-                <button class="mode-button is-active" type="button" data-mode="fact">FACT</button>
-                <button class="mode-button" type="button" data-mode="simulation">SIM</button>
-                <button class="mode-button" type="button" data-mode="japan">JAPAN</button>
+            <div class="header-controls">
+                <div class="mode-switch" role="tablist" aria-label="表示モード">
+                    <button class="mode-button is-active" type="button" data-mode="fact">FACT</button>
+                    <button class="mode-button" type="button" data-mode="simulation">SIM</button>
+                    <button class="mode-button" type="button" data-mode="japan">JAPAN</button>
+                </div>
+                <div class="update-panel">
+                    <div class="update-label">更新モード</div>
+                    <div class="update-switch" role="group" aria-label="データ更新モード">
+                        <button class="update-button is-active" type="button" data-update-mode="manual">手動</button>
+                        <button class="update-button" type="button" data-update-mode="auto">自動</button>
+                    </div>
+                    <div class="refresh-status" data-refresh-status>未取得</div>
+                </div>
             </div>
         </div>
     </header>
@@ -946,6 +1010,8 @@
 
 <script>
 const SNAPSHOT_URL = "data/fifa-2026-snapshot.json";
+const AUTO_REFRESH_INTERVAL_MS = 60 * 1000;
+const UPDATE_MODE_STORAGE_KEY = "worldCup2026UpdateMode";
 
 const GROUPS = "ABCDEFGHIJKL".split("");
 const THIRD_PLACE_SLOTS = new Set(["3ABCDF", "3CDFGH", "3CEFHI", "3EHIJK", "3BEFIJ", "3AEHIJ", "3EFGIJ", "3DEIJL"]);
@@ -1316,22 +1382,37 @@ const BRACKET_TREE = {
 
 let state = {
     mode: "fact",
+    updateMode: getInitialUpdateMode(),
     factLoading: true,
+    factRefreshing: false,
     factError: "",
     matches: [],
     standingsOrder: {},
     bracket: [...FALLBACK_BRACKET],
     sourceLabel: "",
+    lastRefreshAt: "",
     simulation: null
 };
 
 const app = document.getElementById("app");
+const refreshStatus = document.querySelector("[data-refresh-status]");
+let autoRefreshTimer = null;
 
 document.querySelectorAll("[data-mode]").forEach((button) => {
     button.addEventListener("click", () => {
         state.mode = button.dataset.mode;
         document.querySelectorAll("[data-mode]").forEach((item) => item.classList.toggle("is-active", item.dataset.mode === state.mode));
         render();
+    });
+});
+
+document.querySelectorAll("[data-update-mode]").forEach((button) => {
+    button.addEventListener("click", () => {
+        state.updateMode = button.dataset.updateMode === "auto" ? "auto" : "manual";
+        saveUpdateMode(state.updateMode);
+        syncUpdateControls();
+        configureAutoRefresh();
+        if (state.updateMode === "auto") loadFactData({ silent: true });
     });
 });
 
@@ -1346,12 +1427,15 @@ app.addEventListener("click", (event) => {
     }
 });
 
-loadFactData();
+syncUpdateControls();
+loadFactData().finally(configureAutoRefresh);
 
-async function loadFactData() {
-    state.factLoading = true;
+async function loadFactData({ silent = false } = {}) {
+    if (!silent) state.factLoading = true;
+    state.factRefreshing = true;
     state.factError = "";
-    render();
+    syncUpdateControls();
+    if (!silent) render();
 
     try {
         const snapshot = await fetchJson(SNAPSHOT_URL);
@@ -1360,13 +1444,53 @@ async function loadFactData() {
         state.standingsOrder = snapshot.standingsOrder || {};
         state.bracket = snapshot.bracket?.length ? snapshot.bracket : [...FALLBACK_BRACKET];
         state.sourceLabel = `同梱データ作成: ${formatDateTime(snapshot.fetchedAt)}`;
+        state.lastRefreshAt = new Date().toISOString();
     } catch (error) {
         state.factError = "同梱データを読み込めませんでした。時間を置いて再読み込みしてください。";
         state.bracket = [...FALLBACK_BRACKET];
     } finally {
         state.factLoading = false;
+        state.factRefreshing = false;
         render();
+        syncUpdateControls();
     }
+}
+
+function getInitialUpdateMode() {
+    try {
+        return localStorage.getItem(UPDATE_MODE_STORAGE_KEY) === "auto" ? "auto" : "manual";
+    } catch (error) {
+        return "manual";
+    }
+}
+
+function saveUpdateMode(mode) {
+    try {
+        localStorage.setItem(UPDATE_MODE_STORAGE_KEY, mode);
+    } catch (error) {
+        // Ignore storage failures; the in-memory mode still works for this page session.
+    }
+}
+
+function configureAutoRefresh() {
+    if (autoRefreshTimer) clearInterval(autoRefreshTimer);
+    autoRefreshTimer = null;
+
+    if (state.updateMode !== "auto") return;
+    autoRefreshTimer = setInterval(() => loadFactData({ silent: true }), AUTO_REFRESH_INTERVAL_MS);
+}
+
+function syncUpdateControls() {
+    document.querySelectorAll("[data-update-mode]").forEach((button) => {
+        button.classList.toggle("is-active", button.dataset.updateMode === state.updateMode);
+    });
+
+    if (!refreshStatus) return;
+    const modeLabel = state.updateMode === "auto" ? "自動" : "手動";
+    const refreshLabel = state.factRefreshing
+        ? "更新中"
+        : (state.lastRefreshAt ? `最終取得: ${formatDateTime(state.lastRefreshAt)}` : "未取得");
+    refreshStatus.textContent = `${modeLabel} / ${refreshLabel}`;
 }
 
 async function fetchJson(url) {
