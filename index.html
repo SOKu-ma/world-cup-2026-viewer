@@ -255,6 +255,19 @@
             line-height: 1.18;
         }
 
+        .path-opponent-team {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            max-width: 100%;
+        }
+
+        .path-opponent-team .team-flag {
+            width: 28px;
+            height: 22px;
+            font-size: 18px;
+        }
+
         .path-route {
             display: inline-flex;
             width: fit-content;
@@ -266,6 +279,85 @@
             font-size: 12px;
             font-weight: 900;
             overflow-wrap: anywhere;
+        }
+
+        .expected-team-panel {
+            display: grid;
+            gap: 8px;
+            padding: 10px;
+            border: 1px solid #edf0f5;
+            border-radius: 8px;
+            background: #fbfcfe;
+        }
+
+        .expected-team-label {
+            color: var(--muted);
+            font-size: 11px;
+            font-weight: 900;
+        }
+
+        .expected-team-row {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .expected-team-main {
+            min-width: 0;
+            font-weight: 900;
+        }
+
+        .expected-team-main .team-cell {
+            font-size: 15px;
+            line-height: 1.2;
+        }
+
+        .expected-rank-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 74px;
+            padding: 4px 7px;
+            border-radius: 999px;
+            background: var(--green-soft);
+            color: var(--green);
+            font-size: 12px;
+            font-weight: 900;
+            white-space: nowrap;
+        }
+
+        .expected-slot-note {
+            color: var(--muted);
+            font-size: 12px;
+            line-height: 1.35;
+        }
+
+        .expected-team-strip {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 7px;
+        }
+
+        .expected-team-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            min-height: 30px;
+            max-width: 100%;
+            padding: 4px 8px;
+            border: 1px solid var(--line);
+            border-radius: 999px;
+            background: #fff;
+            font-size: 12px;
+            font-weight: 900;
+        }
+
+        .expected-team-chip-text {
+            min-width: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
 
         .path-meta,
@@ -1084,6 +1176,58 @@ const TEAM_RATINGS = {
     "イングランド": 90, "クロアチア": 83, "ガーナ": 75, "パナマ": 73
 };
 
+const FIFA_RANKING_UPDATED_AT = "2026-06-11";
+const FIFA_RANKINGS = {
+    "メキシコ": { rank: 14, points: 1687.48, code: "MEX" },
+    "南アフリカ": { rank: 60, points: 1428.38, code: "RSA" },
+    "韓国": { rank: 25, points: 1591.63, code: "KOR" },
+    "チェコ": { rank: 40, points: 1505.74, code: "CZE" },
+    "カナダ": { rank: 30, points: 1559.48, code: "CAN" },
+    "ボスニア・ヘルツェゴビナ": { rank: 64, points: 1387.22, code: "BIH" },
+    "カタール": { rank: 56, points: 1450.31, code: "QAT" },
+    "スイス": { rank: 19, points: 1650.06, code: "SUI" },
+    "ブラジル": { rank: 6, points: 1765.86, code: "BRA" },
+    "モロッコ": { rank: 7, points: 1755.1, code: "MAR" },
+    "ハイチ": { rank: 83, points: 1293.1, code: "HAI" },
+    "スコットランド": { rank: 42, points: 1503.34, code: "SCO" },
+    "アメリカ": { rank: 17, points: 1671.23, code: "USA" },
+    "パラグアイ": { rank: 41, points: 1505.35, code: "PAR" },
+    "オーストラリア": { rank: 27, points: 1579.34, code: "AUS" },
+    "トルコ": { rank: 22, points: 1605.73, code: "TUR" },
+    "ドイツ": { rank: 10, points: 1735.77, code: "GER" },
+    "キュラソー": { rank: 82, points: 1294.77, code: "CUW" },
+    "コートジボワール": { rank: 33, points: 1540.87, code: "CIV" },
+    "エクアドル": { rank: 23, points: 1598.52, code: "ECU" },
+    "オランダ": { rank: 8, points: 1753.57, code: "NED" },
+    "日本": { rank: 18, points: 1661.58, code: "JPN" },
+    "スウェーデン": { rank: 38, points: 1509.79, code: "SWE" },
+    "チュニジア": { rank: 45, points: 1476.41, code: "TUN" },
+    "ベルギー": { rank: 9, points: 1742.24, code: "BEL" },
+    "エジプト": { rank: 29, points: 1562.37, code: "EGY" },
+    "イラン": { rank: 20, points: 1619.58, code: "IRN" },
+    "ニュージーランド": { rank: 85, points: 1275.58, code: "NZL" },
+    "スペイン": { rank: 2, points: 1874.71, code: "ESP" },
+    "カーボベルデ": { rank: 67, points: 1371.11, code: "CPV" },
+    "サウジアラビア": { rank: 61, points: 1423.88, code: "KSA" },
+    "ウルグアイ": { rank: 16, points: 1673.07, code: "URU" },
+    "フランス": { rank: 3, points: 1870.7, code: "FRA" },
+    "セネガル": { rank: 15, points: 1684.07, code: "SEN" },
+    "イラク": { rank: 57, points: 1446.28, code: "IRQ" },
+    "ノルウェー": { rank: 31, points: 1557.44, code: "NOR" },
+    "アルゼンチン": { rank: 1, points: 1877.27, code: "ARG" },
+    "アルジェリア": { rank: 28, points: 1571.03, code: "ALG" },
+    "オーストリア": { rank: 24, points: 1597.4, code: "AUT" },
+    "ヨルダン": { rank: 63, points: 1387.74, code: "JOR" },
+    "ポルトガル": { rank: 5, points: 1767.85, code: "POR" },
+    "コンゴ民主共和国": { rank: 46, points: 1474.43, code: "COD" },
+    "ウズベキスタン": { rank: 50, points: 1458.73, code: "UZB" },
+    "コロンビア": { rank: 13, points: 1698.35, code: "COL" },
+    "イングランド": { rank: 4, points: 1828.02, code: "ENG" },
+    "クロアチア": { rank: 11, points: 1714.87, code: "CRO" },
+    "ガーナ": { rank: 73, points: 1346.88, code: "GHA" },
+    "パナマ": { rank: 34, points: 1539.16, code: "PAN" }
+};
+
 const SIM_GROUPS = {
     A: ["メキシコ", "南アフリカ", "韓国", "チェコ"],
     B: ["カナダ", "ボスニア・ヘルツェゴビナ", "カタール", "スイス"],
@@ -1298,13 +1442,14 @@ function renderJapanPath() {
                 <strong>JAPAN モード</strong><br>
                 日本がグループ ${escapeHtml(japanGroup)} からラウンド32へ進む前提で、順位別の初戦相手を確認します。データ根拠:
                 <a href="https://digitalhub.fifa.com/m/636f5c9c6f29771f/original/FWC2026_regulations_EN.pdf" target="_blank" rel="noopener noreferrer">FIFA World Cup 2026 Regulations</a>
+                / <a href="https://inside.fifa.com/fifa-world-ranking/men" target="_blank" rel="noopener noreferrer">FIFA/Coca-Cola Men's World Ranking</a>
             </div>
         </div>
         ${state.factError ? `<div class="error-box">${escapeHtml(state.factError)}</div>` : ""}
         <section>
             <div class="section-head">
                 <h2>日本のラウンド32相手</h2>
-                <p class="section-note">1位・2位は公開枠順、3位はFIFA規則Annex Cの3位通過組み合わせ表に基づきます。</p>
+                <p class="section-note">各組の1位・2位想定は、${escapeHtml(FIFA_RANKING_UPDATED_AT)}更新のFIFAランク上位2チームで表示します。</p>
             </div>
             <div class="japan-path-grid">
                 ${directScenarios.map(renderJapanDirectScenarioCard).join("")}
@@ -1312,12 +1457,15 @@ function renderJapanPath() {
                     <div class="path-kicker">${escapeHtml(japanGroup)}組3位通過</div>
                     <h3 class="path-title">3位上位8枠に入った場合</h3>
                     <div class="path-opponent">${escapeHtml(thirdOpponents || "未定")}</div>
+                    <div class="expected-team-strip">
+                        ${thirdScenarios.map((scenario) => renderExpectedTeamChip(scenario.expectedOpponent, `${scenario.opponentGroup}組1位`)).join("")}
+                    </div>
                     <div class="path-route">3${escapeHtml(japanGroup)} / ${totalThirdCombos}通り</div>
                     <p class="japan-card-note">3位通過組の8組の組み合わせにより、相手の組が変わります。該当組み合わせは下で相手組ごとに確認できます。</p>
                 </article>
             </div>
             <div class="japan-note-panel">
-                <strong>前提:</strong> 日本は現在の同梱データではグループ ${escapeHtml(japanGroup)} です。3位の場合は、各組3位の成績比較で上位8チームに入らなければラウンド32へ進めません。
+                <strong>前提:</strong> 日本は現在の同梱データではグループ ${escapeHtml(japanGroup)} です。3位の場合は、各組3位の成績比較で上位8チームに入らなければラウンド32へ進めません。想定相手は試合結果予想ではなく、各組内のFIFAランク順です。
             </div>
         </section>
         <section>
@@ -1339,7 +1487,8 @@ function renderJapanDirectScenarioCard(scenario) {
         <article class="japan-path-card is-direct">
             <div class="path-kicker">${escapeHtml(scenario.japanSlotLabel)}</div>
             <h3 class="path-title">${escapeHtml(scenario.title)}</h3>
-            <div class="path-opponent">${escapeHtml(scenario.opponentLabel)} と対戦</div>
+            <div class="path-opponent">${scenario.expectedOpponent ? renderExpectedOpponentHeadline(scenario.expectedOpponent) : `${escapeHtml(scenario.opponentLabel)} と対戦`}</div>
+            ${renderExpectedTeamPanel(scenario.expectedOpponent)}
             <div class="path-route">${escapeHtml(scenario.routeLabel)}</div>
             <p class="path-meta">${escapeHtml(scenario.matchLabel)}</p>
         </article>
@@ -1357,6 +1506,7 @@ function renderJapanThirdScenarioCard(scenario) {
                 <div class="third-card-meta">${escapeHtml(scenario.matchLabel)}</div>
             </div>
             <div class="path-route">${escapeHtml(scenario.routeLabel)}</div>
+            ${renderExpectedTeamPanel(scenario.expectedOpponent)}
             <p class="japan-card-note">F組3位を含む3位通過組の組み合わせが、以下のいずれかになった場合です。</p>
             <details class="third-details">
                 <summary>${scenario.combos.length}通りの組み合わせを表示</summary>
@@ -1370,6 +1520,48 @@ function renderJapanThirdScenarioCard(scenario) {
 
 function renderThirdComboChip(combo) {
     return `<span class="combo-chip">${escapeHtml(formatThirdCombo(combo))}</span>`;
+}
+
+function renderExpectedOpponentHeadline(expectedOpponent) {
+    return `
+        <span class="path-opponent-team">
+            ${renderTeamFlagOnly(expectedOpponent.team.name, expectedOpponent.team.code)}
+            <span>${escapeHtml(expectedOpponent.team.name)} と対戦</span>
+        </span>
+    `;
+}
+
+function renderExpectedTeamPanel(expectedOpponent) {
+    if (!expectedOpponent) return "";
+    const team = expectedOpponent.team;
+    return `
+        <div class="expected-team-panel">
+            <div class="expected-team-label">想定相手</div>
+            <div class="expected-team-row">
+                <div class="expected-team-main"><span class="team-cell">${renderTeamIdentity(team.name, team.code)}</span></div>
+                <div class="expected-rank-badge">FIFA ${team.rank}位</div>
+            </div>
+            <div class="expected-slot-note">
+                ${escapeHtml(expectedOpponent.slotLabel)} / ${escapeHtml(expectedOpponent.groupRankLabel)} / ${formatRankingPoints(team.points)} pt
+            </div>
+        </div>
+    `;
+}
+
+function renderExpectedTeamChip(expectedOpponent, fallbackLabel) {
+    if (!expectedOpponent) return `<span class="expected-team-chip">${escapeHtml(fallbackLabel)}</span>`;
+    const team = expectedOpponent.team;
+    return `
+        <span class="expected-team-chip" title="${escapeHtml(expectedOpponent.slotLabel)}: ${escapeHtml(team.name)} FIFA ${team.rank}位">
+            ${renderTeamFlagOnly(team.name, team.code)}
+            <span class="expected-team-chip-text">${escapeHtml(team.name)} ${team.rank}位</span>
+        </span>
+    `;
+}
+
+function renderTeamFlagOnly(name, code = "") {
+    const flag = getTeamFlag(name, code);
+    return flag ? `<span class="team-flag" aria-hidden="true">${flag}</span>` : "";
 }
 
 function renderFactGroup(group, teams) {
@@ -1771,11 +1963,13 @@ function createJapanDirectScenario(rank, group) {
     const match = findRoundOf32MatchBySlot(japanSlot);
     const opponentSlot = getOpponentSlot(match, japanSlot);
     const opponent = resolveFactSlot(opponentSlot, {});
+    const expectedOpponent = resolveExpectedTeamSlot(opponentSlot);
 
     return {
         title: `${group}組${rank}位の場合`,
         japanSlotLabel: `${japanSlot} / ${group}組${rank}位`,
         opponentLabel: opponent.main || "未定",
+        expectedOpponent,
         routeLabel: match ? `${match.a} vs ${match.b}` : `${japanSlot} vs 未定`,
         matchLabel: formatJapanMatchLabel(match)
     };
@@ -1796,6 +1990,7 @@ function createJapanThirdScenarios(group) {
             return {
                 opponentGroup,
                 opponentLabel: `${opponentGroup}組1位`,
+                expectedOpponent: resolveExpectedTeamSlot(winnerSlot),
                 thirdSlot,
                 combos,
                 routeLabel: match ? `${match.a} vs ${match.b}` : `${winnerSlot} vs ${thirdSlot}`,
@@ -1819,6 +2014,36 @@ function isThirdPlaceSlotForGroup(slot, group) {
     return THIRD_PLACE_SLOTS.has(slot) && slot.slice(1).includes(group);
 }
 
+function resolveExpectedTeamSlot(slot) {
+    const match = /^([12])([A-L])$/.exec(slot || "");
+    if (!match) return null;
+
+    const groupRank = Number(match[1]);
+    const group = match[2];
+    const team = getProjectedGroupTeams(group)[groupRank - 1];
+    if (!team) return null;
+
+    return {
+        slot,
+        group,
+        groupRank,
+        team,
+        slotLabel: `${group}組${groupRank}位想定`,
+        groupRankLabel: `${group}組FIFAランク${groupRank === 1 ? "最上位" : "2番手"}`
+    };
+}
+
+function getProjectedGroupTeams(group) {
+    return (SIM_GROUPS[group] || [])
+        .map((name) => ({
+            name,
+            rank: FIFA_RANKINGS[name]?.rank || 999,
+            points: FIFA_RANKINGS[name]?.points || 0,
+            code: FIFA_RANKINGS[name]?.code || ""
+        }))
+        .sort((a, b) => a.rank - b.rank || b.points - a.points || a.name.localeCompare(b.name));
+}
+
 function formatJapanMatchLabel(match) {
     if (!match) return "Match未定";
     return `M${match.number} / ${formatShortDate(match.date)}`;
@@ -1826,6 +2051,10 @@ function formatJapanMatchLabel(match) {
 
 function formatThirdCombo(combo) {
     return combo.split("").map((group) => `${group}組`).join("/");
+}
+
+function formatRankingPoints(points) {
+    return Number.isFinite(points) ? points.toFixed(2) : "0.00";
 }
 
 function renderSimulation() {
