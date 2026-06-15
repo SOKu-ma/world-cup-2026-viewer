@@ -1,5 +1,5 @@
 {
-  "fetchedAt": "2026-06-15T01:18:13.167Z",
+  "fetchedAt": "2026-06-15T04:06:15.855Z",
   "source": "FIFA.com",
   "matches": [
     {
@@ -213,10 +213,10 @@
       "awayCode": "TUN",
       "homeSeed": "F3",
       "awaySeed": "F4",
-      "homeScore": null,
-      "awayScore": null,
-      "status": "scheduled",
-      "matchTime": ""
+      "homeScore": 5,
+      "awayScore": 1,
+      "status": "final",
+      "matchTime": "97'"
     },
     {
       "id": "400021486",
@@ -1390,32 +1390,14 @@
         "order": 43
       }
     },
-    "F": {
-      "日本": {
-        "position": 1,
-        "order": 5
-      },
-      "オランダ": {
-        "position": 2,
-        "order": 35
-      },
-      "スウェーデン": {
-        "position": 3,
-        "order": 40
-      },
-      "チュニジア": {
-        "position": 4,
-        "order": 47
-      }
-    },
     "A": {
       "メキシコ": {
         "position": 1,
-        "order": 6
+        "order": 5
       },
       "韓国": {
         "position": 2,
-        "order": 33
+        "order": 34
       },
       "チェコ": {
         "position": 3,
@@ -1429,7 +1411,7 @@
     "K": {
       "ポルトガル": {
         "position": 1,
-        "order": 7
+        "order": 6
       },
       "コンゴ民主共和国": {
         "position": 1,
@@ -1447,11 +1429,11 @@
     "C": {
       "スコットランド": {
         "position": 1,
-        "order": 8
+        "order": 7
       },
       "モロッコ": {
         "position": 2,
-        "order": 34
+        "order": 35
       },
       "ブラジル": {
         "position": 3,
@@ -1465,7 +1447,7 @@
     "H": {
       "スペイン": {
         "position": 1,
-        "order": 9
+        "order": 8
       },
       "カーボベルデ": {
         "position": 1,
@@ -1480,6 +1462,24 @@
         "order": 29
       }
     },
+    "F": {
+      "スウェーデン": {
+        "position": 1,
+        "order": 9
+      },
+      "日本": {
+        "position": 2,
+        "order": 33
+      },
+      "オランダ": {
+        "position": 3,
+        "order": 39
+      },
+      "チュニジア": {
+        "position": 4,
+        "order": 47
+      }
+    },
     "B": {
       "スイス": {
         "position": 1,
@@ -1491,7 +1491,7 @@
       },
       "カタール": {
         "position": 3,
-        "order": 39
+        "order": 40
       },
       "ボスニア・ヘルツェゴビナ": {
         "position": 4,
