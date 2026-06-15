@@ -1,5 +1,5 @@
 {
-  "fetchedAt": "2026-06-15T00:44:32.413Z",
+  "fetchedAt": "2026-06-15T01:18:13.167Z",
   "source": "FIFA.com",
   "matches": [
     {
@@ -159,10 +159,10 @@
       "awayCode": "ECU",
       "homeSeed": "E3",
       "awaySeed": "E4",
-      "homeScore": 0,
+      "homeScore": 1,
       "awayScore": 0,
-      "status": "live",
-      "matchTime": "79'"
+      "status": "final",
+      "matchTime": "99'"
     },
     {
       "id": "400021464",
@@ -216,7 +216,7 @@
       "homeScore": null,
       "awayScore": null,
       "status": "scheduled",
-      "matchTime": "0'"
+      "matchTime": ""
     },
     {
       "id": "400021486",
@@ -1377,13 +1377,13 @@
         "position": 1,
         "order": 4
       },
-      "エクアドル": {
+      "コートジボワール": {
         "position": 2,
         "order": 32
       },
-      "コートジボワール": {
+      "エクアドル": {
         "position": 3,
-        "order": 37
+        "order": 38
       },
       "キュラソー": {
         "position": 4,
@@ -1419,7 +1419,7 @@
       },
       "チェコ": {
         "position": 3,
-        "order": 38
+        "order": 37
       },
       "南アフリカ": {
         "position": 4,
