@@ -375,6 +375,43 @@
             line-height: 1.35;
         }
 
+        .expected-group-snapshot {
+            display: grid;
+            gap: 5px;
+            padding-top: 8px;
+            border-top: 1px solid #edf0f5;
+        }
+
+        .expected-group-row {
+            display: grid;
+            grid-template-columns: 24px minmax(0, 1fr) auto;
+            align-items: center;
+            gap: 7px;
+            color: var(--muted);
+            font-size: 12px;
+            line-height: 1.3;
+        }
+
+        .expected-group-row.is-target {
+            color: var(--ink);
+            font-weight: 900;
+        }
+
+        .expected-group-team {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            min-width: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .expected-group-stat {
+            color: inherit;
+            white-space: nowrap;
+        }
+
         .expected-team-strip {
             display: flex;
             flex-wrap: wrap;
@@ -1555,8 +1592,9 @@ function renderJapanPath() {
     }
 
     const japanGroup = getJapanGroup();
-    const directScenarios = [1, 2].map((rank) => createJapanDirectScenario(rank, japanGroup));
-    const thirdScenarios = createJapanThirdScenarios(japanGroup);
+    const projectedStandings = getJapanProjectedStandings();
+    const directScenarios = [1, 2].map((rank) => createJapanDirectScenario(rank, japanGroup, projectedStandings));
+    const thirdScenarios = createJapanThirdScenarios(japanGroup, projectedStandings);
     const totalThirdCombos = thirdScenarios.reduce((sum, scenario) => sum + scenario.combos.length, 0);
     const thirdOpponents = thirdScenarios.map((scenario) => `${scenario.opponentGroup}組1位`).join(" / ");
 
@@ -1566,6 +1604,7 @@ function renderJapanPath() {
                 <strong>JAPAN モード</strong><br>
                 日本がグループ ${escapeHtml(japanGroup)} からラウンド32へ進む前提で、順位別の初戦相手を確認します。データ根拠:
                 <a href="https://digitalhub.fifa.com/m/636f5c9c6f29771f/original/FWC2026_regulations_EN.pdf" target="_blank" rel="noopener noreferrer">FIFA World Cup 2026 Regulations</a>
+                / <a href="https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026" target="_blank" rel="noopener noreferrer">FIFA.com</a>
                 / <a href="https://inside.fifa.com/fifa-world-ranking/men" target="_blank" rel="noopener noreferrer">FIFA/Coca-Cola Men's World Ranking</a>
             </div>
         </div>
@@ -1573,7 +1612,7 @@ function renderJapanPath() {
         <section>
             <div class="section-head">
                 <h2>日本のラウンド32相手</h2>
-                <p class="section-note">各組の1位・2位想定は、${escapeHtml(FIFA_RANKING_UPDATED_AT)}更新のFIFAランク上位2チームで表示します。</p>
+                <p class="section-note">各組の想定順位はFACTモードと同じ現在順位表を使います。勝点、得失点、得点、FIFA.comの表示順をベースにし、FIFAランクは補助情報として表示します。ライブ中の試合は現在スコアを暫定反映します。</p>
             </div>
             <div class="japan-path-grid">
                 ${directScenarios.map(renderJapanDirectScenarioCard).join("")}
@@ -1589,7 +1628,7 @@ function renderJapanPath() {
                 </article>
             </div>
             <div class="japan-note-panel">
-                <strong>前提:</strong> 日本は現在の同梱データではグループ ${escapeHtml(japanGroup)} です。3位の場合は、各組3位の成績比較で上位8チームに入らなければラウンド32へ進めません。想定相手は試合結果予想ではなく、各組内のFIFAランク順です。
+                <strong>前提:</strong> 日本は現在の同梱データではグループ ${escapeHtml(japanGroup)} です。3位の場合は、各組3位の成績比較で上位8チームに入らなければラウンド32へ進めません。初戦段階では未消化試合が多いため、想定相手は現在状況ベースの暫定表示です。
             </div>
         </section>
         <section>
@@ -1663,11 +1702,12 @@ function renderExpectedTeamPanel(expectedOpponent) {
             <div class="expected-team-label">想定相手</div>
             <div class="expected-team-row">
                 <div class="expected-team-main"><span class="team-cell">${renderTeamIdentity(team.name, team.code)}</span></div>
-                <div class="expected-rank-badge">FIFA ${team.rank}位</div>
+                <div class="expected-rank-badge">現在 ${expectedOpponent.groupRank}位</div>
             </div>
             <div class="expected-slot-note">
-                ${escapeHtml(expectedOpponent.slotLabel)} / ${escapeHtml(expectedOpponent.groupRankLabel)} / ${formatRankingPoints(team.points)} pt
+                ${escapeHtml(expectedOpponent.slotLabel)} / ${escapeHtml(formatProjectedTeamRecord(team))} / FIFA ${escapeHtml(formatFifaRank(team.rank))}
             </div>
+            ${renderExpectedGroupSnapshot(expectedOpponent)}
         </div>
     `;
 }
@@ -1676,10 +1716,27 @@ function renderExpectedTeamChip(expectedOpponent, fallbackLabel) {
     if (!expectedOpponent) return `<span class="expected-team-chip">${escapeHtml(fallbackLabel)}</span>`;
     const team = expectedOpponent.team;
     return `
-        <span class="expected-team-chip" title="${escapeHtml(expectedOpponent.slotLabel)}: ${escapeHtml(team.name)} FIFA ${team.rank}位">
+        <span class="expected-team-chip" title="${escapeHtml(expectedOpponent.slotLabel)}: ${escapeHtml(team.name)} 現在${expectedOpponent.groupRank}位 / FIFA ${escapeHtml(formatFifaRank(team.rank))}">
             ${renderTeamFlagOnly(team.name, team.code)}
-            <span class="expected-team-chip-text">${escapeHtml(team.name)} ${team.rank}位</span>
+            <span class="expected-team-chip-text">${escapeHtml(team.name)} 現在${expectedOpponent.groupRank}位</span>
         </span>
+    `;
+}
+
+function renderExpectedGroupSnapshot(expectedOpponent) {
+    const rows = (expectedOpponent.groupSnapshot || []).slice(0, 4);
+    if (!rows.length) return "";
+
+    return `
+        <div class="expected-group-snapshot" aria-label="${escapeHtml(expectedOpponent.group)}組の現在順位">
+            ${rows.map((team, index) => `
+                <div class="expected-group-row ${team.name === expectedOpponent.team.name ? "is-target" : ""}">
+                    <span>${index + 1}</span>
+                    <span class="expected-group-team">${renderTeamFlagOnly(team.name, team.code)}${escapeHtml(team.name)}</span>
+                    <span class="expected-group-stat">${escapeHtml(formatProjectedTeamRecord(team))}</span>
+                </div>
+            `).join("")}
+        </div>
     `;
 }
 
@@ -2082,12 +2139,12 @@ function getJapanGroup() {
     return simGroup?.[0] || JAPAN_DEFAULT_GROUP;
 }
 
-function createJapanDirectScenario(rank, group) {
+function createJapanDirectScenario(rank, group, projectedStandings) {
     const japanSlot = `${rank}${group}`;
     const match = findRoundOf32MatchBySlot(japanSlot);
     const opponentSlot = getOpponentSlot(match, japanSlot);
     const opponent = resolveFactSlot(opponentSlot, {});
-    const expectedOpponent = resolveExpectedTeamSlot(opponentSlot);
+    const expectedOpponent = resolveExpectedTeamSlot(opponentSlot, projectedStandings);
 
     return {
         title: `${group}組${rank}位の場合`,
@@ -2099,7 +2156,7 @@ function createJapanDirectScenario(rank, group) {
     };
 }
 
-function createJapanThirdScenarios(group) {
+function createJapanThirdScenarios(group, projectedStandings) {
     if (group !== JAPAN_DEFAULT_GROUP) return [];
 
     return Object.entries(JAPAN_THIRD_PLACE_COMBOS_BY_OPPONENT)
@@ -2114,7 +2171,7 @@ function createJapanThirdScenarios(group) {
             return {
                 opponentGroup,
                 opponentLabel: `${opponentGroup}組1位`,
-                expectedOpponent: resolveExpectedTeamSlot(winnerSlot),
+                expectedOpponent: resolveExpectedTeamSlot(winnerSlot, projectedStandings),
                 thirdSlot,
                 combos,
                 routeLabel: match ? `${match.a} vs ${match.b}` : `${winnerSlot} vs ${thirdSlot}`,
@@ -2138,13 +2195,51 @@ function isThirdPlaceSlotForGroup(slot, group) {
     return THIRD_PLACE_SLOTS.has(slot) && slot.slice(1).includes(group);
 }
 
-function resolveExpectedTeamSlot(slot) {
+function getJapanProjectedStandings() {
+    const standings = computeStandings(state.matches, state.standingsOrder);
+    return Object.fromEntries(GROUPS.map((group) => {
+        const teams = [...(standings[group] || [])]
+            .sort((a, b) => sortJapanProjectedTeams(a, b, group))
+            .map((team, index) => enrichJapanProjectedTeam(team, index + 1));
+        return [group, teams];
+    }));
+}
+
+function sortJapanProjectedTeams(a, b, group) {
+    const officialA = state.standingsOrder[group]?.[a.name] || {};
+    const officialB = state.standingsOrder[group]?.[b.name] || {};
+    const rankA = FIFA_RANKINGS[a.name] || {};
+    const rankB = FIFA_RANKINGS[b.name] || {};
+
+    return b.points - a.points
+        || b.gd - a.gd
+        || b.gf - a.gf
+        || (officialA.position || 99) - (officialB.position || 99)
+        || (officialA.order || 999) - (officialB.order || 999)
+        || (rankA.rank || 999) - (rankB.rank || 999)
+        || (rankB.points || 0) - (rankA.points || 0)
+        || a.seed.localeCompare(b.seed);
+}
+
+function enrichJapanProjectedTeam(team, position) {
+    const ranking = FIFA_RANKINGS[team.name] || {};
+    return {
+        ...team,
+        projectedPosition: position,
+        rank: ranking.rank || 999,
+        rankingPoints: ranking.points || 0,
+        code: team.code || ranking.code || ""
+    };
+}
+
+function resolveExpectedTeamSlot(slot, projectedStandings) {
     const match = /^([12])([A-L])$/.exec(slot || "");
     if (!match) return null;
 
     const groupRank = Number(match[1]);
     const group = match[2];
-    const team = getProjectedGroupTeams(group)[groupRank - 1];
+    const groupSnapshot = projectedStandings?.[group] || getProjectedGroupTeams(group);
+    const team = groupSnapshot[groupRank - 1];
     if (!team) return null;
 
     return {
@@ -2152,20 +2247,27 @@ function resolveExpectedTeamSlot(slot) {
         group,
         groupRank,
         team,
-        slotLabel: `${group}組${groupRank}位想定`,
-        groupRankLabel: `${group}組FIFAランク${groupRank === 1 ? "最上位" : "2番手"}`
+        groupSnapshot,
+        slotLabel: `${group}組${groupRank}位想定`
     };
 }
 
 function getProjectedGroupTeams(group) {
     return (SIM_GROUPS[group] || [])
-        .map((name) => ({
+        .map((name, index) => ({
             name,
+            projectedPosition: index + 1,
             rank: FIFA_RANKINGS[name]?.rank || 999,
-            points: FIFA_RANKINGS[name]?.points || 0,
-            code: FIFA_RANKINGS[name]?.code || ""
+            rankingPoints: FIFA_RANKINGS[name]?.points || 0,
+            code: FIFA_RANKINGS[name]?.code || "",
+            played: 0,
+            points: 0,
+            gf: 0,
+            ga: 0,
+            gd: 0
         }))
-        .sort((a, b) => a.rank - b.rank || b.points - a.points || a.name.localeCompare(b.name));
+        .sort((a, b) => a.rank - b.rank || b.rankingPoints - a.rankingPoints || a.name.localeCompare(b.name))
+        .map((team, index) => ({ ...team, projectedPosition: index + 1 }));
 }
 
 function formatJapanMatchLabel(match) {
@@ -2173,12 +2275,16 @@ function formatJapanMatchLabel(match) {
     return `M${match.number} / ${formatShortDate(match.date)}`;
 }
 
-function formatThirdCombo(combo) {
-    return combo.split("").map((group) => `${group}組`).join("/");
+function formatProjectedTeamRecord(team) {
+    return `${team.played}試合 ${team.points}pt ${formatSigned(team.gd)} ${team.gf}得`;
 }
 
-function formatRankingPoints(points) {
-    return Number.isFinite(points) ? points.toFixed(2) : "0.00";
+function formatFifaRank(rank) {
+    return Number.isFinite(rank) && rank < 999 ? `${rank}位` : "未設定";
+}
+
+function formatThirdCombo(combo) {
+    return combo.split("").map((group) => `${group}組`).join("/");
 }
 
 function renderSimulation() {
