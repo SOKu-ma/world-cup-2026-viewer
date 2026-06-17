@@ -1,5 +1,5 @@
 {
-  "fetchedAt": "2026-06-17T00:18:43.910Z",
+  "fetchedAt": "2026-06-17T03:59:32.359Z",
   "source": "FIFA.com",
   "matches": [
     {
@@ -339,10 +339,10 @@
       "awayCode": "ALG",
       "homeSeed": "J1",
       "awaySeed": "J2",
-      "homeScore": null,
-      "awayScore": null,
-      "status": "scheduled",
-      "matchTime": "0'"
+      "homeScore": 3,
+      "awayScore": 0,
+      "status": "final",
+      "matchTime": "97'"
     },
     {
       "id": "400021498",
@@ -360,7 +360,7 @@
       "homeScore": null,
       "awayScore": null,
       "status": "scheduled",
-      "matchTime": ""
+      "matchTime": "0'"
     },
     {
       "id": "400021510",
@@ -1305,17 +1305,17 @@
         "position": 1,
         "order": 0
       },
-      "アルジェリア": {
-        "position": 1,
-        "order": 12
-      },
       "オーストリア": {
-        "position": 1,
-        "order": 15
+        "position": 2,
+        "order": 19
       },
       "ヨルダン": {
-        "position": 1,
-        "order": 19
+        "position": 3,
+        "order": 32
+      },
+      "アルジェリア": {
+        "position": 4,
+        "order": 38
       }
     },
     "L": {
@@ -1325,15 +1325,15 @@
       },
       "クロアチア": {
         "position": 1,
-        "order": 14
+        "order": 13
       },
       "ガーナ": {
         "position": 1,
-        "order": 16
+        "order": 14
       },
       "パナマ": {
         "position": 1,
-        "order": 20
+        "order": 17
       }
     },
     "E": {
@@ -1343,11 +1343,11 @@
       },
       "コートジボワール": {
         "position": 2,
-        "order": 23
+        "order": 21
       },
       "エクアドル": {
         "position": 3,
-        "order": 33
+        "order": 31
       },
       "キュラソー": {
         "position": 4,
@@ -1361,11 +1361,11 @@
       },
       "韓国": {
         "position": 2,
-        "order": 27
+        "order": 25
       },
       "チェコ": {
         "position": 3,
-        "order": 32
+        "order": 30
       },
       "南アフリカ": {
         "position": 4,
@@ -1379,11 +1379,11 @@
       },
       "イラン": {
         "position": 2,
-        "order": 25
+        "order": 23
       },
       "ベルギー": {
         "position": 3,
-        "order": 30
+        "order": 28
       },
       "エジプト": {
         "position": 4,
@@ -1397,11 +1397,11 @@
       },
       "フランス": {
         "position": 2,
-        "order": 24
+        "order": 22
       },
       "セネガル": {
         "position": 3,
-        "order": 36
+        "order": 35
       },
       "イラク": {
         "position": 4,
@@ -1415,15 +1415,15 @@
       },
       "コンゴ民主共和国": {
         "position": 1,
-        "order": 13
+        "order": 12
       },
       "ウズベキスタン": {
         "position": 1,
-        "order": 17
+        "order": 15
       },
       "コロンビア": {
         "position": 1,
-        "order": 18
+        "order": 16
       }
     },
     "C": {
@@ -1433,11 +1433,11 @@
       },
       "モロッコ": {
         "position": 2,
-        "order": 28
+        "order": 26
       },
       "ブラジル": {
         "position": 3,
-        "order": 31
+        "order": 29
       },
       "ハイチ": {
         "position": 4,
@@ -1451,11 +1451,11 @@
       },
       "日本": {
         "position": 2,
-        "order": 26
+        "order": 24
       },
       "オランダ": {
         "position": 3,
-        "order": 34
+        "order": 33
       },
       "チュニジア": {
         "position": 4,
@@ -1469,11 +1469,11 @@
       },
       "カナダ": {
         "position": 2,
-        "order": 22
+        "order": 20
       },
       "カタール": {
         "position": 3,
-        "order": 35
+        "order": 34
       },
       "ボスニア・ヘルツェゴビナ": {
         "position": 4,
@@ -1487,11 +1487,11 @@
       },
       "サウジアラビア": {
         "position": 2,
-        "order": 29
+        "order": 27
       },
       "スペイン": {
         "position": 3,
-        "order": 37
+        "order": 36
       },
       "カーボベルデ": {
         "position": 4,
@@ -1505,11 +1505,11 @@
       },
       "オーストラリア": {
         "position": 2,
-        "order": 21
+        "order": 18
       },
       "トルコ": {
         "position": 3,
-        "order": 38
+        "order": 37
       },
       "パラグアイ": {
         "position": 4,
