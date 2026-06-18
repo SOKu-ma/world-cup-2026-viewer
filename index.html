@@ -79,7 +79,7 @@
 
         .mode-switch {
             display: inline-grid;
-            grid-template-columns: repeat(3, minmax(104px, 1fr));
+            grid-template-columns: repeat(4, minmax(96px, 1fr));
             gap: 4px;
             padding: 4px;
             border: 1px solid var(--line);
@@ -725,6 +725,224 @@
         .status-live { color: var(--red); background: var(--red-soft); }
         .status-scheduled { color: var(--muted); background: #eef2f7; }
 
+        .calendar-shell {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 650px), 1fr));
+            gap: 14px;
+            align-items: start;
+        }
+
+        .calendar-month-shell {
+            overflow-x: auto;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: var(--panel);
+            box-shadow: 0 4px 14px rgba(20, 32, 48, 0.05);
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .calendar-month {
+            min-width: 660px;
+        }
+
+        .calendar-month-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 14px;
+            border-bottom: 1px solid var(--line);
+            background: #f8fafc;
+        }
+
+        .calendar-month-title h3 {
+            margin: 0;
+            font-size: 18px;
+            line-height: 1.2;
+        }
+
+        .calendar-month-meta {
+            color: var(--muted);
+            font-size: 12px;
+            font-weight: 800;
+            white-space: nowrap;
+        }
+
+        .calendar-weekdays,
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, minmax(0, 1fr));
+        }
+
+        .calendar-weekday {
+            padding: 8px 5px;
+            border-right: 1px solid #edf0f5;
+            border-bottom: 1px solid var(--line);
+            background: #eef2f7;
+            color: var(--muted);
+            font-size: 11px;
+            font-weight: 900;
+            text-align: center;
+        }
+
+        .calendar-weekday:last-child,
+        .calendar-day:nth-child(7n) {
+            border-right: 0;
+        }
+
+        .calendar-day {
+            min-height: 154px;
+            padding: 7px;
+            border-right: 1px solid #edf0f5;
+            border-bottom: 1px solid #edf0f5;
+            background: #fff;
+        }
+
+        .calendar-day.is-muted {
+            background: #f8fafc;
+        }
+
+        .calendar-day.is-today {
+            box-shadow: inset 0 0 0 2px rgba(15, 138, 95, 0.42);
+        }
+
+        .calendar-day-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 6px;
+            min-height: 22px;
+            margin-bottom: 6px;
+        }
+
+        .calendar-day-number {
+            color: var(--ink);
+            font-size: 13px;
+            font-weight: 900;
+        }
+
+        .calendar-day-count {
+            color: var(--muted);
+            font-size: 10px;
+            font-weight: 900;
+            white-space: nowrap;
+        }
+
+        .calendar-day-matches {
+            display: grid;
+            gap: 5px;
+        }
+
+        .calendar-match-card {
+            display: grid;
+            gap: 5px;
+            padding: 6px;
+            border: 1px solid var(--line);
+            border-left-width: 4px;
+            border-radius: 6px;
+            background: #fbfcfe;
+            min-width: 0;
+        }
+
+        .calendar-match-card.status-final {
+            border-left-color: var(--green);
+        }
+
+        .calendar-match-card.status-live {
+            border-left-color: var(--red);
+        }
+
+        .calendar-match-card.status-scheduled {
+            border-left-color: #8da0b7;
+        }
+
+        .calendar-match-meta,
+        .calendar-match-bottom {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 6px;
+            min-width: 0;
+        }
+
+        .calendar-match-meta {
+            color: var(--muted);
+            font-size: 10px;
+            font-weight: 900;
+            line-height: 1.15;
+        }
+
+        .calendar-match-stage {
+            min-width: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            text-align: right;
+        }
+
+        .calendar-match-teams {
+            display: grid;
+            gap: 2px;
+            min-width: 0;
+        }
+
+        .calendar-team {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            min-width: 0;
+            color: var(--ink);
+            font-size: 11px;
+            font-weight: 900;
+            line-height: 1.2;
+        }
+
+        .calendar-team-row {
+            min-width: 0;
+        }
+
+        .calendar-team.is-home {
+            justify-content: flex-start;
+            text-align: left;
+        }
+
+        .calendar-team.is-away {
+            justify-content: flex-start;
+            text-align: left;
+        }
+
+        .calendar-team-label {
+            min-width: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .calendar-vs {
+            color: var(--muted);
+            font-size: 10px;
+            font-weight: 900;
+            line-height: 1;
+        }
+
+        .calendar-result {
+            min-width: 42px;
+            padding: 2px 6px;
+            border-radius: 999px;
+            background: #1f2933;
+            color: #fff;
+            font-size: 11px;
+            font-weight: 900;
+            line-height: 1.4;
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        .calendar-result.is-empty {
+            background: #eef2f7;
+            color: var(--muted);
+        }
+
         .bracket-tree-shell {
             background: var(--panel);
             border: 1px solid var(--line);
@@ -990,7 +1208,7 @@
             }
             .mode-switch {
                 width: 100%;
-                grid-template-columns: repeat(3, minmax(0, 1fr));
+                grid-template-columns: repeat(4, minmax(0, 1fr));
             }
             .header-controls,
             .update-panel,
@@ -1006,10 +1224,16 @@
             }
             .mode-button {
                 padding: 0 8px;
-                font-size: 13px;
+                font-size: 12px;
             }
             .path-opponent {
                 font-size: 21px;
+            }
+            .calendar-month {
+                min-width: 620px;
+            }
+            .calendar-day {
+                min-height: 142px;
             }
         }
     </style>
@@ -1020,11 +1244,12 @@
         <div class="header-row">
             <div>
                 <h1>World Cup 2026</h1>
-                <p class="subtitle">FACT、シミュレーション、日本の勝ち上がりルートを切り替えて、グループリーグと決勝トーナメントを確認できます。</p>
+                <p class="subtitle">FACT、カレンダー、シミュレーション、日本の勝ち上がりルートを切り替えて、グループリーグと決勝トーナメントを確認できます。</p>
             </div>
             <div class="header-controls">
                 <div class="mode-switch" role="tablist" aria-label="表示モード">
                     <button class="mode-button is-active" type="button" data-mode="fact">FACT</button>
+                    <button class="mode-button" type="button" data-mode="calendar">CAL</button>
                     <button class="mode-button" type="button" data-mode="simulation">SIM</button>
                     <button class="mode-button" type="button" data-mode="japan">JAPAN</button>
                 </div>
@@ -1538,6 +1763,7 @@ async function fetchJson(url) {
 
 function render() {
     if (state.mode === "fact") renderFact();
+    else if (state.mode === "calendar") renderCalendar();
     else if (state.mode === "japan") renderJapanPath();
     else renderSimulation();
 }
@@ -1583,6 +1809,216 @@ function renderFact() {
             ${renderFactBracket(groupData)}
         </section>
     `;
+}
+
+function renderCalendar() {
+    if (state.factLoading) {
+        app.innerHTML = `<div class="loading">FACT データを読み込んでいます。</div>`;
+        return;
+    }
+
+    const groupData = computeStandings(state.matches, state.standingsOrder);
+    const calendarEntries = buildCalendarEntries(groupData);
+    const months = getCalendarMonths(calendarEntries);
+
+    app.innerHTML = `
+        <div class="toolbar">
+            <div class="source-line">
+                <strong>CALENDAR モード</strong><br>
+                試合日ごとに対戦カードと結果を表示します。時刻と日付は端末のタイムゾーンで表示します。データ出典:
+                <a href="https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026" target="_blank" rel="noopener noreferrer">FIFA.com</a>
+            </div>
+            <div class="toolbar-actions">
+                <button class="action-button" type="button" data-action="refresh-fact">同梱データ再読み込み</button>
+            </div>
+        </div>
+        ${state.factError ? `<div class="error-box">${escapeHtml(state.factError)}</div>` : ""}
+        <section>
+            <div class="section-head">
+                <h2>試合カレンダー</h2>
+                <p class="section-note">グループリーグは実チーム名、決勝トーナメントは確定前の枠名または取得済みのチーム名で表示します。</p>
+            </div>
+            ${months.length ? `
+                <div class="calendar-shell">
+                    ${months.map((month) => renderCalendarMonth(month, calendarEntries)).join("")}
+                </div>
+            ` : `<div class="empty-panel">カレンダーに表示できる試合がありません。</div>`}
+        </section>
+    `;
+}
+
+function buildCalendarEntries(groupData) {
+    const standings = Object.fromEntries(Object.entries(groupData).map(([group, teams]) => [group, teams]));
+    const groupEntries = state.matches.map((match) => ({
+        type: "group",
+        number: Number(match.number),
+        date: match.date,
+        stage: `グループ ${match.group}`,
+        home: match.home,
+        away: match.away,
+        homeCode: match.homeCode || "",
+        awayCode: match.awayCode || "",
+        homeScore: normalizeScore(match.homeScore),
+        awayScore: normalizeScore(match.awayScore),
+        status: match.status || "scheduled",
+        matchTime: match.matchTime || ""
+    }));
+
+    const bracketEntries = (state.bracket || []).map((match) => {
+        const home = resolveCalendarBracketSide(match, "home", standings);
+        const away = resolveCalendarBracketSide(match, "away", standings);
+        return {
+            type: "bracket",
+            number: Number(match.number),
+            date: match.date,
+            stage: STAGE_LABELS[match.stage] || match.stage || "決勝トーナメント",
+            home: home.name,
+            away: away.name,
+            homeCode: home.code,
+            awayCode: away.code,
+            homeScore: normalizeScore(match.homeScore),
+            awayScore: normalizeScore(match.awayScore),
+            status: match.status || "scheduled",
+            matchTime: match.matchTime || "",
+            homeSub: home.sub,
+            awaySub: away.sub
+        };
+    });
+
+    return [...groupEntries, ...bracketEntries]
+        .filter((entry) => entry.date)
+        .sort((a, b) => new Date(a.date) - new Date(b.date) || a.number - b.number);
+}
+
+function resolveCalendarBracketSide(match, side, standings) {
+    const isHome = side === "home";
+    const name = isHome ? match.home : match.away;
+    const code = isHome ? match.homeCode : match.awayCode;
+    const slot = isHome ? match.a : match.b;
+    const slotLabel = resolveFactSlot(slot, standings).main || slot || "未定";
+
+    if (name && name !== "未定") {
+        return {
+            name,
+            code: code || "",
+            sub: slotLabel !== name ? slotLabel : ""
+        };
+    }
+
+    return {
+        name: slotLabel,
+        code: "",
+        sub: ""
+    };
+}
+
+function getCalendarMonths(entries) {
+    if (!entries.length) return [];
+
+    const monthIds = entries.map((entry) => {
+        const { year, month } = getLocalDateParts(entry.date);
+        return year * 12 + month;
+    });
+    const first = Math.min(...monthIds);
+    const last = Math.max(...monthIds);
+    const months = [];
+
+    for (let monthId = first; monthId <= last; monthId++) {
+        months.push({
+            year: Math.floor(monthId / 12),
+            month: monthId % 12
+        });
+    }
+
+    return months;
+}
+
+function renderCalendarMonth(month, entries) {
+    const entriesByDate = new Map();
+    entries.forEach((entry) => {
+        const key = getLocalDateKey(entry.date);
+        if (!entriesByDate.has(key)) entriesByDate.set(key, []);
+        entriesByDate.get(key).push(entry);
+    });
+
+    const firstDay = new Date(month.year, month.month, 1);
+    const daysInMonth = new Date(month.year, month.month + 1, 0).getDate();
+    const leadingBlanks = firstDay.getDay();
+    const cellCount = Math.ceil((leadingBlanks + daysInMonth) / 7) * 7;
+    const monthEntries = entries.filter((entry) => {
+        const parts = getLocalDateParts(entry.date);
+        return parts.year === month.year && parts.month === month.month;
+    });
+    const weekdays = ["日", "月", "火", "水", "木", "金", "土"];
+
+    return `
+        <article class="calendar-month-shell">
+            <div class="calendar-month">
+                <div class="calendar-month-title">
+                    <h3>${escapeHtml(formatMonthTitle(month.year, month.month))}</h3>
+                    <span class="calendar-month-meta">${monthEntries.length}試合</span>
+                </div>
+                <div class="calendar-weekdays" aria-hidden="true">
+                    ${weekdays.map((day) => `<div class="calendar-weekday">${escapeHtml(day)}</div>`).join("")}
+                </div>
+                <div class="calendar-grid">
+                    ${Array.from({ length: cellCount }, (_, index) => {
+                        const day = index - leadingBlanks + 1;
+                        if (day < 1 || day > daysInMonth) return `<div class="calendar-day is-muted"></div>`;
+                        const key = getLocalDateKey(new Date(month.year, month.month, day));
+                        return renderCalendarDay(month.year, month.month, day, entriesByDate.get(key) || []);
+                    }).join("")}
+                </div>
+            </div>
+        </article>
+    `;
+}
+
+function renderCalendarDay(year, month, day, entries) {
+    return `
+        <div class="calendar-day ${isTodayLocal(year, month, day) ? "is-today" : ""}">
+            <div class="calendar-day-head">
+                <span class="calendar-day-number">${day}</span>
+                ${entries.length ? `<span class="calendar-day-count">${entries.length}試合</span>` : ""}
+            </div>
+            ${entries.length ? `
+                <div class="calendar-day-matches">
+                    ${entries.map(renderCalendarMatchCard).join("")}
+                </div>
+            ` : ""}
+        </div>
+    `;
+}
+
+function renderCalendarMatchCard(match) {
+    const status = match.status || "scheduled";
+    const hasResult = hasScore(match);
+    const result = hasResult ? `${scoreValue(match.homeScore)}-${scoreValue(match.awayScore)}` : "未定";
+    const title = `${match.home}${match.homeSub ? ` (${match.homeSub})` : ""} vs ${match.away}${match.awaySub ? ` (${match.awaySub})` : ""}`;
+
+    return `
+        <article class="calendar-match-card status-${escapeHtml(status)}" title="${escapeHtml(title)}">
+            <div class="calendar-match-meta">
+                <span>M${escapeHtml(match.number)} / ${escapeHtml(formatMatchTime(match.date))}</span>
+                <span class="calendar-match-stage">${escapeHtml(match.stage)}</span>
+            </div>
+            <div class="calendar-match-teams">
+                <div class="calendar-team-row">${renderCalendarTeam(match.home, match.homeCode, "home")}</div>
+                <div class="calendar-vs">vs</div>
+                <div class="calendar-team-row">${renderCalendarTeam(match.away, match.awayCode, "away")}</div>
+            </div>
+            <div class="calendar-match-bottom">
+                <span class="calendar-result ${hasResult ? "" : "is-empty"}">${escapeHtml(result)}</span>
+                <span class="status-pill status-${escapeHtml(status)}">${escapeHtml(statusLabel(match))}</span>
+            </div>
+        </article>
+    `;
+}
+
+function renderCalendarTeam(name, code, side) {
+    const flag = renderTeamFlagOnly(name, code);
+    const label = `<span class="calendar-team-label">${escapeHtml(name)}</span>`;
+    return `<span class="calendar-team is-${escapeHtml(side)}">${flag}${label}</span>`;
 }
 
 function renderJapanPath() {
@@ -2625,6 +3061,39 @@ function scoreValue(score) {
     return Number.isFinite(score) ? String(score) : "–";
 }
 
+function getLocalDateParts(value) {
+    const date = new Date(value);
+    return {
+        year: date.getFullYear(),
+        month: date.getMonth(),
+        day: date.getDate()
+    };
+}
+
+function getLocalDateKey(value) {
+    const { year, month, day } = getLocalDateParts(value);
+    return `${year}-${pad2(month + 1)}-${pad2(day)}`;
+}
+
+function isTodayLocal(year, month, day) {
+    const today = new Date();
+    return today.getFullYear() === year && today.getMonth() === month && today.getDate() === day;
+}
+
+function formatMonthTitle(year, month) {
+    return new Intl.DateTimeFormat("ja-JP", {
+        year: "numeric",
+        month: "long"
+    }).format(new Date(year, month, 1));
+}
+
+function formatMatchTime(value) {
+    return new Intl.DateTimeFormat("ja-JP", {
+        hour: "2-digit",
+        minute: "2-digit"
+    }).format(new Date(value));
+}
+
 function formatShortDate(value) {
     if (!value) return "";
     const date = new Date(value);
@@ -2653,6 +3122,10 @@ function escapeHtml(value) {
         .replaceAll(">", "&gt;")
         .replaceAll('"', "&quot;")
         .replaceAll("'", "&#039;");
+}
+
+function pad2(value) {
+    return String(value).padStart(2, "0");
 }
 
 </script>
