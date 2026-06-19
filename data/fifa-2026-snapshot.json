@@ -1,5 +1,5 @@
 {
-  "fetchedAt": "2026-06-18T09:33:44.240Z",
+  "fetchedAt": "2026-06-18T23:08:49.412Z",
   "source": "FIFA.com",
   "matches": [
     {
@@ -447,10 +447,10 @@
       "awayCode": "RSA",
       "homeSeed": "A4",
       "awaySeed": "A2",
-      "homeScore": null,
-      "awayScore": null,
-      "status": "scheduled",
-      "matchTime": ""
+      "homeScore": 1,
+      "awayScore": 1,
+      "status": "final",
+      "matchTime": "98'"
     },
     {
       "id": "400021446",
@@ -465,10 +465,10 @@
       "awayCode": "BIH",
       "homeSeed": "B4",
       "awaySeed": "B2",
-      "homeScore": null,
-      "awayScore": null,
-      "status": "scheduled",
-      "matchTime": ""
+      "homeScore": 4,
+      "awayScore": 1,
+      "status": "final",
+      "matchTime": "98'"
     },
     {
       "id": "400021450",
@@ -483,10 +483,10 @@
       "awayCode": "QAT",
       "homeSeed": "B1",
       "awaySeed": "B3",
-      "homeScore": null,
-      "awayScore": null,
-      "status": "scheduled",
-      "matchTime": ""
+      "homeScore": 3,
+      "awayScore": 0,
+      "status": "live",
+      "matchTime": "47'"
     },
     {
       "id": "400021442",
@@ -1311,7 +1311,7 @@
       },
       "ヨルダン": {
         "position": 3,
-        "order": 28
+        "order": 29
       },
       "アルジェリア": {
         "position": 4,
@@ -1329,7 +1329,7 @@
       },
       "ポルトガル": {
         "position": 3,
-        "order": 31
+        "order": 32
       },
       "ウズベキスタン": {
         "position": 4,
@@ -1347,11 +1347,11 @@
       },
       "パナマ": {
         "position": 3,
-        "order": 30
+        "order": 31
       },
       "クロアチア": {
         "position": 4,
-        "order": 39
+        "order": 38
       }
     },
     "E": {
@@ -1365,11 +1365,11 @@
       },
       "エクアドル": {
         "position": 3,
-        "order": 27
+        "order": 28
       },
       "キュラソー": {
         "position": 4,
-        "order": 40
+        "order": 39
       }
     },
     "A": {
@@ -1383,7 +1383,7 @@
       },
       "チェコ": {
         "position": 3,
-        "order": 26
+        "order": 27
       },
       "南アフリカ": {
         "position": 4,
@@ -1405,7 +1405,7 @@
       },
       "エジプト": {
         "position": 4,
-        "order": 41
+        "order": 40
       }
     },
     "I": {
@@ -1423,7 +1423,7 @@
       },
       "イラク": {
         "position": 4,
-        "order": 43
+        "order": 42
       }
     },
     "C": {
@@ -1437,11 +1437,11 @@
       },
       "ブラジル": {
         "position": 3,
-        "order": 25
+        "order": 26
       },
       "ハイチ": {
         "position": 4,
-        "order": 42
+        "order": 41
       }
     },
     "F": {
@@ -1455,7 +1455,7 @@
       },
       "オランダ": {
         "position": 3,
-        "order": 29
+        "order": 30
       },
       "チュニジア": {
         "position": 4,
@@ -1471,13 +1471,13 @@
         "position": 2,
         "order": 14
       },
-      "カタール": {
-        "position": 3,
-        "order": 32
-      },
       "ボスニア・ヘルツェゴビナ": {
+        "position": 3,
+        "order": 25
+      },
+      "カタール": {
         "position": 4,
-        "order": 37
+        "order": 44
       }
     },
     "H": {
@@ -1495,7 +1495,7 @@
       },
       "カーボベルデ": {
         "position": 4,
-        "order": 38
+        "order": 37
       }
     },
     "D": {
@@ -1513,7 +1513,7 @@
       },
       "パラグアイ": {
         "position": 4,
-        "order": 44
+        "order": 43
       }
     }
   },
@@ -1523,224 +1523,544 @@
       "number": 73,
       "date": "2026-06-28T19:00:00Z",
       "a": "2A",
-      "b": "2B"
+      "b": "2B",
+      "home": "",
+      "away": "",
+      "homeRaw": "",
+      "awayRaw": "",
+      "homeCode": "",
+      "awayCode": "",
+      "homeScore": null,
+      "awayScore": null,
+      "status": "scheduled",
+      "matchTime": ""
     },
     {
       "stage": "Round of 32",
       "number": 74,
       "date": "2026-06-29T20:30:00Z",
       "a": "1E",
-      "b": "3ABCDF"
+      "b": "3ABCDF",
+      "home": "",
+      "away": "",
+      "homeRaw": "",
+      "awayRaw": "",
+      "homeCode": "",
+      "awayCode": "",
+      "homeScore": null,
+      "awayScore": null,
+      "status": "scheduled",
+      "matchTime": ""
     },
     {
       "stage": "Round of 32",
       "number": 75,
       "date": "2026-06-30T01:00:00Z",
       "a": "1F",
-      "b": "2C"
+      "b": "2C",
+      "home": "",
+      "away": "",
+      "homeRaw": "",
+      "awayRaw": "",
+      "homeCode": "",
+      "awayCode": "",
+      "homeScore": null,
+      "awayScore": null,
+      "status": "scheduled",
+      "matchTime": ""
     },
     {
       "stage": "Round of 32",
       "number": 76,
       "date": "2026-06-29T17:00:00Z",
       "a": "1C",
-      "b": "2F"
+      "b": "2F",
+      "home": "",
+      "away": "",
+      "homeRaw": "",
+      "awayRaw": "",
+      "homeCode": "",
+      "awayCode": "",
+      "homeScore": null,
+      "awayScore": null,
+      "status": "scheduled",
+      "matchTime": ""
     },
     {
       "stage": "Round of 32",
       "number": 77,
       "date": "2026-06-30T21:00:00Z",
       "a": "1I",
-      "b": "3CDFGH"
+      "b": "3CDFGH",
+      "home": "",
+      "away": "",
+      "homeRaw": "",
+      "awayRaw": "",
+      "homeCode": "",
+      "awayCode": "",
+      "homeScore": null,
+      "awayScore": null,
+      "status": "scheduled",
+      "matchTime": ""
     },
     {
       "stage": "Round of 32",
       "number": 78,
       "date": "2026-06-30T17:00:00Z",
       "a": "2E",
-      "b": "2I"
+      "b": "2I",
+      "home": "",
+      "away": "",
+      "homeRaw": "",
+      "awayRaw": "",
+      "homeCode": "",
+      "awayCode": "",
+      "homeScore": null,
+      "awayScore": null,
+      "status": "scheduled",
+      "matchTime": ""
     },
     {
       "stage": "Round of 32",
       "number": 79,
       "date": "2026-07-01T01:00:00Z",
       "a": "1A",
-      "b": "3CEFHI"
+      "b": "3CEFHI",
+      "home": "",
+      "away": "",
+      "homeRaw": "",
+      "awayRaw": "",
+      "homeCode": "",
+      "awayCode": "",
+      "homeScore": null,
+      "awayScore": null,
+      "status": "scheduled",
+      "matchTime": ""
     },
     {
       "stage": "Round of 32",
       "number": 80,
       "date": "2026-07-01T16:00:00Z",
       "a": "1L",
-      "b": "3EHIJK"
+      "b": "3EHIJK",
+      "home": "",
+      "away": "",
+      "homeRaw": "",
+      "awayRaw": "",
+      "homeCode": "",
+      "awayCode": "",
+      "homeScore": null,
+      "awayScore": null,
+      "status": "scheduled",
+      "matchTime": ""
     },
     {
       "stage": "Round of 32",
       "number": 81,
       "date": "2026-07-02T00:00:00Z",
       "a": "1D",
-      "b": "3BEFIJ"
+      "b": "3BEFIJ",
+      "home": "",
+      "away": "",
+      "homeRaw": "",
+      "awayRaw": "",
+      "homeCode": "",
+      "awayCode": "",
+      "homeScore": null,
+      "awayScore": null,
+      "status": "scheduled",
+      "matchTime": ""
     },
     {
       "stage": "Round of 32",
       "number": 82,
       "date": "2026-07-01T20:00:00Z",
       "a": "1G",
-      "b": "3AEHIJ"
+      "b": "3AEHIJ",
+      "home": "",
+      "away": "",
+      "homeRaw": "",
+      "awayRaw": "",
+      "homeCode": "",
+      "awayCode": "",
+      "homeScore": null,
+      "awayScore": null,
+      "status": "scheduled",
+      "matchTime": ""
     },
     {
       "stage": "Round of 32",
       "number": 83,
       "date": "2026-07-02T23:00:00Z",
       "a": "2K",
-      "b": "2L"
+      "b": "2L",
+      "home": "",
+      "away": "",
+      "homeRaw": "",
+      "awayRaw": "",
+      "homeCode": "",
+      "awayCode": "",
+      "homeScore": null,
+      "awayScore": null,
+      "status": "scheduled",
+      "matchTime": ""
     },
     {
       "stage": "Round of 32",
       "number": 84,
       "date": "2026-07-02T19:00:00Z",
       "a": "1H",
-      "b": "2J"
+      "b": "2J",
+      "home": "",
+      "away": "",
+      "homeRaw": "",
+      "awayRaw": "",
+      "homeCode": "",
+      "awayCode": "",
+      "homeScore": null,
+      "awayScore": null,
+      "status": "scheduled",
+      "matchTime": ""
     },
     {
       "stage": "Round of 32",
       "number": 85,
       "date": "2026-07-03T03:00:00Z",
       "a": "1B",
-      "b": "3EFGIJ"
+      "b": "3EFGIJ",
+      "home": "",
+      "away": "",
+      "homeRaw": "",
+      "awayRaw": "",
+      "homeCode": "",
+      "awayCode": "",
+      "homeScore": null,
+      "awayScore": null,
+      "status": "scheduled",
+      "matchTime": ""
     },
     {
       "stage": "Round of 32",
       "number": 86,
       "date": "2026-07-03T22:00:00Z",
       "a": "1J",
-      "b": "2H"
+      "b": "2H",
+      "home": "",
+      "away": "",
+      "homeRaw": "",
+      "awayRaw": "",
+      "homeCode": "",
+      "awayCode": "",
+      "homeScore": null,
+      "awayScore": null,
+      "status": "scheduled",
+      "matchTime": ""
     },
     {
       "stage": "Round of 32",
       "number": 87,
       "date": "2026-07-04T01:30:00Z",
       "a": "1K",
-      "b": "3DEIJL"
+      "b": "3DEIJL",
+      "home": "",
+      "away": "",
+      "homeRaw": "",
+      "awayRaw": "",
+      "homeCode": "",
+      "awayCode": "",
+      "homeScore": null,
+      "awayScore": null,
+      "status": "scheduled",
+      "matchTime": ""
     },
     {
       "stage": "Round of 32",
       "number": 88,
       "date": "2026-07-03T18:00:00Z",
       "a": "2D",
-      "b": "2G"
+      "b": "2G",
+      "home": "",
+      "away": "",
+      "homeRaw": "",
+      "awayRaw": "",
+      "homeCode": "",
+      "awayCode": "",
+      "homeScore": null,
+      "awayScore": null,
+      "status": "scheduled",
+      "matchTime": ""
     },
     {
       "stage": "Round of 16",
       "number": 89,
       "date": "2026-07-04T21:00:00Z",
       "a": "W74",
-      "b": "W77"
+      "b": "W77",
+      "home": "",
+      "away": "",
+      "homeRaw": "",
+      "awayRaw": "",
+      "homeCode": "",
+      "awayCode": "",
+      "homeScore": null,
+      "awayScore": null,
+      "status": "scheduled",
+      "matchTime": ""
     },
     {
       "stage": "Round of 16",
       "number": 90,
       "date": "2026-07-04T17:00:00Z",
       "a": "W73",
-      "b": "W75"
+      "b": "W75",
+      "home": "",
+      "away": "",
+      "homeRaw": "",
+      "awayRaw": "",
+      "homeCode": "",
+      "awayCode": "",
+      "homeScore": null,
+      "awayScore": null,
+      "status": "scheduled",
+      "matchTime": ""
     },
     {
       "stage": "Round of 16",
       "number": 91,
       "date": "2026-07-05T20:00:00Z",
       "a": "W76",
-      "b": "W78"
+      "b": "W78",
+      "home": "",
+      "away": "",
+      "homeRaw": "",
+      "awayRaw": "",
+      "homeCode": "",
+      "awayCode": "",
+      "homeScore": null,
+      "awayScore": null,
+      "status": "scheduled",
+      "matchTime": ""
     },
     {
       "stage": "Round of 16",
       "number": 92,
       "date": "2026-07-06T00:00:00Z",
       "a": "W79",
-      "b": "W80"
+      "b": "W80",
+      "home": "",
+      "away": "",
+      "homeRaw": "",
+      "awayRaw": "",
+      "homeCode": "",
+      "awayCode": "",
+      "homeScore": null,
+      "awayScore": null,
+      "status": "scheduled",
+      "matchTime": ""
     },
     {
       "stage": "Round of 16",
       "number": 93,
       "date": "2026-07-06T19:00:00Z",
       "a": "W83",
-      "b": "W84"
+      "b": "W84",
+      "home": "",
+      "away": "",
+      "homeRaw": "",
+      "awayRaw": "",
+      "homeCode": "",
+      "awayCode": "",
+      "homeScore": null,
+      "awayScore": null,
+      "status": "scheduled",
+      "matchTime": ""
     },
     {
       "stage": "Round of 16",
       "number": 94,
       "date": "2026-07-07T00:00:00Z",
       "a": "W81",
-      "b": "W82"
+      "b": "W82",
+      "home": "",
+      "away": "",
+      "homeRaw": "",
+      "awayRaw": "",
+      "homeCode": "",
+      "awayCode": "",
+      "homeScore": null,
+      "awayScore": null,
+      "status": "scheduled",
+      "matchTime": ""
     },
     {
       "stage": "Round of 16",
       "number": 95,
       "date": "2026-07-07T16:00:00Z",
       "a": "W86",
-      "b": "W88"
+      "b": "W88",
+      "home": "",
+      "away": "",
+      "homeRaw": "",
+      "awayRaw": "",
+      "homeCode": "",
+      "awayCode": "",
+      "homeScore": null,
+      "awayScore": null,
+      "status": "scheduled",
+      "matchTime": ""
     },
     {
       "stage": "Round of 16",
       "number": 96,
       "date": "2026-07-07T20:00:00Z",
       "a": "W85",
-      "b": "W87"
+      "b": "W87",
+      "home": "",
+      "away": "",
+      "homeRaw": "",
+      "awayRaw": "",
+      "homeCode": "",
+      "awayCode": "",
+      "homeScore": null,
+      "awayScore": null,
+      "status": "scheduled",
+      "matchTime": ""
     },
     {
       "stage": "Quarter-final",
       "number": 97,
       "date": "2026-07-09T20:00:00Z",
       "a": "W89",
-      "b": "W90"
+      "b": "W90",
+      "home": "",
+      "away": "",
+      "homeRaw": "",
+      "awayRaw": "",
+      "homeCode": "",
+      "awayCode": "",
+      "homeScore": null,
+      "awayScore": null,
+      "status": "scheduled",
+      "matchTime": ""
     },
     {
       "stage": "Quarter-final",
       "number": 98,
       "date": "2026-07-10T19:00:00Z",
       "a": "W93",
-      "b": "W94"
+      "b": "W94",
+      "home": "",
+      "away": "",
+      "homeRaw": "",
+      "awayRaw": "",
+      "homeCode": "",
+      "awayCode": "",
+      "homeScore": null,
+      "awayScore": null,
+      "status": "scheduled",
+      "matchTime": ""
     },
     {
       "stage": "Quarter-final",
       "number": 99,
       "date": "2026-07-11T21:00:00Z",
       "a": "W91",
-      "b": "W92"
+      "b": "W92",
+      "home": "",
+      "away": "",
+      "homeRaw": "",
+      "awayRaw": "",
+      "homeCode": "",
+      "awayCode": "",
+      "homeScore": null,
+      "awayScore": null,
+      "status": "scheduled",
+      "matchTime": ""
     },
     {
       "stage": "Quarter-final",
       "number": 100,
       "date": "2026-07-12T01:00:00Z",
       "a": "W95",
-      "b": "W96"
+      "b": "W96",
+      "home": "",
+      "away": "",
+      "homeRaw": "",
+      "awayRaw": "",
+      "homeCode": "",
+      "awayCode": "",
+      "homeScore": null,
+      "awayScore": null,
+      "status": "scheduled",
+      "matchTime": ""
     },
     {
       "stage": "Semi-final",
       "number": 101,
       "date": "2026-07-14T19:00:00Z",
       "a": "W97",
-      "b": "W98"
+      "b": "W98",
+      "home": "",
+      "away": "",
+      "homeRaw": "",
+      "awayRaw": "",
+      "homeCode": "",
+      "awayCode": "",
+      "homeScore": null,
+      "awayScore": null,
+      "status": "scheduled",
+      "matchTime": ""
     },
     {
       "stage": "Semi-final",
       "number": 102,
       "date": "2026-07-15T19:00:00Z",
       "a": "W99",
-      "b": "W100"
+      "b": "W100",
+      "home": "",
+      "away": "",
+      "homeRaw": "",
+      "awayRaw": "",
+      "homeCode": "",
+      "awayCode": "",
+      "homeScore": null,
+      "awayScore": null,
+      "status": "scheduled",
+      "matchTime": ""
     },
     {
       "stage": "Play-off for third place",
       "number": 103,
       "date": "2026-07-18T21:00:00Z",
       "a": "RU101",
-      "b": "RU102"
+      "b": "RU102",
+      "home": "",
+      "away": "",
+      "homeRaw": "",
+      "awayRaw": "",
+      "homeCode": "",
+      "awayCode": "",
+      "homeScore": null,
+      "awayScore": null,
+      "status": "scheduled",
+      "matchTime": ""
     },
     {
       "stage": "Final",
       "number": 104,
       "date": "2026-07-19T19:00:00Z",
       "a": "W101",
-      "b": "W102"
+      "b": "W102",
+      "home": "",
+      "away": "",
+      "homeRaw": "",
+      "awayRaw": "",
+      "homeCode": "",
+      "awayCode": "",
+      "homeScore": null,
+      "awayScore": null,
+      "status": "scheduled",
+      "matchTime": ""
     }
   ]
 }
