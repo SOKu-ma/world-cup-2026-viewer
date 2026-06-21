@@ -1,5 +1,5 @@
 {
-  "fetchedAt": "2026-06-20T07:54:12.342Z",
+  "fetchedAt": "2026-06-21T08:44:54.304Z",
   "source": "FIFA.com",
   "matches": [
     {
@@ -591,10 +591,10 @@
       "awayCode": "CIV",
       "homeSeed": "E1",
       "awaySeed": "E3",
-      "homeScore": null,
-      "awayScore": null,
-      "status": "scheduled",
-      "matchTime": "0'"
+      "homeScore": 2,
+      "awayScore": 1,
+      "status": "final",
+      "matchTime": "98'"
     },
     {
       "id": "400021465",
@@ -609,10 +609,10 @@
       "awayCode": "CUW",
       "homeSeed": "E4",
       "awaySeed": "E2",
-      "homeScore": null,
-      "awayScore": null,
-      "status": "scheduled",
-      "matchTime": "0'"
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "final",
+      "matchTime": "96'"
     },
     {
       "id": "400021472",
@@ -627,10 +627,10 @@
       "awayCode": "SWE",
       "homeSeed": "F1",
       "awaySeed": "F3",
-      "homeScore": null,
-      "awayScore": null,
-      "status": "scheduled",
-      "matchTime": "0'"
+      "homeScore": 5,
+      "awayScore": 1,
+      "status": "final",
+      "matchTime": "96'"
     },
     {
       "id": "400021475",
@@ -645,10 +645,10 @@
       "awayCode": "JPN",
       "homeSeed": "F4",
       "awaySeed": "F2",
-      "homeScore": null,
-      "awayScore": null,
-      "status": "scheduled",
-      "matchTime": "0'"
+      "homeScore": 0,
+      "awayScore": 4,
+      "status": "final",
+      "matchTime": "97'"
     },
     {
       "id": "400021487",
@@ -666,7 +666,7 @@
       "homeScore": null,
       "awayScore": null,
       "status": "scheduled",
-      "matchTime": "0'"
+      "matchTime": ""
     },
     {
       "id": "400021483",
@@ -684,7 +684,7 @@
       "homeScore": null,
       "awayScore": null,
       "status": "scheduled",
-      "matchTime": "0'"
+      "matchTime": ""
     },
     {
       "id": "400021477",
@@ -702,7 +702,7 @@
       "homeScore": null,
       "awayScore": null,
       "status": "scheduled",
-      "matchTime": "0'"
+      "matchTime": ""
     },
     {
       "id": "400021480",
@@ -720,7 +720,7 @@
       "homeScore": null,
       "awayScore": null,
       "status": "scheduled",
-      "matchTime": "0'"
+      "matchTime": ""
     },
     {
       "id": "400021491",
@@ -738,7 +738,7 @@
       "homeScore": null,
       "awayScore": null,
       "status": "scheduled",
-      "matchTime": "0'"
+      "matchTime": ""
     },
     {
       "id": "400021492",
@@ -756,7 +756,7 @@
       "homeScore": null,
       "awayScore": null,
       "status": "scheduled",
-      "matchTime": "0'"
+      "matchTime": ""
     },
     {
       "id": "400021494",
@@ -774,7 +774,7 @@
       "homeScore": null,
       "awayScore": null,
       "status": "scheduled",
-      "matchTime": "0'"
+      "matchTime": ""
     },
     {
       "id": "400021499",
@@ -792,7 +792,7 @@
       "homeScore": null,
       "awayScore": null,
       "status": "scheduled",
-      "matchTime": "0'"
+      "matchTime": ""
     },
     {
       "id": "400021506",
@@ -810,7 +810,7 @@
       "homeScore": null,
       "awayScore": null,
       "status": "scheduled",
-      "matchTime": "0'"
+      "matchTime": ""
     },
     {
       "id": "400021511",
@@ -828,7 +828,7 @@
       "homeScore": null,
       "awayScore": null,
       "status": "scheduled",
-      "matchTime": "0'"
+      "matchTime": ""
     },
     {
       "id": "400021503",
@@ -846,7 +846,7 @@
       "homeScore": null,
       "awayScore": null,
       "status": "scheduled",
-      "matchTime": "0'"
+      "matchTime": ""
     },
     {
       "id": "400021501",
@@ -864,7 +864,7 @@
       "homeScore": null,
       "awayScore": null,
       "status": "scheduled",
-      "matchTime": "0'"
+      "matchTime": ""
     },
     {
       "id": "400021455",
@@ -882,7 +882,7 @@
       "homeScore": null,
       "awayScore": null,
       "status": "scheduled",
-      "matchTime": "0'"
+      "matchTime": ""
     },
     {
       "id": "400021452",
@@ -900,7 +900,7 @@
       "homeScore": null,
       "awayScore": null,
       "status": "scheduled",
-      "matchTime": "0'"
+      "matchTime": ""
     },
     {
       "id": "400021451",
@@ -918,7 +918,7 @@
       "homeScore": null,
       "awayScore": null,
       "status": "scheduled",
-      "matchTime": "0'"
+      "matchTime": ""
     },
     {
       "id": "400021448",
@@ -936,7 +936,7 @@
       "homeScore": null,
       "awayScore": null,
       "status": "scheduled",
-      "matchTime": "0'"
+      "matchTime": ""
     },
     {
       "id": "400021444",
@@ -954,7 +954,7 @@
       "homeScore": null,
       "awayScore": null,
       "status": "scheduled",
-      "matchTime": "0'"
+      "matchTime": ""
     },
     {
       "id": "400021445",
@@ -972,7 +972,7 @@
       "homeScore": null,
       "awayScore": null,
       "status": "scheduled",
-      "matchTime": "0'"
+      "matchTime": ""
     },
     {
       "id": "400021468",
@@ -990,7 +990,7 @@
       "homeScore": null,
       "awayScore": null,
       "status": "scheduled",
-      "matchTime": "0'"
+      "matchTime": ""
     },
     {
       "id": "400021466",
@@ -1008,7 +1008,7 @@
       "homeScore": null,
       "awayScore": null,
       "status": "scheduled",
-      "matchTime": "0'"
+      "matchTime": ""
     },
     {
       "id": "400021471",
@@ -1026,7 +1026,7 @@
       "homeScore": null,
       "awayScore": null,
       "status": "scheduled",
-      "matchTime": "0'"
+      "matchTime": ""
     },
     {
       "id": "400021473",
@@ -1044,7 +1044,7 @@
       "homeScore": null,
       "awayScore": null,
       "status": "scheduled",
-      "matchTime": "0'"
+      "matchTime": ""
     },
     {
       "id": "400021459",
@@ -1062,7 +1062,7 @@
       "homeScore": null,
       "awayScore": null,
       "status": "scheduled",
-      "matchTime": "0'"
+      "matchTime": ""
     },
     {
       "id": "400021461",
@@ -1080,7 +1080,7 @@
       "homeScore": null,
       "awayScore": null,
       "status": "scheduled",
-      "matchTime": "0'"
+      "matchTime": ""
     },
     {
       "id": "400021489",
@@ -1098,7 +1098,7 @@
       "homeScore": null,
       "awayScore": null,
       "status": "scheduled",
-      "matchTime": "0'"
+      "matchTime": ""
     },
     {
       "id": "400021493",
@@ -1116,7 +1116,7 @@
       "homeScore": null,
       "awayScore": null,
       "status": "scheduled",
-      "matchTime": "0'"
+      "matchTime": ""
     },
     {
       "id": "400021479",
@@ -1134,7 +1134,7 @@
       "homeScore": null,
       "awayScore": null,
       "status": "scheduled",
-      "matchTime": "0'"
+      "matchTime": ""
     },
     {
       "id": "400021481",
@@ -1152,7 +1152,7 @@
       "homeScore": null,
       "awayScore": null,
       "status": "scheduled",
-      "matchTime": "0'"
+      "matchTime": ""
     },
     {
       "id": "400021485",
@@ -1170,7 +1170,7 @@
       "homeScore": null,
       "awayScore": null,
       "status": "scheduled",
-      "matchTime": "0'"
+      "matchTime": ""
     },
     {
       "id": "400021484",
@@ -1188,7 +1188,7 @@
       "homeScore": null,
       "awayScore": null,
       "status": "scheduled",
-      "matchTime": "0'"
+      "matchTime": ""
     },
     {
       "id": "400021508",
@@ -1206,7 +1206,7 @@
       "homeScore": null,
       "awayScore": null,
       "status": "scheduled",
-      "matchTime": "0'"
+      "matchTime": ""
     },
     {
       "id": "400021509",
@@ -1224,7 +1224,7 @@
       "homeScore": null,
       "awayScore": null,
       "status": "scheduled",
-      "matchTime": "0'"
+      "matchTime": ""
     },
     {
       "id": "400021497",
@@ -1242,7 +1242,7 @@
       "homeScore": null,
       "awayScore": null,
       "status": "scheduled",
-      "matchTime": "0'"
+      "matchTime": ""
     },
     {
       "id": "400021495",
@@ -1260,7 +1260,7 @@
       "homeScore": null,
       "awayScore": null,
       "status": "scheduled",
-      "matchTime": "0'"
+      "matchTime": ""
     },
     {
       "id": "400021505",
@@ -1278,7 +1278,7 @@
       "homeScore": null,
       "awayScore": null,
       "status": "scheduled",
-      "matchTime": "0'"
+      "matchTime": ""
     },
     {
       "id": "400021500",
@@ -1296,7 +1296,7 @@
       "homeScore": null,
       "awayScore": null,
       "status": "scheduled",
-      "matchTime": "0'"
+      "matchTime": ""
     }
   ],
   "standingsOrder": {
@@ -1329,7 +1329,7 @@
       },
       "スコットランド": {
         "position": 3,
-        "order": 33
+        "order": 32
       },
       "ハイチ": {
         "position": 4,
@@ -1365,7 +1365,7 @@
       },
       "ポルトガル": {
         "position": 3,
-        "order": 32
+        "order": 31
       },
       "ウズベキスタン": {
         "position": 4,
@@ -1383,7 +1383,7 @@
       },
       "パナマ": {
         "position": 3,
-        "order": 30
+        "order": 29
       },
       "クロアチア": {
         "position": 4,
@@ -1426,10 +1426,28 @@
         "order": 44
       }
     },
+    "F": {
+      "オランダ": {
+        "position": 1,
+        "order": 7
+      },
+      "日本": {
+        "position": 2,
+        "order": 19
+      },
+      "スウェーデン": {
+        "position": 3,
+        "order": 35
+      },
+      "チュニジア": {
+        "position": 4,
+        "order": 45
+      }
+    },
     "G": {
       "ニュージーランド": {
         "position": 1,
-        "order": 7
+        "order": 8
       },
       "イラン": {
         "position": 2,
@@ -1447,7 +1465,7 @@
     "I": {
       "ノルウェー": {
         "position": 1,
-        "order": 8
+        "order": 9
       },
       "フランス": {
         "position": 2,
@@ -1455,29 +1473,11 @@
       },
       "セネガル": {
         "position": 3,
-        "order": 34
+        "order": 33
       },
       "イラク": {
         "position": 4,
         "order": 42
-      }
-    },
-    "F": {
-      "スウェーデン": {
-        "position": 1,
-        "order": 9
-      },
-      "日本": {
-        "position": 2,
-        "order": 19
-      },
-      "オランダ": {
-        "position": 3,
-        "order": 29
-      },
-      "チュニジア": {
-        "position": 4,
-        "order": 45
       }
     },
     "H": {
@@ -1491,7 +1491,7 @@
       },
       "スペイン": {
         "position": 3,
-        "order": 35
+        "order": 34
       },
       "カーボベルデ": {
         "position": 4,
@@ -1509,7 +1509,7 @@
       },
       "パラグアイ": {
         "position": 3,
-        "order": 31
+        "order": 30
       },
       "トルコ": {
         "position": 4,
