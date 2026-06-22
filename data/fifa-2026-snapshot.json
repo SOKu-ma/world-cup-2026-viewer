@@ -1,5 +1,5 @@
 {
-  "fetchedAt": "2026-06-21T23:31:20.623Z",
+  "fetchedAt": "2026-06-22T23:21:28.962Z",
   "source": "FIFA.com",
   "matches": [
     {
@@ -665,8 +665,8 @@
       "awaySeed": "H2",
       "homeScore": 2,
       "awayScore": 2,
-      "status": "live",
-      "matchTime": "65'"
+      "status": "final",
+      "matchTime": "99'"
     },
     {
       "id": "400021483",
@@ -717,10 +717,10 @@
       "awayCode": "EGY",
       "homeSeed": "G4",
       "awaySeed": "G2",
-      "homeScore": null,
-      "awayScore": null,
-      "status": "scheduled",
-      "matchTime": ""
+      "homeScore": 1,
+      "awayScore": 3,
+      "status": "final",
+      "matchTime": "101'"
     },
     {
       "id": "400021491",
@@ -738,7 +738,7 @@
       "homeScore": null,
       "awayScore": null,
       "status": "scheduled",
-      "matchTime": ""
+      "matchTime": "0'"
     },
     {
       "id": "400021492",
@@ -753,9 +753,9 @@
       "awayCode": "IRQ",
       "homeSeed": "I1",
       "awaySeed": "I3",
-      "homeScore": null,
-      "awayScore": null,
-      "status": "scheduled",
+      "homeScore": 1,
+      "awayScore": 0,
+      "status": "live",
       "matchTime": ""
     },
     {
@@ -771,10 +771,10 @@
       "awayCode": "AUT",
       "homeSeed": "J1",
       "awaySeed": "J3",
-      "homeScore": null,
-      "awayScore": null,
-      "status": "scheduled",
-      "matchTime": ""
+      "homeScore": 2,
+      "awayScore": 0,
+      "status": "final",
+      "matchTime": "98'"
     },
     {
       "id": "400021499",
@@ -1311,7 +1311,7 @@
       },
       "ヨルダン": {
         "position": 3,
-        "order": 28
+        "order": 29
       },
       "アルジェリア": {
         "position": 4,
@@ -1325,7 +1325,7 @@
       },
       "モロッコ": {
         "position": 2,
-        "order": 21
+        "order": 20
       },
       "スコットランド": {
         "position": 3,
@@ -1333,7 +1333,7 @@
       },
       "ハイチ": {
         "position": 4,
-        "order": 40
+        "order": 39
       }
     },
     "B": {
@@ -1347,7 +1347,7 @@
       },
       "ボスニア・ヘルツェゴビナ": {
         "position": 3,
-        "order": 24
+        "order": 25
       },
       "カタール": {
         "position": 4,
@@ -1361,7 +1361,7 @@
       },
       "コンゴ民主共和国": {
         "position": 2,
-        "order": 15
+        "order": 14
       },
       "ポルトガル": {
         "position": 3,
@@ -1372,14 +1372,32 @@
         "order": 47
       }
     },
-    "L": {
-      "イングランド": {
+    "G": {
+      "エジプト": {
         "position": 1,
         "order": 4
       },
+      "イラン": {
+        "position": 2,
+        "order": 17
+      },
+      "ベルギー": {
+        "position": 3,
+        "order": 24
+      },
+      "ニュージーランド": {
+        "position": 4,
+        "order": 41
+      }
+    },
+    "L": {
+      "イングランド": {
+        "position": 1,
+        "order": 5
+      },
       "ガーナ": {
         "position": 2,
-        "order": 18
+        "order": 16
       },
       "パナマ": {
         "position": 3,
@@ -1390,54 +1408,54 @@
         "order": 37
       }
     },
+    "I": {
+      "フランス": {
+        "position": 1,
+        "order": 6
+      },
+      "ノルウェー": {
+        "position": 2,
+        "order": 21
+      },
+      "セネガル": {
+        "position": 3,
+        "order": 34
+      },
+      "イラク": {
+        "position": 4,
+        "order": 40
+      }
+    },
     "E": {
       "ドイツ": {
         "position": 1,
-        "order": 5
+        "order": 7
       },
       "コートジボワール": {
         "position": 2,
-        "order": 16
+        "order": 15
       },
       "エクアドル": {
         "position": 3,
-        "order": 27
+        "order": 28
       },
       "キュラソー": {
         "position": 4,
         "order": 38
       }
     },
-    "G": {
-      "イラン": {
-        "position": 1,
-        "order": 6
-      },
-      "ベルギー": {
-        "position": 2,
-        "order": 14
-      },
-      "ニュージーランド": {
-        "position": 3,
-        "order": 29
-      },
-      "エジプト": {
-        "position": 4,
-        "order": 39
-      }
-    },
     "A": {
       "メキシコ": {
         "position": 1,
-        "order": 7
+        "order": 8
       },
       "韓国": {
         "position": 2,
-        "order": 20
+        "order": 19
       },
       "チェコ": {
         "position": 3,
-        "order": 26
+        "order": 27
       },
       "南アフリカ": {
         "position": 4,
@@ -1447,11 +1465,11 @@
     "F": {
       "オランダ": {
         "position": 1,
-        "order": 8
+        "order": 9
       },
       "日本": {
         "position": 2,
-        "order": 19
+        "order": 18
       },
       "スウェーデン": {
         "position": 3,
@@ -1460,24 +1478,6 @@
       "チュニジア": {
         "position": 4,
         "order": 45
-      }
-    },
-    "I": {
-      "ノルウェー": {
-        "position": 1,
-        "order": 9
-      },
-      "フランス": {
-        "position": 2,
-        "order": 17
-      },
-      "セネガル": {
-        "position": 3,
-        "order": 34
-      },
-      "イラク": {
-        "position": 4,
-        "order": 41
       }
     },
     "H": {
@@ -1491,7 +1491,7 @@
       },
       "カーボベルデ": {
         "position": 3,
-        "order": 25
+        "order": 26
       },
       "サウジアラビア": {
         "position": 4,
