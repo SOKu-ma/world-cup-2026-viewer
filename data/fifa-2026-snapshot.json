@@ -1,5 +1,5 @@
 {
-  "fetchedAt": "2026-06-25T00:23:31.289Z",
+  "fetchedAt": "2026-06-25T10:28:53.903Z",
   "source": "FIFA.com",
   "matches": [
     {
@@ -951,10 +951,10 @@
       "awayCode": "MEX",
       "homeSeed": "A4",
       "awaySeed": "A1",
-      "homeScore": null,
-      "awayScore": null,
-      "status": "scheduled",
-      "matchTime": "0'"
+      "homeScore": 0,
+      "awayScore": 3,
+      "status": "final",
+      "matchTime": "97'"
     },
     {
       "id": "400021445",
@@ -969,10 +969,10 @@
       "awayCode": "KOR",
       "homeSeed": "A2",
       "awaySeed": "A3",
-      "homeScore": null,
-      "awayScore": null,
-      "status": "scheduled",
-      "matchTime": "0'"
+      "homeScore": 1,
+      "awayScore": 0,
+      "status": "final",
+      "matchTime": "97'"
     },
     {
       "id": "400021468",
@@ -1315,7 +1315,7 @@
       },
       "ヨルダン": {
         "position": 4,
-        "order": 39
+        "order": 40
       }
     },
     "C": {
@@ -1325,7 +1325,7 @@
       },
       "モロッコ": {
         "position": 2,
-        "order": 20
+        "order": 19
       },
       "スコットランド": {
         "position": 3,
@@ -1333,7 +1333,7 @@
       },
       "ハイチ": {
         "position": 4,
-        "order": 37
+        "order": 38
       }
     },
     "K": {
@@ -1343,7 +1343,7 @@
       },
       "ポルトガル": {
         "position": 2,
-        "order": 22
+        "order": 21
       },
       "コンゴ民主共和国": {
         "position": 3,
@@ -1369,7 +1369,7 @@
       },
       "ニュージーランド": {
         "position": 4,
-        "order": 40
+        "order": 41
       }
     },
     "L": {
@@ -1387,7 +1387,7 @@
       },
       "パナマ": {
         "position": 4,
-        "order": 41
+        "order": 42
       }
     },
     "I": {
@@ -1397,7 +1397,7 @@
       },
       "ノルウェー": {
         "position": 2,
-        "order": 21
+        "order": 20
       },
       "セネガル": {
         "position": 3,
@@ -1405,7 +1405,7 @@
       },
       "イラク": {
         "position": 4,
-        "order": 38
+        "order": 39
       }
     },
     "E": {
@@ -1419,7 +1419,7 @@
       },
       "エクアドル": {
         "position": 3,
-        "order": 31
+        "order": 30
       },
       "キュラソー": {
         "position": 4,
@@ -1431,17 +1431,17 @@
         "position": 1,
         "order": 7
       },
-      "韓国": {
+      "南アフリカ": {
         "position": 2,
-        "order": 19
+        "order": 22
+      },
+      "韓国": {
+        "position": 3,
+        "order": 31
       },
       "チェコ": {
-        "position": 3,
-        "order": 30
-      },
-      "南アフリカ": {
         "position": 4,
-        "order": 44
+        "order": 37
       }
     },
     "F": {
@@ -1477,7 +1477,7 @@
       },
       "サウジアラビア": {
         "position": 4,
-        "order": 43
+        "order": 44
       }
     },
     "B": {
@@ -1495,7 +1495,7 @@
       },
       "カタール": {
         "position": 4,
-        "order": 42
+        "order": 43
       }
     },
     "D": {
