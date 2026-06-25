@@ -1,5 +1,5 @@
 {
-  "fetchedAt": "2026-06-25T00:16:37.356Z",
+  "fetchedAt": "2026-06-25T00:23:31.289Z",
   "source": "FIFA.com",
   "matches": [
     {
@@ -972,7 +972,7 @@
       "homeScore": null,
       "awayScore": null,
       "status": "scheduled",
-      "matchTime": ""
+      "matchTime": "0'"
     },
     {
       "id": "400021468",

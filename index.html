@@ -1082,7 +1082,19 @@
             font-weight: 900;
         }
 
+        .tree-team-row > div {
+            min-width: 0;
+        }
+
+        .tree-team-main {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            min-width: 0;
+        }
+
         .tree-team-name {
+            flex: 1 1 auto;
             min-width: 0;
             font-size: 12px;
             font-weight: 900;
@@ -1805,7 +1817,7 @@ function renderFact() {
         <section>
             <div class="section-head">
                 <h2>決勝トーナメント</h2>
-                <p class="section-note">Match 73-104 の公開枠順で表示しています。</p>
+                <p class="section-note">Match 73-104 の公開枠順で表示しています。全試合が終了したグループの1位・2位は実チーム名で反映します。</p>
             </div>
             ${renderFactBracket(groupData)}
         </section>
@@ -1849,7 +1861,7 @@ function renderCalendar() {
 }
 
 function buildCalendarEntries(groupData) {
-    const standings = Object.fromEntries(Object.entries(groupData).map(([group, teams]) => [group, teams]));
+    const entrantContext = buildFactEntrantContext(groupData);
     const groupEntries = state.matches.map((match) => ({
         type: "group",
         number: Number(match.number),
@@ -1866,8 +1878,8 @@ function buildCalendarEntries(groupData) {
     }));
 
     const bracketEntries = (state.bracket || []).map((match) => {
-        const home = resolveCalendarBracketSide(match, "home", standings);
-        const away = resolveCalendarBracketSide(match, "away", standings);
+        const home = resolveCalendarBracketSide(match, "home", entrantContext);
+        const away = resolveCalendarBracketSide(match, "away", entrantContext);
         return {
             type: "bracket",
             number: Number(match.number),
@@ -1891,25 +1903,12 @@ function buildCalendarEntries(groupData) {
         .sort((a, b) => new Date(a.date) - new Date(b.date) || a.number - b.number);
 }
 
-function resolveCalendarBracketSide(match, side, standings) {
-    const isHome = side === "home";
-    const name = isHome ? match.home : match.away;
-    const code = isHome ? match.homeCode : match.awayCode;
-    const slot = isHome ? match.a : match.b;
-    const slotLabel = resolveFactSlot(slot, standings).main || slot || "未定";
-
-    if (name && name !== "未定") {
-        return {
-            name,
-            code: code || "",
-            sub: slotLabel !== name ? slotLabel : ""
-        };
-    }
-
+function resolveCalendarBracketSide(match, side, entrantContext) {
+    const resolved = resolveFactBracketSide(match, side, entrantContext);
     return {
-        name: slotLabel,
-        code: "",
-        sub: ""
+        name: resolved.main,
+        code: resolved.code || "",
+        sub: resolved.sub || ""
     };
 }
 
@@ -2277,11 +2276,11 @@ function renderMatchTeam(name, code = "") {
 }
 
 function renderFactBracket(groupData) {
-    const standings = Object.fromEntries(Object.entries(groupData).map(([group, teams]) => [group, teams]));
+    const entrantContext = buildFactEntrantContext(groupData);
     return renderBracketTree({
         mode: "fact",
         matches: state.bracket,
-        getMatchView: (match) => createFactMatchView(match, standings)
+        getMatchView: (match) => createFactMatchView(match, entrantContext)
     });
 }
 
@@ -2458,10 +2457,11 @@ function renderTreeNode(node, getMatchView, champion) {
 }
 
 function renderTreeTeamRow(team) {
+    const flag = team.code ? renderTeamFlagOnly(team.name, team.code) : "";
     return `
         <div class="tree-team-row ${team.winner ? "is-winner" : ""}">
             <div>
-                <span class="tree-team-name">${escapeHtml(team.name)}</span>
+                <span class="tree-team-main">${flag}<span class="tree-team-name">${escapeHtml(team.name)}</span></span>
                 ${team.sub ? `<span class="tree-team-sub">${escapeHtml(team.sub)}</span>` : ""}
             </div>
             ${team.score ? `<span class="tree-score">${escapeHtml(team.score)}</span>` : ""}
@@ -2469,13 +2469,27 @@ function renderTreeTeamRow(team) {
     `;
 }
 
-function createFactMatchView(match, standings) {
-    const left = resolveFactSlot(match.a, standings);
-    const right = resolveFactSlot(match.b, standings);
+function createFactMatchView(match, entrantContext) {
+    const left = resolveFactBracketSide(match, "home", entrantContext);
+    const right = resolveFactBracketSide(match, "away", entrantContext);
+    const hasResult = hasScore(match);
     return {
+        score: hasResult ? `${scoreValue(match.homeScore)}-${scoreValue(match.awayScore)}` : "",
         teams: [
-            { name: left.main, sub: left.sub },
-            { name: right.main, sub: right.sub }
+            {
+                name: left.main,
+                code: left.code,
+                sub: left.sub,
+                score: hasResult ? scoreValue(match.homeScore) : "",
+                winner: hasResult && match.homeScore > match.awayScore
+            },
+            {
+                name: right.main,
+                code: right.code,
+                sub: right.sub,
+                score: hasResult ? scoreValue(match.awayScore) : "",
+                winner: hasResult && match.awayScore > match.homeScore
+            }
         ]
     };
 }
@@ -2523,7 +2537,7 @@ function computeStandings(matches, officialOrder = {}) {
     });
 
     return Object.fromEntries(GROUPS.map((group) => {
-        const teams = Object.values(groups[group] || {}).sort((a, b) => {
+        const teams = Object.values(groups[group] || {}).map((team) => ({ ...team, group })).sort((a, b) => {
             const officialA = officialOrder[group]?.[a.name] || {};
             const officialB = officialOrder[group]?.[b.name] || {};
             return b.points - a.points
@@ -2543,29 +2557,127 @@ function ensureTeam(group, name, code, seed) {
     }
 }
 
-function resolveFactSlot(slot, standings) {
+function buildFactEntrantContext(groupData) {
+    const standings = Object.fromEntries(Object.entries(groupData).map(([group, teams]) => [group, teams]));
+    const progress = getGroupProgress(state.matches);
+    const completedGroups = new Set(GROUPS.filter((group) => isGroupComplete(group, progress)));
+    const allGroupsComplete = GROUPS.every((group) => completedGroups.has(group));
+    const thirdAssignments = {};
+
+    if (allGroupsComplete) {
+        const bestThirdTeams = GROUPS
+            .map((group) => standings[group]?.[2])
+            .filter(Boolean)
+            .sort(sortFactThirdTeams)
+            .slice(0, 8);
+        Object.assign(thirdAssignments, assignThirdTeams(bestThirdTeams));
+    }
+
+    return { standings, progress, completedGroups, allGroupsComplete, thirdAssignments };
+}
+
+function getGroupProgress(matches) {
+    const progress = Object.fromEntries(GROUPS.map((group) => [group, { total: 0, scored: 0, final: 0 }]));
+    matches.forEach((match) => {
+        if (!progress[match.group]) progress[match.group] = { total: 0, scored: 0, final: 0 };
+        progress[match.group].total++;
+        if (hasScore(match)) progress[match.group].scored++;
+        if (match.status === "final") progress[match.group].final++;
+    });
+    return progress;
+}
+
+function isGroupComplete(group, progress) {
+    const item = progress[group];
+    return Boolean(item?.total) && item.final >= item.total;
+}
+
+function sortFactThirdTeams(a, b) {
+    const officialA = state.standingsOrder[a.group]?.[a.name] || {};
+    const officialB = state.standingsOrder[b.group]?.[b.name] || {};
+    return b.points - a.points
+        || b.gd - a.gd
+        || b.gf - a.gf
+        || (officialA.order ?? 999) - (officialB.order ?? 999)
+        || GROUPS.indexOf(a.group) - GROUPS.indexOf(b.group)
+        || a.name.localeCompare(b.name);
+}
+
+function resolveFactBracketSide(match, side, entrantContext) {
+    const isHome = side === "home";
+    const name = isHome ? match.home : match.away;
+    const code = isHome ? match.homeCode : match.awayCode;
+    const slot = isHome ? match.a : match.b;
+    const slotView = resolveFactSlot(slot, entrantContext, match.number);
+
+    if (name && name !== "未定") {
+        return {
+            main: name,
+            code: code || slotView.code || "",
+            sub: slotView.main && slotView.main !== name ? slotView.main : slotView.sub
+        };
+    }
+
+    return slotView;
+}
+
+function resolveFactSlot(slot, entrantContext = {}, matchNumber = null) {
     if (!slot) return { main: "未定", sub: "" };
     if (/^W\d+$/.test(slot)) return { main: `M${slot.slice(1)} 勝者`, sub: "" };
     if (/^RU\d+$/.test(slot)) return { main: `M${slot.slice(2)} 敗者`, sub: "" };
 
+    const standings = entrantContext.standings || {};
+    const completedGroups = entrantContext.completedGroups || new Set();
     const rank = slot[0];
+
     if ((rank === "1" || rank === "2") && slot.length === 2) {
         const group = slot[1];
+        const slotLabel = `${group}組${rank}位`;
+        const team = standings[group]?.[Number(rank) - 1];
+        if (team && completedGroups.has(group)) {
+            return {
+                main: team.name,
+                code: team.code || "",
+                sub: slotLabel
+            };
+        }
         return {
-            main: `${group}組${rank}位`,
+            main: slotLabel,
             sub: ""
         };
     }
 
     if (rank === "3") {
         const letters = slot.slice(1).split("");
+        const assigned = getAssignedThirdTeam(slot, matchNumber, entrantContext);
+        if (assigned) {
+            return {
+                main: assigned.name,
+                code: assigned.code || "",
+                sub: `${assigned.group}組3位`
+            };
+        }
+
+        const completedCandidates = letters
+            .map((group) => completedGroups.has(group) ? standings[group]?.[2] : null)
+            .filter(Boolean);
         return {
             main: `${letters.join("/")}組 3位枠`,
-            sub: ""
+            sub: completedCandidates.length
+                ? `完了組3位: ${completedCandidates.map((team) => `${team.group} ${team.name}`).join(" / ")}`
+                : ""
         };
     }
 
     return { main: slot, sub: "" };
+}
+
+function getAssignedThirdTeam(slot, matchNumber, entrantContext) {
+    if (!entrantContext.allGroupsComplete) return null;
+    const assignments = entrantContext.thirdAssignments || {};
+    return assignments[`${matchNumber}:${slot}`]
+        || assignments[Object.keys(assignments).find((key) => key.endsWith(`:${slot}`))]
+        || null;
 }
 
 function getJapanGroup() {
