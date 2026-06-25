@@ -1,5 +1,5 @@
 {
-  "fetchedAt": "2026-06-23T22:40:32.783Z",
+  "fetchedAt": "2026-06-25T00:16:37.356Z",
   "source": "FIFA.com",
   "matches": [
     {
@@ -825,10 +825,10 @@
       "awayCode": "CRO",
       "homeSeed": "L4",
       "awaySeed": "L2",
-      "homeScore": null,
-      "awayScore": null,
-      "status": "scheduled",
-      "matchTime": "0'"
+      "homeScore": 0,
+      "awayScore": 1,
+      "status": "final",
+      "matchTime": "96'"
     },
     {
       "id": "400021503",
@@ -861,10 +861,10 @@
       "awayCode": "COD",
       "homeSeed": "K4",
       "awaySeed": "K2",
-      "homeScore": null,
-      "awayScore": null,
-      "status": "scheduled",
-      "matchTime": ""
+      "homeScore": 1,
+      "awayScore": 0,
+      "status": "final",
+      "matchTime": "97'"
     },
     {
       "id": "400021455",
@@ -879,10 +879,10 @@
       "awayCode": "BRA",
       "homeSeed": "C4",
       "awaySeed": "C1",
-      "homeScore": null,
-      "awayScore": null,
-      "status": "scheduled",
-      "matchTime": ""
+      "homeScore": 0,
+      "awayScore": 3,
+      "status": "final",
+      "matchTime": "97'"
     },
     {
       "id": "400021452",
@@ -897,10 +897,10 @@
       "awayCode": "HAI",
       "homeSeed": "C2",
       "awaySeed": "C3",
-      "homeScore": null,
-      "awayScore": null,
-      "status": "scheduled",
-      "matchTime": ""
+      "homeScore": 4,
+      "awayScore": 2,
+      "status": "final",
+      "matchTime": "99'"
     },
     {
       "id": "400021451",
@@ -915,10 +915,10 @@
       "awayCode": "CAN",
       "homeSeed": "B4",
       "awaySeed": "B1",
-      "homeScore": null,
-      "awayScore": null,
-      "status": "scheduled",
-      "matchTime": ""
+      "homeScore": 2,
+      "awayScore": 1,
+      "status": "final",
+      "matchTime": "97'"
     },
     {
       "id": "400021448",
@@ -933,10 +933,10 @@
       "awayCode": "QAT",
       "homeSeed": "B2",
       "awaySeed": "B3",
-      "homeScore": null,
-      "awayScore": null,
-      "status": "scheduled",
-      "matchTime": ""
+      "homeScore": 3,
+      "awayScore": 1,
+      "status": "final",
+      "matchTime": "97'"
     },
     {
       "id": "400021444",
@@ -954,7 +954,7 @@
       "homeScore": null,
       "awayScore": null,
       "status": "scheduled",
-      "matchTime": ""
+      "matchTime": "0'"
     },
     {
       "id": "400021445",
@@ -1315,7 +1315,7 @@
       },
       "ヨルダン": {
         "position": 4,
-        "order": 40
+        "order": 39
       }
     },
     "C": {
@@ -1333,25 +1333,25 @@
       },
       "ハイチ": {
         "position": 4,
-        "order": 38
+        "order": 37
       }
     },
-    "B": {
-      "カナダ": {
+    "K": {
+      "コロンビア": {
         "position": 1,
         "order": 2
       },
-      "スイス": {
+      "ポルトガル": {
         "position": 2,
         "order": 22
       },
-      "ボスニア・ヘルツェゴビナ": {
+      "コンゴ民主共和国": {
         "position": 3,
-        "order": 26
+        "order": 28
       },
-      "カタール": {
+      "ウズベキスタン": {
         "position": 4,
-        "order": 42
+        "order": 47
       }
     },
     "G": {
@@ -1369,7 +1369,7 @@
       },
       "ニュージーランド": {
         "position": 4,
-        "order": 41
+        "order": 40
       }
     },
     "L": {
@@ -1381,13 +1381,13 @@
         "position": 2,
         "order": 16
       },
-      "パナマ": {
-        "position": 3,
-        "order": 31
-      },
       "クロアチア": {
+        "position": 3,
+        "order": 29
+      },
+      "パナマ": {
         "position": 4,
-        "order": 36
+        "order": 41
       }
     },
     "I": {
@@ -1405,7 +1405,7 @@
       },
       "イラク": {
         "position": 4,
-        "order": 39
+        "order": 38
       }
     },
     "E": {
@@ -1419,11 +1419,11 @@
       },
       "エクアドル": {
         "position": 3,
-        "order": 30
+        "order": 31
       },
       "キュラソー": {
         "position": 4,
-        "order": 37
+        "order": 36
       }
     },
     "A": {
@@ -1437,7 +1437,7 @@
       },
       "チェコ": {
         "position": 3,
-        "order": 29
+        "order": 30
       },
       "南アフリカ": {
         "position": 4,
@@ -1462,28 +1462,10 @@
         "order": 45
       }
     },
-    "K": {
-      "ポルトガル": {
-        "position": 1,
-        "order": 9
-      },
-      "コロンビア": {
-        "position": 2,
-        "order": 14
-      },
-      "コンゴ民主共和国": {
-        "position": 3,
-        "order": 28
-      },
-      "ウズベキスタン": {
-        "position": 4,
-        "order": 47
-      }
-    },
     "H": {
       "スペイン": {
         "position": 1,
-        "order": 10
+        "order": 9
       },
       "ウルグアイ": {
         "position": 2,
@@ -1496,6 +1478,24 @@
       "サウジアラビア": {
         "position": 4,
         "order": 43
+      }
+    },
+    "B": {
+      "スイス": {
+        "position": 1,
+        "order": 10
+      },
+      "カナダ": {
+        "position": 2,
+        "order": 14
+      },
+      "ボスニア・ヘルツェゴビナ": {
+        "position": 3,
+        "order": 26
+      },
+      "カタール": {
+        "position": 4,
+        "order": 42
       }
     },
     "D": {
