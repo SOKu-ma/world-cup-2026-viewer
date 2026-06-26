@@ -255,7 +255,7 @@
         }
 
         .japan-path-card,
-        .japan-third-card,
+        .japan-route-card,
         .japan-note-panel {
             background: var(--panel);
             border: 1px solid var(--line);
@@ -269,16 +269,11 @@
             padding: 16px;
         }
 
-        .japan-path-card.is-direct {
-            border-top: 4px solid var(--green);
+        .japan-path-card.is-confirmed {
+            border-top: 4px solid var(--red);
         }
 
-        .japan-path-card.is-third {
-            border-top: 4px solid var(--amber);
-        }
-
-        .path-kicker,
-        .third-count {
+        .path-kicker {
             color: var(--muted);
             font-size: 12px;
             font-weight: 900;
@@ -412,33 +407,6 @@
             white-space: nowrap;
         }
 
-        .expected-team-strip {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 7px;
-        }
-
-        .expected-team-chip {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            min-height: 30px;
-            max-width: 100%;
-            padding: 4px 8px;
-            border: 1px solid var(--line);
-            border-radius: 999px;
-            background: #fff;
-            font-size: 12px;
-            font-weight: 900;
-        }
-
-        .expected-team-chip-text {
-            min-width: 0;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
         .path-meta,
         .japan-card-note {
             margin: 0;
@@ -459,72 +427,190 @@
             color: var(--ink);
         }
 
-        .japan-third-grid {
+        .japan-route-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 14px;
             align-items: start;
         }
 
-        .japan-third-card {
+        .japan-route-card {
+            display: grid;
+            gap: 12px;
             padding: 14px;
+            border-top: 4px solid var(--navy);
         }
 
-        .third-card-head {
+        .japan-route-card.is-first {
+            border-top-color: var(--red);
+        }
+
+        .route-card-head {
             display: flex;
             align-items: flex-start;
             justify-content: space-between;
             gap: 10px;
-            margin-bottom: 10px;
         }
 
-        .third-card-head h3 {
+        .route-card-head h3 {
             margin: 0;
             font-size: 17px;
-            line-height: 1.3;
+            line-height: 1.28;
         }
 
-        .third-card-meta {
-            color: var(--muted);
-            font-size: 12px;
-            font-weight: 800;
+        .route-step-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 42px;
+            padding: 4px 7px;
+            border-radius: 999px;
+            background: #eef2f7;
+            color: var(--navy);
+            font-size: 11px;
+            font-weight: 900;
             white-space: nowrap;
         }
 
-        .third-details {
-            margin-top: 12px;
-            border-top: 1px solid #edf0f5;
-            padding-top: 10px;
+        .route-match-meta,
+        .route-branch-title {
+            color: var(--muted);
+            font-size: 12px;
+            font-weight: 900;
+            line-height: 1.35;
         }
 
-        .third-details summary {
-            cursor: pointer;
-            color: var(--navy);
-            font-size: 13px;
+        .route-team-list,
+        .route-branch-list {
+            display: grid;
+            gap: 7px;
+        }
+
+        .route-team-row {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto;
+            align-items: center;
+            gap: 8px;
+            min-height: 42px;
+            padding: 8px;
+            border: 1px solid var(--line);
+            border-radius: 6px;
+            background: #fbfcfe;
+        }
+
+        .route-team-row.is-japan {
+            border-color: rgba(201, 53, 53, 0.45);
+            background: var(--red-soft);
+            color: #8f2424;
             font-weight: 900;
         }
 
-        .third-combo-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
-            max-height: 260px;
-            margin-top: 10px;
-            padding-right: 4px;
-            overflow: auto;
+        .route-team-main {
+            min-width: 0;
         }
 
-        .combo-chip {
-            display: inline-flex;
+        .route-team-name {
+            display: flex;
             align-items: center;
-            min-height: 28px;
-            padding: 4px 7px;
-            border: 1px solid var(--line);
-            border-radius: 999px;
-            background: #fbfcfe;
+            gap: 6px;
+            min-width: 0;
+            font-size: 14px;
+            font-weight: 900;
+            line-height: 1.2;
+        }
+
+        .route-team-name-text {
+            min-width: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .route-team-sub {
+            display: block;
+            margin-top: 2px;
+            color: var(--muted);
             font-size: 11px;
             font-weight: 800;
+            line-height: 1.25;
+            overflow-wrap: anywhere;
+        }
+
+        .route-slot-code {
+            padding: 3px 7px;
+            border-radius: 999px;
+            background: #eef2f7;
+            color: var(--muted);
+            font-size: 11px;
+            font-weight: 900;
             white-space: nowrap;
+        }
+
+        .route-team-row.is-japan .route-slot-code {
+            background: #fff;
+            color: #8f2424;
+        }
+
+        .route-branch {
+            display: grid;
+            gap: 8px;
+            padding-top: 10px;
+            border-top: 1px solid #edf0f5;
+        }
+
+        .route-branch-match {
+            display: grid;
+            gap: 6px;
+            padding: 8px;
+            border: 1px solid #edf0f5;
+            border-radius: 6px;
+            background: #fbfcfe;
+        }
+
+        .route-branch-match-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            color: var(--muted);
+            font-size: 11px;
+            font-weight: 900;
+            line-height: 1.25;
+        }
+
+        .route-branch-sides {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+            align-items: center;
+            gap: 7px;
+        }
+
+        .route-branch-side {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            min-width: 0;
+            font-size: 12px;
+            font-weight: 900;
+            line-height: 1.25;
+        }
+
+        .route-branch-side:last-child {
+            justify-content: flex-end;
+            text-align: right;
+        }
+
+        .route-branch-side-text {
+            min-width: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .route-vs {
+            color: var(--muted);
+            font-size: 10px;
+            font-weight: 900;
         }
 
         .groups-container {
@@ -1291,63 +1377,9 @@ const UPDATE_MODE_STORAGE_KEY = "worldCup2026UpdateMode";
 const GROUPS = "ABCDEFGHIJKL".split("");
 const THIRD_PLACE_SLOTS = new Set(["3ABCDF", "3CDFGH", "3CEFHI", "3EHIJK", "3BEFIJ", "3AEHIJ", "3EFGIJ", "3DEIJL"]);
 const JAPAN_TEAM = "日本";
-const JAPAN_DEFAULT_GROUP = "F";
-const JAPAN_THIRD_PLACE_COMBOS_BY_OPPONENT = Object.fromEntries(Object.entries({
-    A: `
-        ABDFGJKL ABDFGIJL ABDFGIJK
-    `,
-    B: `
-        ACDFHIKL ABCDFHKL ABCDFHIL ABCDFHIK ABCDEFHL
-    `,
-    D: `
-        ACDFHJKL ACDFHIJL ACDFHIJK ACDFGHKL ACDFGHIL ACDFGHIK ACDEFHKL ACDEFHJL
-        ACDEFHIL ACDEFHIK ACDEFGHL
-    `,
-    E: `
-        EFGHIJKL BFGHIJKL BEFHIJKL BEFGIJKL BEFGHJKL BEFGHIKL BEFGHIJL BEFGHIJK
-        AFGHIJKL AEFHIJKL AEFGIJKL AEFGHJKL AEFGHIKL AEFGHIJL AEFGHIJK ABFGIJKL
-        ABFGHJKL ABFGHIJL ABFGHIJK ABEFHJKL ABEFHIKL ABEFHIJL ABEFHIJK ABEFGJKL
-        ABEFGIJL ABEFGIJK ABEFGHKL ABEFGHJL ABEFGHJK ABEFGHIL ABEFGHIK ABEFGHIJ
-        ABCFGJKL ABCFGIJL ABCFGIJK
-    `,
-    I: `
-        DFGHIJKL DEFHIJKL DEFGIJKL DEFGHJKL DEFGHIKL DEFGHIJL DEFGHIJK CFGHIJKL
-        CEFHIJKL CEFGIJKL CEFGHJKL CEFGHIKL CEFGHIJL CEFGHIJK CDFHIJKL CDFGIJKL
-        CDFGHJKL CDFGHIKL CDFGHIJL CDFGHIJK CDEFIJKL CDEFHJKL CDEFHIKL CDEFHIJL
-        CDEFHIJK CDEFGJKL CDEFGIKL CDEFGIJL CDEFGIJK CDEFGHKL CDEFGHJL CDEFGHJK
-        CDEFGHIL CDEFGHIK CDEFGHIJ BDFHIJKL BDFGIJKL BDFGHJKL BDFGHIKL BDFGHIJL
-        BDFGHIJK BDEFIJKL BDEFHJKL BDEFHIKL BDEFHIJL BDEFHIJK BDEFGJKL BDEFGIKL
-        BDEFGIJL BDEFGIJK BDEFGHKL BDEFGHJL BDEFGHJK BDEFGHIL BDEFGHIK BDEFGHIJ
-        BCFHIJKL BCFGIJKL BCFGHJKL BCFGHIKL BCFGHIJL BCFGHIJK BCEFIJKL BCEFHJKL
-        BCEFHIKL BCEFHIJL BCEFHIJK BCEFGJKL BCEFGIKL BCEFGIJL BCEFGIJK BCEFGHKL
-        BCEFGHJL BCEFGHJK BCEFGHIL BCEFGHIK BCEFGHIJ BCDFIJKL BCDFHJKL BCDFHIKL
-        BCDFHIJL BCDFHIJK BCDFGJKL BCDFGIKL BCDFGIJL BCDFGIJK BCDFGHKL BCDFGHJL
-        BCDFGHJK BCDFGHIL BCDFGHIK BCDFGHIJ BCDEFJKL BCDEFIKL BCDEFIJL BCDEFIJK
-        BCDEFHKL BCDEFHJL BCDEFHJK BCDEFHIL BCDEFHIK BCDEFHIJ BCDEFGKL BCDEFGJL
-        BCDEFGJK BCDEFGIL BCDEFGIK BCDEFGIJ BCDEFGHL BCDEFGHK BCDEFGHJ BCDEFGHI
-        ADFHIJKL ADFGIJKL ADFGHJKL ADFGHIKL ADFGHIJL ADFGHIJK ADEFIJKL ADEFHJKL
-        ADEFHIKL ADEFHIJL ADEFHIJK ADEFGJKL ADEFGIKL ADEFGIJL ADEFGIJK ADEFGHKL
-        ADEFGHJL ADEFGHJK ADEFGHIL ADEFGHIK ADEFGHIJ ACFHIJKL ACFGIJKL ACFGHJKL
-        ACFGHIKL ACFGHIJL ACFGHIJK ACEFIJKL ACEFHJKL ACEFHIKL ACEFHIJL ACEFHIJK
-        ACEFGJKL ACEFGIKL ACEFGIJL ACEFGIJK ACEFGHKL ACEFGHJL ACEFGHJK ACEFGHIL
-        ACEFGHIK ACEFGHIJ ACDFIJKL ACDFGJKL ACDFGIKL ACDFGIJL ACDFGIJK ACDFGHJL
-        ACDFGHJK ACDFGHIJ ACDEFJKL ACDEFIKL ACDEFIJL ACDEFIJK ACDEFHJK ACDEFHIJ
-        ACDEFGKL ACDEFGJL ACDEFGJK ACDEFGIL ACDEFGIK ACDEFGIJ ACDEFGHK ACDEFGHJ
-        ACDEFGHI ABFHIJKL ABFGHIKL ABEFIJKL ABEFGIKL ABDFIJKL ABDFHJKL ABDFHIKL
-        ABDFHIJL ABDFHIJK ABDFGIKL ABDFGHKL ABDFGHJL ABDFGHJK ABDFGHIL ABDFGHIK
-        ABDFGHIJ ABDEFJKL ABDEFIKL ABDEFIJL ABDEFIJK ABDEFHKL ABDEFHJL ABDEFHJK
-        ABDEFHIL ABDEFHIK ABDEFHIJ ABDEFGKL ABDEFGJL ABDEFGJK ABDEFGIL ABDEFGIK
-        ABDEFGIJ ABDEFGHL ABDEFGHK ABDEFGHJ ABDEFGHI ABCFIJKL ABCFHJKL ABCFHIKL
-        ABCFHIJL ABCFHIJK ABCFGIKL ABCFGHKL ABCFGHJL ABCFGHJK ABCFGHIL ABCFGHIK
-        ABCFGHIJ ABCEFJKL ABCEFIKL ABCEFIJL ABCEFIJK ABCEFHKL ABCEFHJL ABCEFHJK
-        ABCEFHIL ABCEFHIK ABCEFHIJ ABCEFGKL ABCEFGJL ABCEFGJK ABCEFGIL ABCEFGIK
-        ABCEFGIJ ABCEFGHL ABCEFGHK ABCEFGHJ ABCEFGHI ABCDFJKL ABCDFIKL ABCDFIJL
-        ABCDFIJK ABCDFHJL ABCDFHJK ABCDFHIJ ABCDFGKL ABCDFGJL ABCDFGJK ABCDFGIL
-        ABCDFGIK ABCDFGIJ ABCDFGHL ABCDFGHK ABCDFGHJ ABCDFGHI ABCDEFKL ABCDEFJL
-        ABCDEFJK ABCDEFIL ABCDEFIK ABCDEFIJ ABCDEFHK ABCDEFHJ ABCDEFHI ABCDEFGL
-        ABCDEFGK ABCDEFGJ ABCDEFGI ABCDEFGH
-    `
-}).map(([group, combos]) => [group, combos.trim().split(/\s+/)]));
+const JAPAN_CONFIRMED_GROUP = "F";
+const JAPAN_CONFIRMED_RANK = 2;
+const JAPAN_CONFIRMED_SLOT = `${JAPAN_CONFIRMED_RANK}${JAPAN_CONFIRMED_GROUP}`;
 
 const TEAM_NAME_JA = {
     "Algeria": "アルジェリア",
@@ -2027,18 +2059,15 @@ function renderJapanPath() {
         return;
     }
 
-    const japanGroup = getJapanGroup();
     const projectedStandings = getJapanProjectedStandings();
-    const directScenarios = [1, 2].map((rank) => createJapanDirectScenario(rank, japanGroup, projectedStandings));
-    const thirdScenarios = createJapanThirdScenarios(japanGroup, projectedStandings);
-    const totalThirdCombos = thirdScenarios.reduce((sum, scenario) => sum + scenario.combos.length, 0);
-    const thirdOpponents = thirdScenarios.map((scenario) => `${scenario.opponentGroup}組1位`).join(" / ");
+    const confirmedScenario = createJapanConfirmedScenario(projectedStandings);
+    const route = buildJapanKnockoutRoute(JAPAN_CONFIRMED_SLOT);
 
     app.innerHTML = `
         <div class="toolbar">
             <div class="source-line">
                 <strong>JAPAN モード</strong><br>
-                日本がグループ ${escapeHtml(japanGroup)} からラウンド32へ進む前提で、順位別の初戦相手を確認します。データ根拠:
+                日本はグループ ${escapeHtml(JAPAN_CONFIRMED_GROUP)} 2位通過として、C組1位側の山を表示します。データ根拠:
                 <a href="https://digitalhub.fifa.com/m/636f5c9c6f29771f/original/FWC2026_regulations_EN.pdf" target="_blank" rel="noopener noreferrer">FIFA World Cup 2026 Regulations</a>
                 / <a href="https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026" target="_blank" rel="noopener noreferrer">FIFA.com</a>
                 / <a href="https://inside.fifa.com/fifa-world-ranking/men" target="_blank" rel="noopener noreferrer">FIFA/Coca-Cola Men's World Ranking</a>
@@ -2047,43 +2076,33 @@ function renderJapanPath() {
         ${state.factError ? `<div class="error-box">${escapeHtml(state.factError)}</div>` : ""}
         <section>
             <div class="section-head">
-                <h2>日本のラウンド32相手</h2>
-                <p class="section-note">各組の想定順位はFACTモードと同じ現在順位表を使います。勝点、得失点、得点、FIFA.comの表示順をベースにし、FIFAランクは補助情報として表示します。ライブ中の試合は現在スコアを暫定反映します。</p>
+                <h2>日本の確定カード</h2>
+                <p class="section-note">日本はF組2位のため、ラウンド32ではC組1位と対戦します。同梱データ上のC組1位はブラジルです。</p>
             </div>
             <div class="japan-path-grid">
-                ${directScenarios.map(renderJapanDirectScenarioCard).join("")}
-                <article class="japan-path-card is-third">
-                    <div class="path-kicker">${escapeHtml(japanGroup)}組3位通過</div>
-                    <h3 class="path-title">3位上位8枠に入った場合</h3>
-                    <div class="path-opponent">${escapeHtml(thirdOpponents || "未定")}</div>
-                    <div class="expected-team-strip">
-                        ${thirdScenarios.map((scenario) => renderExpectedTeamChip(scenario.expectedOpponent, `${scenario.opponentGroup}組1位`)).join("")}
-                    </div>
-                    <div class="path-route">3${escapeHtml(japanGroup)} / ${totalThirdCombos}通り</div>
-                    <p class="japan-card-note">3位通過組の8組の組み合わせにより、相手の組が変わります。該当組み合わせは下で相手組ごとに確認できます。</p>
-                </article>
+                ${renderJapanConfirmedScenarioCard(confirmedScenario)}
             </div>
             <div class="japan-note-panel">
-                <strong>前提:</strong> 日本は現在の同梱データではグループ ${escapeHtml(japanGroup)} です。3位の場合は、各組3位の成績比較で上位8チームに入らなければラウンド32へ進めません。初戦段階では未消化試合が多いため、想定相手は現在状況ベースの暫定表示です。
+                <strong>前提:</strong> このモードは日本を ${escapeHtml(JAPAN_CONFIRMED_SLOT)}（F組2位）に固定しています。以降の相手候補は、FACTモードと同じ現在順位表を使って、勝ち上がり先の枠を展開しています。
             </div>
         </section>
         <section>
             <div class="section-head">
-                <h2>3位通過時の組み合わせ</h2>
-                <p class="section-note">表示している文字列は「3位上位8枠に入る組」です。F組を含む組み合わせだけを表示します。</p>
+                <h2>C組1位の山と勝ち上がり先</h2>
+                <p class="section-note">日本が各試合を勝ち上がった場合に入る次の試合と、その反対側の組み合わせを決勝まで表示します。</p>
             </div>
-            ${thirdScenarios.length ? `
-                <div class="japan-third-grid">
-                    ${thirdScenarios.map(renderJapanThirdScenarioCard).join("")}
+            ${route.length ? `
+                <div class="japan-route-grid">
+                    ${route.map((step, index) => renderJapanRouteCard(step, index, projectedStandings)).join("")}
                 </div>
-            ` : `<div class="empty-panel">日本3位通過の組み合わせ表を表示できませんでした。</div>`}
+            ` : `<div class="empty-panel">日本の勝ち上がりルートを表示できませんでした。</div>`}
         </section>
     `;
 }
 
-function renderJapanDirectScenarioCard(scenario) {
+function renderJapanConfirmedScenarioCard(scenario) {
     return `
-        <article class="japan-path-card is-direct">
+        <article class="japan-path-card is-confirmed">
             <div class="path-kicker">${escapeHtml(scenario.japanSlotLabel)}</div>
             <h3 class="path-title">${escapeHtml(scenario.title)}</h3>
             <div class="path-opponent">${scenario.expectedOpponent ? renderExpectedOpponentHeadline(scenario.expectedOpponent) : `${escapeHtml(scenario.opponentLabel)} と対戦`}</div>
@@ -2094,31 +2113,84 @@ function renderJapanDirectScenarioCard(scenario) {
     `;
 }
 
-function renderJapanThirdScenarioCard(scenario) {
+function renderJapanRouteCard(step, index, projectedStandings) {
+    const match = step.match;
+    const title = STAGE_LABELS[match.stage] || match.stage;
     return `
-        <article class="japan-third-card">
-            <div class="third-card-head">
+        <article class="japan-route-card ${index === 0 ? "is-first" : ""}">
+            <div class="route-card-head">
                 <div>
-                    <div class="path-kicker">${escapeHtml(scenario.thirdSlot)} に入るケース</div>
-                    <h3>${escapeHtml(scenario.opponentLabel)} と対戦</h3>
+                    <div class="path-kicker">${escapeHtml(formatJapanMatchLabel(match))}</div>
+                    <h3>${escapeHtml(title)}</h3>
                 </div>
-                <div class="third-card-meta">${escapeHtml(scenario.matchLabel)}</div>
+                <div class="route-step-badge">STEP ${index + 1}</div>
             </div>
-            <div class="path-route">${escapeHtml(scenario.routeLabel)}</div>
-            ${renderExpectedTeamPanel(scenario.expectedOpponent)}
-            <p class="japan-card-note">F組3位を含む3位通過組の組み合わせが、以下のいずれかになった場合です。</p>
-            <details class="third-details">
-                <summary>${scenario.combos.length}通りの組み合わせを表示</summary>
-                <div class="third-combo-list">
-                    ${scenario.combos.map(renderThirdComboChip).join("")}
-                </div>
-            </details>
+            <div class="route-match-meta">${escapeHtml(match.a)} vs ${escapeHtml(match.b)}</div>
+            <div class="route-team-list">
+                ${[match.a, match.b].map((slot) => renderJapanRouteTeamRow(slot, step.entrySlot, projectedStandings)).join("")}
+            </div>
+            ${renderJapanRouteBranch(step.opponentSlot, projectedStandings)}
         </article>
     `;
 }
 
-function renderThirdComboChip(combo) {
-    return `<span class="combo-chip">${escapeHtml(formatThirdCombo(combo))}</span>`;
+function renderJapanRouteTeamRow(slot, entrySlot, projectedStandings) {
+    const view = resolveJapanRouteSlotView(slot, entrySlot, projectedStandings);
+    const flag = view.code ? renderTeamFlagOnly(view.name, view.code) : "";
+    return `
+        <div class="route-team-row ${view.focus ? "is-japan" : ""}">
+            <div class="route-team-main">
+                <span class="route-team-name">
+                    ${flag}
+                    <span class="route-team-name-text">${escapeHtml(view.name)}</span>
+                </span>
+                ${view.sub ? `<span class="route-team-sub">${escapeHtml(view.sub)}</span>` : ""}
+            </div>
+            <span class="route-slot-code">${escapeHtml(view.slotLabel || slot)}</span>
+        </div>
+    `;
+}
+
+function renderJapanRouteBranch(slot, projectedStandings) {
+    const branchMatches = collectOpponentLeafMatches(slot);
+    if (!branchMatches.length) return "";
+
+    return `
+        <div class="route-branch">
+            <div class="route-branch-title">${escapeHtml(formatRouteSlotLabel(slot))} の内訳</div>
+            <div class="route-branch-list">
+                ${branchMatches.map((match) => renderJapanBranchMatch(match, projectedStandings)).join("")}
+            </div>
+        </div>
+    `;
+}
+
+function renderJapanBranchMatch(match, projectedStandings) {
+    const left = resolveProjectedSlotView(match.a, projectedStandings);
+    const right = resolveProjectedSlotView(match.b, projectedStandings);
+    return `
+        <div class="route-branch-match">
+            <div class="route-branch-match-head">
+                <span>M${escapeHtml(match.number)} ${escapeHtml(STAGE_LABELS[match.stage] || match.stage)}</span>
+                <span>${escapeHtml(formatShortDate(match.date))}</span>
+            </div>
+            <div class="route-branch-sides">
+                ${renderJapanBranchSide(left)}
+                <span class="route-vs">vs</span>
+                ${renderJapanBranchSide(right)}
+            </div>
+        </div>
+    `;
+}
+
+function renderJapanBranchSide(view) {
+    const flag = view.code ? renderTeamFlagOnly(view.name, view.code) : "";
+    return `
+        <span class="route-branch-side" title="${escapeHtml(view.sub || view.slotLabel || view.name)}">
+            ${flag}
+            <span class="route-branch-side-text">${escapeHtml(view.name)}</span>
+        </span>
+    `;
 }
 
 function renderExpectedOpponentHeadline(expectedOpponent) {
@@ -2145,17 +2217,6 @@ function renderExpectedTeamPanel(expectedOpponent) {
             </div>
             ${renderExpectedGroupSnapshot(expectedOpponent)}
         </div>
-    `;
-}
-
-function renderExpectedTeamChip(expectedOpponent, fallbackLabel) {
-    if (!expectedOpponent) return `<span class="expected-team-chip">${escapeHtml(fallbackLabel)}</span>`;
-    const team = expectedOpponent.team;
-    return `
-        <span class="expected-team-chip" title="${escapeHtml(expectedOpponent.slotLabel)}: ${escapeHtml(team.name)} 現在${expectedOpponent.groupRank}位 / FIFA ${escapeHtml(formatFifaRank(team.rank))}">
-            ${renderTeamFlagOnly(team.name, team.code)}
-            <span class="expected-team-chip-text">${escapeHtml(team.name)} 現在${expectedOpponent.groupRank}位</span>
-        </span>
     `;
 }
 
@@ -2680,55 +2741,136 @@ function getAssignedThirdTeam(slot, matchNumber, entrantContext) {
         || null;
 }
 
-function getJapanGroup() {
-    const factMatch = state.matches.find((match) => match.home === JAPAN_TEAM || match.away === JAPAN_TEAM);
-    if (factMatch?.group) return factMatch.group;
-
-    const simGroup = Object.entries(SIM_GROUPS).find(([, teams]) => teams.includes(JAPAN_TEAM));
-    return simGroup?.[0] || JAPAN_DEFAULT_GROUP;
-}
-
-function createJapanDirectScenario(rank, group, projectedStandings) {
-    const japanSlot = `${rank}${group}`;
-    const match = findRoundOf32MatchBySlot(japanSlot);
-    const opponentSlot = getOpponentSlot(match, japanSlot);
-    const opponent = resolveFactSlot(opponentSlot, {});
+function createJapanConfirmedScenario(projectedStandings) {
+    const match = findRoundOf32MatchBySlot(JAPAN_CONFIRMED_SLOT);
+    const opponentSlot = getOpponentSlot(match, JAPAN_CONFIRMED_SLOT);
+    const opponent = resolveProjectedSlotView(opponentSlot, projectedStandings);
     const expectedOpponent = resolveExpectedTeamSlot(opponentSlot, projectedStandings);
 
     return {
-        title: `${group}組${rank}位の場合`,
-        japanSlotLabel: `${japanSlot} / ${group}組${rank}位`,
-        opponentLabel: opponent.main || "未定",
+        title: `${JAPAN_CONFIRMED_GROUP}組${JAPAN_CONFIRMED_RANK}位通過`,
+        japanSlotLabel: `${JAPAN_CONFIRMED_SLOT} / ${JAPAN_CONFIRMED_GROUP}組${JAPAN_CONFIRMED_RANK}位`,
+        opponentLabel: opponent.name || "未定",
         expectedOpponent,
-        routeLabel: match ? `${match.a} vs ${match.b}` : `${japanSlot} vs 未定`,
+        routeLabel: match ? `${match.a} vs ${match.b}` : `${JAPAN_CONFIRMED_SLOT} vs 未定`,
         matchLabel: formatJapanMatchLabel(match)
     };
 }
 
-function createJapanThirdScenarios(group, projectedStandings) {
-    if (group !== JAPAN_DEFAULT_GROUP) return [];
+function buildJapanKnockoutRoute(startSlot) {
+    const route = [];
+    const visited = new Set();
+    let entrySlot = startSlot;
 
-    return Object.entries(JAPAN_THIRD_PLACE_COMBOS_BY_OPPONENT)
-        .map(([opponentGroup, combos]) => {
-            const winnerSlot = `1${opponentGroup}`;
-            const match = state.bracket.find((item) => {
-                if (item.stage !== "Round of 32") return false;
-                const slots = [item.a, item.b];
-                return slots.includes(winnerSlot) && slots.some((slot) => isThirdPlaceSlotForGroup(slot, group));
-            });
-            const thirdSlot = [match?.a, match?.b].find((slot) => isThirdPlaceSlotForGroup(slot, group)) || `3${group}`;
+    while (entrySlot && !visited.has(entrySlot)) {
+        visited.add(entrySlot);
+        const match = state.bracket.find((item) => item.a === entrySlot || item.b === entrySlot);
+        if (!match) break;
+
+        route.push({
+            match,
+            entrySlot,
+            opponentSlot: getOpponentSlot(match, entrySlot)
+        });
+
+        if (match.stage === "Final") break;
+        entrySlot = `W${match.number}`;
+    }
+
+    return route;
+}
+
+function resolveJapanRouteSlotView(slot, entrySlot, projectedStandings) {
+    if (slot === entrySlot) {
+        const sourceMatch = /^W(\d+)$/.exec(slot || "");
+        return {
+            name: JAPAN_TEAM,
+            code: FIFA_RANKINGS[JAPAN_TEAM]?.code || "JPN",
+            sub: sourceMatch ? `M${sourceMatch[1]}勝者として勝ち上がり` : `${JAPAN_CONFIRMED_GROUP}組${JAPAN_CONFIRMED_RANK}位`,
+            slotLabel: slot,
+            focus: true
+        };
+    }
+
+    return resolveProjectedSlotView(slot, projectedStandings);
+}
+
+function resolveProjectedSlotView(slot, projectedStandings) {
+    if (!slot) return { name: "未定", code: "", sub: "", slotLabel: "" };
+
+    const direct = /^([12])([A-L])$/.exec(slot);
+    if (direct) {
+        const expected = resolveExpectedTeamSlot(slot, projectedStandings);
+        if (expected) {
             return {
-                opponentGroup,
-                opponentLabel: `${opponentGroup}組1位`,
-                expectedOpponent: resolveExpectedTeamSlot(winnerSlot, projectedStandings),
-                thirdSlot,
-                combos,
-                routeLabel: match ? `${match.a} vs ${match.b}` : `${winnerSlot} vs ${thirdSlot}`,
-                matchLabel: formatJapanMatchLabel(match),
-                matchNumber: Number(match?.number || 999)
+                name: expected.team.name,
+                code: expected.team.code || "",
+                sub: `${expected.group}組${expected.groupRank}位 / ${formatProjectedTeamRecord(expected.team)}`,
+                slotLabel: slot
             };
-        })
-        .sort((a, b) => a.matchNumber - b.matchNumber || a.opponentGroup.localeCompare(b.opponentGroup));
+        }
+
+        return {
+            name: `${direct[2]}組${direct[1]}位`,
+            code: "",
+            sub: "",
+            slotLabel: slot
+        };
+    }
+
+    if (THIRD_PLACE_SLOTS.has(slot)) {
+        const groups = slot.slice(1).split("").join("/");
+        return {
+            name: `${groups}組 3位枠`,
+            code: "",
+            sub: "3位上位8枠",
+            slotLabel: slot
+        };
+    }
+
+    const winner = /^W(\d+)$/.exec(slot);
+    if (winner) {
+        return {
+            name: `M${winner[1]} 勝者`,
+            code: "",
+            sub: "",
+            slotLabel: slot
+        };
+    }
+
+    const runnerUp = /^RU(\d+)$/.exec(slot);
+    if (runnerUp) {
+        return {
+            name: `M${runnerUp[1]} 敗者`,
+            code: "",
+            sub: "",
+            slotLabel: slot
+        };
+    }
+
+    return { name: slot, code: "", sub: "", slotLabel: slot };
+}
+
+function collectOpponentLeafMatches(slot) {
+    const byNumber = new Map(state.bracket.map((match) => [Number(match.number), match]));
+    const source = getWinnerSourceMatch(slot, byNumber);
+    return source ? collectLeafMatches(source, byNumber) : [];
+}
+
+function formatRouteSlotLabel(slot) {
+    if (!slot) return "未定";
+
+    const winner = /^W(\d+)$/.exec(slot);
+    if (winner) return `M${winner[1]}勝者`;
+
+    const direct = /^([12])([A-L])$/.exec(slot);
+    if (direct) return `${direct[2]}組${direct[1]}位`;
+
+    if (THIRD_PLACE_SLOTS.has(slot)) {
+        return `${slot.slice(1).split("").join("/")}組3位枠`;
+    }
+
+    return slot;
 }
 
 function findRoundOf32MatchBySlot(slot) {
@@ -2738,10 +2880,6 @@ function findRoundOf32MatchBySlot(slot) {
 function getOpponentSlot(match, slot) {
     if (!match) return "";
     return match.a === slot ? match.b : match.a;
-}
-
-function isThirdPlaceSlotForGroup(slot, group) {
-    return THIRD_PLACE_SLOTS.has(slot) && slot.slice(1).includes(group);
 }
 
 function getJapanProjectedStandings() {
@@ -2787,7 +2925,7 @@ function resolveExpectedTeamSlot(slot, projectedStandings) {
 
     const groupRank = Number(match[1]);
     const group = match[2];
-    const groupSnapshot = projectedStandings?.[group] || getProjectedGroupTeams(group);
+    const groupSnapshot = projectedStandings?.[group]?.length ? projectedStandings[group] : getProjectedGroupTeams(group);
     const team = groupSnapshot[groupRank - 1];
     if (!team) return null;
 
@@ -2830,10 +2968,6 @@ function formatProjectedTeamRecord(team) {
 
 function formatFifaRank(rank) {
     return Number.isFinite(rank) && rank < 999 ? `${rank}位` : "未設定";
-}
-
-function formatThirdCombo(combo) {
-    return combo.split("").map((group) => `${group}組`).join("/");
 }
 
 function renderSimulation() {

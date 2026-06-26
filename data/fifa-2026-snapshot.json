@@ -1,5 +1,5 @@
 {
-  "fetchedAt": "2026-06-26T03:07:11.818Z",
+  "fetchedAt": "2026-06-26T03:11:17.574Z",
   "source": "FIFA.com",
   "matches": [
     {
@@ -1062,7 +1062,7 @@
       "homeScore": 2,
       "awayScore": 1,
       "status": "live",
-      "matchTime": ""
+      "matchTime": "48'"
     },
     {
       "id": "400021461",
@@ -1080,7 +1080,7 @@
       "homeScore": 0,
       "awayScore": 0,
       "status": "live",
-      "matchTime": ""
+      "matchTime": "48'"
     },
     {
       "id": "400021489",
