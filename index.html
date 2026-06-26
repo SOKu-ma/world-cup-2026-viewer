@@ -89,6 +89,7 @@
 
         .mode-button,
         .update-button,
+        .records-language-button,
         .action-button,
         .primary-button {
             min-height: 40px;
@@ -102,7 +103,8 @@
         }
 
         .mode-button,
-        .update-button {
+        .update-button,
+        .records-language-button {
             background: transparent;
             color: var(--muted);
         }
@@ -121,7 +123,8 @@
             line-height: 1.2;
         }
 
-        .update-switch {
+        .update-switch,
+        .records-language-switch {
             display: inline-grid;
             grid-template-columns: repeat(2, minmax(72px, 1fr));
             gap: 4px;
@@ -131,7 +134,8 @@
             background: #eef2f7;
         }
 
-        .update-button {
+        .update-button,
+        .records-language-button {
             min-height: 32px;
             padding: 0 10px;
             font-size: 12px;
@@ -139,6 +143,7 @@
 
         .mode-button:focus-visible,
         .update-button:focus-visible,
+        .records-language-button:focus-visible,
         .action-button:focus-visible,
         .primary-button:focus-visible {
             outline: 3px solid rgba(23, 50, 77, 0.24);
@@ -146,7 +151,8 @@
         }
 
         .mode-button.is-active,
-        .update-button.is-active {
+        .update-button.is-active,
+        .records-language-button.is-active {
             background: var(--panel);
             border-color: var(--line);
             color: var(--navy);
@@ -1494,7 +1500,8 @@
             }
             .header-controls,
             .update-panel,
-            .update-switch {
+            .update-switch,
+            .records-language-switch {
                 width: 100%;
             }
             .update-panel {
@@ -1564,6 +1571,7 @@
 const SNAPSHOT_URL = "data/fifa-2026-snapshot.json";
 const AUTO_REFRESH_INTERVAL_MS = 60 * 1000;
 const UPDATE_MODE_STORAGE_KEY = "worldCup2026UpdateMode";
+const RECORDS_LANGUAGE_STORAGE_KEY = "worldCup2026RecordsLanguage";
 
 const GROUPS = "ABCDEFGHIJKL".split("");
 const THIRD_PLACE_SLOTS = new Set(["3ABCDF", "3CDFGH", "3CEFHI", "3EHIJK", "3BEFIJ", "3AEHIJ", "3EFGIJ", "3DEIJL"]);
@@ -1881,6 +1889,7 @@ const BRACKET_TREE = {
 let state = {
     mode: "fact",
     updateMode: getInitialUpdateMode(),
+    recordsLanguage: getInitialRecordsLanguage(),
     factLoading: true,
     factRefreshing: false,
     factError: "",
@@ -1917,6 +1926,14 @@ document.querySelectorAll("[data-update-mode]").forEach((button) => {
 });
 
 app.addEventListener("click", (event) => {
+    const recordsLanguage = event.target.closest("[data-records-language]");
+    if (recordsLanguage) {
+        state.recordsLanguage = recordsLanguage.dataset.recordsLanguage === "en" ? "en" : "ja";
+        saveRecordsLanguage(state.recordsLanguage);
+        renderRecords();
+        return;
+    }
+
     const action = event.target.closest("[data-action]");
     if (!action) return;
 
@@ -1966,11 +1983,27 @@ function getInitialUpdateMode() {
     }
 }
 
+function getInitialRecordsLanguage() {
+    try {
+        return localStorage.getItem(RECORDS_LANGUAGE_STORAGE_KEY) === "en" ? "en" : "ja";
+    } catch (error) {
+        return "ja";
+    }
+}
+
 function saveUpdateMode(mode) {
     try {
         localStorage.setItem(UPDATE_MODE_STORAGE_KEY, mode);
     } catch (error) {
         // Ignore storage failures; the in-memory mode still works for this page session.
+    }
+}
+
+function saveRecordsLanguage(language) {
+    try {
+        localStorage.setItem(RECORDS_LANGUAGE_STORAGE_KEY, language);
+    } catch (error) {
+        // Ignore storage failures; the in-memory language still works for this page session.
     }
 }
 
@@ -2269,6 +2302,10 @@ function renderRecords() {
                 <a href="https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026" target="_blank" rel="noopener noreferrer">FIFA.com</a>
             </div>
             <div class="toolbar-actions">
+                <div class="records-language-switch" role="group" aria-label="個人記録の表示言語">
+                    <button class="records-language-button ${state.recordsLanguage === "ja" ? "is-active" : ""}" type="button" data-records-language="ja">日本語</button>
+                    <button class="records-language-button ${state.recordsLanguage === "en" ? "is-active" : ""}" type="button" data-records-language="en">English</button>
+                </div>
                 <button class="action-button" type="button" data-action="refresh-fact">同梱データ再読み込み</button>
             </div>
         </div>
@@ -2299,7 +2336,7 @@ function renderRecordsSummary(stats) {
             ${renderRecordSummaryCard("対象選手", totalPlayers, "選手別データに含まれる人数")}
             ${renderRecordSummaryCard("総得点", totalGoals, "選手別得点の合計")}
             ${renderRecordSummaryCard("総アシスト", totalAssists, "選手別アシストの合計")}
-            ${renderRecordSummaryCard("最多得点", topScorer ? `${topScorer.goals}点` : "0点", topScorer ? topScorer.player : "該当なし")}
+            ${renderRecordSummaryCard("最多得点", topScorer ? `${topScorer.goals}点` : "0点", topScorer ? getRecordPlayerName(topScorer) : "該当なし")}
         </div>
     `;
 }
@@ -2378,7 +2415,7 @@ function sortRecordPlayers(a, b) {
         || b.assists - a.assists
         || b.matches - a.matches
         || b.minutes - a.minutes
-        || a.player.localeCompare(b.player, "ja");
+        || getRecordPlayerName(a).localeCompare(getRecordPlayerName(b), state.recordsLanguage === "en" ? "en" : "ja");
 }
 
 function renderRecordBoard(board) {
@@ -2401,17 +2438,19 @@ function renderRecordBoard(board) {
 }
 
 function renderRecordRow(player, index, board) {
-    const flag = renderTeamFlagOnly(player.team, player.teamCode);
+    const playerName = getRecordPlayerName(player);
+    const teamName = getRecordTeamName(player);
+    const flag = renderTeamFlagOnly(teamName, player.teamCode);
     const detail = board.getDetail(player);
     return `
         <div class="record-row ${index === 0 ? "is-leader" : ""}">
             <div class="record-rank">${index + 1}</div>
             <div class="record-player">
-                <div class="record-player-name">${escapeHtml(player.player)}</div>
-                ${player.team ? `
+                <div class="record-player-name">${escapeHtml(playerName)}</div>
+                ${teamName ? `
                     <div class="record-player-team">
                         ${flag}
-                        <span>${escapeHtml(player.team)}</span>
+                        <span>${escapeHtml(teamName)}</span>
                     </div>
                 ` : ""}
                 ${detail ? `<div class="record-player-sub"><span>${escapeHtml(detail)}</span></div>` : ""}
@@ -2422,6 +2461,17 @@ function renderRecordRow(player, index, board) {
             </div>
         </div>
     `;
+}
+
+function getRecordPlayerName(player) {
+    if (state.recordsLanguage === "en") return player.playerEn || player.player || player.playerJa || "";
+    return player.playerJa || player.player || player.playerEn || "";
+}
+
+function getRecordTeamName(player) {
+    if (state.recordsLanguage === "en") return player.teamEn || player.teamRaw || player.team || player.teamJa || "";
+    const fallback = player.teamEn || player.teamRaw;
+    return player.teamJa || player.team || (fallback ? localizeTeam(fallback) : "");
 }
 
 function normalizePlayerStats(rawStats) {
@@ -2436,16 +2486,27 @@ function normalizePlayerStats(rawStats) {
 
 function normalizePlayerStatRow(row) {
     const stats = row.stats || row.tournamentStats || row.seasonStats || row;
-    const player = readRecordName(row.player || row.playerName || row.name)
+    const playerEn = readRecordName(row.playerEn || row.playerEnglish || row.playerNameEn)
+        || readRecordName(row.player || row.playerName || row.name)
         || [readRecordName(row.firstName), readRecordName(row.lastName)].filter(Boolean).join(" ")
         || readRecordName(row.shortName);
-    const teamName = readRecordName(row.team || row.teamName || row.country || row.nationalTeam);
-    const team = teamName ? localizeTeam(teamName) : "";
+    const playerJa = readRecordName(row.playerJa || row.playerJapanese || row.playerNameJa) || playerEn;
+    const player = playerJa || playerEn;
+    const teamEn = readRecordName(row.teamEn || row.teamRaw || row.teamEnglish || row.teamNameEn)
+        || readRecordName(row.teamName || row.country || row.nationalTeam || row.team);
+    const teamJaSource = readRecordName(row.teamJa || row.teamJapanese || row.teamNameJa || row.team);
+    const teamJa = teamJaSource ? localizeTeam(teamJaSource) : (teamEn ? localizeTeam(teamEn) : "");
+    const team = teamJa || teamEn;
     const teamCode = readRecordName(row.teamCode || row.teamAbbreviation || row.countryCode || row.associationCode);
 
     return {
         player,
+        playerJa,
+        playerEn,
         team,
+        teamJa,
+        teamEn,
+        teamRaw: teamEn,
         teamCode,
         goals: readRecordNumber(stats, ["goals", "goal", "totalGoals", "goalsScored"]),
         assists: readRecordNumber(stats, ["assists", "assist", "totalAssists"]),
