@@ -79,7 +79,7 @@
 
         .mode-switch {
             display: inline-grid;
-            grid-template-columns: repeat(4, minmax(96px, 1fr));
+            grid-template-columns: repeat(5, minmax(86px, 1fr));
             gap: 4px;
             padding: 4px;
             border: 1px solid var(--line);
@@ -1030,6 +1030,189 @@
             color: var(--muted);
         }
 
+        .records-summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 10px;
+            margin-bottom: 14px;
+        }
+
+        .record-summary-card {
+            display: grid;
+            gap: 4px;
+            min-height: 86px;
+            padding: 13px;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: var(--panel);
+            box-shadow: 0 4px 14px rgba(20, 32, 48, 0.05);
+        }
+
+        .record-summary-label {
+            color: var(--muted);
+            font-size: 11px;
+            font-weight: 900;
+        }
+
+        .record-summary-value {
+            font-size: 24px;
+            font-weight: 900;
+            line-height: 1.15;
+        }
+
+        .record-summary-sub {
+            color: var(--muted);
+            font-size: 12px;
+            line-height: 1.35;
+        }
+
+        .records-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 14px;
+            align-items: start;
+        }
+
+        .record-board {
+            overflow: hidden;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: var(--panel);
+            box-shadow: 0 4px 14px rgba(20, 32, 48, 0.05);
+        }
+
+        .record-board-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 12px;
+            border-bottom: 1px solid var(--line);
+            background: #f8fafc;
+        }
+
+        .record-board-title {
+            min-width: 0;
+        }
+
+        .record-board-title h3 {
+            margin: 0;
+            font-size: 17px;
+            line-height: 1.25;
+        }
+
+        .record-board-note {
+            margin-top: 3px;
+            color: var(--muted);
+            font-size: 11px;
+            font-weight: 800;
+            line-height: 1.35;
+        }
+
+        .record-board-count {
+            flex: 0 0 auto;
+            min-width: 54px;
+            padding: 4px 7px;
+            border-radius: 999px;
+            background: #eef2f7;
+            color: var(--muted);
+            font-size: 11px;
+            font-weight: 900;
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        .record-list {
+            display: grid;
+        }
+
+        .record-row {
+            display: grid;
+            grid-template-columns: 32px minmax(0, 1fr) auto;
+            align-items: center;
+            gap: 10px;
+            min-height: 58px;
+            padding: 10px 12px;
+            border-bottom: 1px solid #edf0f5;
+        }
+
+        .record-row:last-child {
+            border-bottom: 0;
+        }
+
+        .record-row.is-leader {
+            background: var(--green-soft);
+        }
+
+        .record-rank {
+            color: var(--muted);
+            font-size: 13px;
+            font-weight: 900;
+            text-align: center;
+        }
+
+        .record-player {
+            display: grid;
+            gap: 4px;
+            min-width: 0;
+        }
+
+        .record-player-name {
+            overflow: hidden;
+            color: var(--ink);
+            font-size: 14px;
+            font-weight: 900;
+            line-height: 1.2;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .record-player-team,
+        .record-player-sub {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            min-width: 0;
+            color: var(--muted);
+            font-size: 11px;
+            font-weight: 800;
+            line-height: 1.25;
+        }
+
+        .record-player-team span:last-child,
+        .record-player-sub span {
+            min-width: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .record-value {
+            display: grid;
+            justify-items: end;
+            gap: 1px;
+            min-width: 54px;
+        }
+
+        .record-value-main {
+            font-size: 22px;
+            font-weight: 900;
+            line-height: 1.1;
+        }
+
+        .record-value-label {
+            color: var(--muted);
+            font-size: 10px;
+            font-weight: 900;
+            white-space: nowrap;
+        }
+
+        .records-empty {
+            display: grid;
+            gap: 8px;
+            text-align: left;
+        }
+
         .bracket-tree-shell {
             background: var(--panel);
             border: 1px solid var(--line);
@@ -1307,7 +1490,7 @@
             }
             .mode-switch {
                 width: 100%;
-                grid-template-columns: repeat(4, minmax(0, 1fr));
+                grid-template-columns: repeat(5, minmax(0, 1fr));
             }
             .header-controls,
             .update-panel,
@@ -1334,6 +1517,13 @@
             .calendar-day {
                 min-height: 142px;
             }
+            .records-grid {
+                grid-template-columns: 1fr;
+            }
+            .record-row {
+                grid-template-columns: 28px minmax(0, 1fr) auto;
+                padding: 9px;
+            }
         }
     </style>
 </head>
@@ -1343,12 +1533,13 @@
         <div class="header-row">
             <div>
                 <h1>World Cup 2026</h1>
-                <p class="subtitle">FACT、カレンダー、シミュレーション、日本の勝ち上がりルートを切り替えて、グループリーグと決勝トーナメントを確認できます。</p>
+                <p class="subtitle">FACT、カレンダー、個人記録、シミュレーション、日本の勝ち上がりルートを切り替えて、グループリーグと決勝トーナメントを確認できます。</p>
             </div>
             <div class="header-controls">
                 <div class="mode-switch" role="tablist" aria-label="表示モード">
                     <button class="mode-button is-active" type="button" data-mode="fact">FACT</button>
                     <button class="mode-button" type="button" data-mode="calendar">CAL</button>
+                    <button class="mode-button" type="button" data-mode="records">RECORDS</button>
                     <button class="mode-button" type="button" data-mode="simulation">SIM</button>
                     <button class="mode-button" type="button" data-mode="japan">JAPAN</button>
                 </div>
@@ -1694,6 +1885,8 @@ let state = {
     factRefreshing: false,
     factError: "",
     matches: [],
+    playerStats: [],
+    playerStatsUpdatedAt: "",
     standingsOrder: {},
     bracket: [...FALLBACK_BRACKET],
     sourceLabel: "",
@@ -1748,6 +1941,8 @@ async function loadFactData({ silent = false } = {}) {
         const snapshot = await fetchJson(SNAPSHOT_URL);
 
         state.matches = snapshot.matches || [];
+        state.playerStats = normalizePlayerStats(snapshot.playerStats || []);
+        state.playerStatsUpdatedAt = snapshot.playerStatsUpdatedAt || (state.playerStats.length ? snapshot.fetchedAt : "") || "";
         state.standingsOrder = snapshot.standingsOrder || {};
         state.bracket = snapshot.bracket?.length ? snapshot.bracket : [...FALLBACK_BRACKET];
         state.sourceLabel = `同梱データ作成: ${formatDateTime(snapshot.fetchedAt)}`;
@@ -1809,6 +2004,7 @@ async function fetchJson(url) {
 function render() {
     if (state.mode === "fact") renderFact();
     else if (state.mode === "calendar") renderCalendar();
+    else if (state.mode === "records") renderRecords();
     else if (state.mode === "japan") renderJapanPath();
     else renderSimulation();
 }
@@ -2051,6 +2247,258 @@ function renderCalendarTeam(name, code, side) {
     const flag = renderTeamFlagOnly(name, code);
     const label = `<span class="calendar-team-label">${escapeHtml(name)}</span>`;
     return `<span class="calendar-team is-${escapeHtml(side)}">${flag}${label}</span>`;
+}
+
+function renderRecords() {
+    if (state.factLoading) {
+        app.innerHTML = `<div class="loading">FACT データを読み込んでいます。</div>`;
+        return;
+    }
+
+    const stats = normalizePlayerStats(state.playerStats);
+    const boards = buildRecordBoards(stats);
+    const source = state.playerStatsUpdatedAt
+        ? `個人記録データ: ${formatDateTime(state.playerStatsUpdatedAt)}`
+        : "個人記録データ未取得";
+
+    app.innerHTML = `
+        <div class="toolbar">
+            <div class="source-line">
+                <strong>RECORDS モード</strong><br>
+                ${escapeHtml(source)} / 得点、アシスト、得点関与、出場記録を表示します。データ出典:
+                <a href="https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026" target="_blank" rel="noopener noreferrer">FIFA.com</a>
+            </div>
+            <div class="toolbar-actions">
+                <button class="action-button" type="button" data-action="refresh-fact">同梱データ再読み込み</button>
+            </div>
+        </div>
+        ${state.factError ? `<div class="error-box">${escapeHtml(state.factError)}</div>` : ""}
+        <section>
+            <div class="section-head">
+                <h2>個人記録</h2>
+                <p class="section-note">同梱スナップショットの選手別データから集計します。</p>
+            </div>
+            ${stats.length ? `
+                ${renderRecordsSummary(stats)}
+                <div class="records-grid">
+                    ${boards.map(renderRecordBoard).join("")}
+                </div>
+            ` : renderRecordsEmpty()}
+        </section>
+    `;
+}
+
+function renderRecordsSummary(stats) {
+    const totalGoals = sumPlayerMetric(stats, "goals");
+    const totalAssists = sumPlayerMetric(stats, "assists");
+    const totalPlayers = stats.length;
+    const topScorer = getTopPlayerByMetric(stats, (player) => player.goals);
+
+    return `
+        <div class="records-summary-grid">
+            ${renderRecordSummaryCard("対象選手", totalPlayers, "選手別データに含まれる人数")}
+            ${renderRecordSummaryCard("総得点", totalGoals, "選手別得点の合計")}
+            ${renderRecordSummaryCard("総アシスト", totalAssists, "選手別アシストの合計")}
+            ${renderRecordSummaryCard("最多得点", topScorer ? `${topScorer.goals}点` : "0点", topScorer ? topScorer.player : "該当なし")}
+        </div>
+    `;
+}
+
+function renderRecordSummaryCard(label, value, sub) {
+    return `
+        <article class="record-summary-card">
+            <div class="record-summary-label">${escapeHtml(label)}</div>
+            <div class="record-summary-value">${escapeHtml(value)}</div>
+            <div class="record-summary-sub">${escapeHtml(sub)}</div>
+        </article>
+    `;
+}
+
+function renderRecordsEmpty() {
+    return `
+        <div class="empty-panel records-empty">
+            <strong>選手別の得点・アシストデータはまだ同梱されていません。</strong>
+            <span>現在のスナップショットは試合結果、順位、トーナメント枠を保持しています。</span>
+        </div>
+    `;
+}
+
+function buildRecordBoards(stats) {
+    const configs = [
+        {
+            title: "得点王",
+            valueLabel: "得点",
+            note: "ゴール数順",
+            getValue: (player) => player.goals,
+            getDetail: (player) => formatRecordDetail([`${player.assists}A`, formatPlayerAppearances(player)])
+        },
+        {
+            title: "アシスト王",
+            valueLabel: "アシスト",
+            note: "アシスト数順",
+            getValue: (player) => player.assists,
+            getDetail: (player) => formatRecordDetail([`${player.goals}G`, formatPlayerAppearances(player)])
+        },
+        {
+            title: "得点関与",
+            valueLabel: "G+A",
+            note: "得点 + アシスト",
+            getValue: (player) => player.goals + player.assists,
+            getDetail: (player) => formatRecordDetail([`${player.goals}G`, `${player.assists}A`, formatPlayerAppearances(player)])
+        },
+        {
+            title: "出場試合",
+            valueLabel: "試合",
+            note: "出場数順",
+            getValue: (player) => player.matches,
+            getDetail: (player) => formatRecordDetail([player.minutes ? `${player.minutes}分` : "", `${player.goals}G`, `${player.assists}A`])
+        }
+    ];
+
+    return configs.map((config) => ({
+        ...config,
+        entries: getRecordEntries(stats, config)
+    }));
+}
+
+function getRecordEntries(stats, config) {
+    return stats
+        .map((player) => ({
+            ...player,
+            recordValue: config.getValue(player)
+        }))
+        .filter((player) => player.recordValue > 0)
+        .sort(sortRecordPlayers)
+        .slice(0, 10);
+}
+
+function sortRecordPlayers(a, b) {
+    return b.recordValue - a.recordValue
+        || b.goals - a.goals
+        || b.assists - a.assists
+        || b.matches - a.matches
+        || b.minutes - a.minutes
+        || a.player.localeCompare(b.player, "ja");
+}
+
+function renderRecordBoard(board) {
+    return `
+        <article class="record-board">
+            <div class="record-board-head">
+                <div class="record-board-title">
+                    <h3>${escapeHtml(board.title)}</h3>
+                    <div class="record-board-note">${escapeHtml(board.note)}</div>
+                </div>
+                <div class="record-board-count">TOP ${board.entries.length}</div>
+            </div>
+            <div class="record-list">
+                ${board.entries.length
+                    ? board.entries.map((player, index) => renderRecordRow(player, index, board)).join("")
+                    : `<div class="empty-panel">表示できるデータがありません。</div>`}
+            </div>
+        </article>
+    `;
+}
+
+function renderRecordRow(player, index, board) {
+    const flag = renderTeamFlagOnly(player.team, player.teamCode);
+    const detail = board.getDetail(player);
+    return `
+        <div class="record-row ${index === 0 ? "is-leader" : ""}">
+            <div class="record-rank">${index + 1}</div>
+            <div class="record-player">
+                <div class="record-player-name">${escapeHtml(player.player)}</div>
+                ${player.team ? `
+                    <div class="record-player-team">
+                        ${flag}
+                        <span>${escapeHtml(player.team)}</span>
+                    </div>
+                ` : ""}
+                ${detail ? `<div class="record-player-sub"><span>${escapeHtml(detail)}</span></div>` : ""}
+            </div>
+            <div class="record-value">
+                <div class="record-value-main">${escapeHtml(player.recordValue)}</div>
+                <div class="record-value-label">${escapeHtml(board.valueLabel)}</div>
+            </div>
+        </div>
+    `;
+}
+
+function normalizePlayerStats(rawStats) {
+    const rows = Array.isArray(rawStats)
+        ? rawStats
+        : (Array.isArray(rawStats?.players) ? rawStats.players : (Array.isArray(rawStats?.stats) ? rawStats.stats : []));
+
+    return rows
+        .map(normalizePlayerStatRow)
+        .filter((player) => player.player);
+}
+
+function normalizePlayerStatRow(row) {
+    const stats = row.stats || row.tournamentStats || row.seasonStats || row;
+    const player = readRecordName(row.player || row.playerName || row.name)
+        || [readRecordName(row.firstName), readRecordName(row.lastName)].filter(Boolean).join(" ")
+        || readRecordName(row.shortName);
+    const teamName = readRecordName(row.team || row.teamName || row.country || row.nationalTeam);
+    const team = teamName ? localizeTeam(teamName) : "";
+    const teamCode = readRecordName(row.teamCode || row.teamAbbreviation || row.countryCode || row.associationCode);
+
+    return {
+        player,
+        team,
+        teamCode,
+        goals: readRecordNumber(stats, ["goals", "goal", "totalGoals", "goalsScored"]),
+        assists: readRecordNumber(stats, ["assists", "assist", "totalAssists"]),
+        matches: readRecordNumber(stats, ["matches", "appearances", "matchesPlayed", "played"]),
+        minutes: readRecordNumber(stats, ["minutes", "minutesPlayed", "minsPlayed"]),
+        yellowCards: readRecordNumber(stats, ["yellowCards", "yellows"]),
+        redCards: readRecordNumber(stats, ["redCards", "reds"])
+    };
+}
+
+function readRecordName(value) {
+    if (!value) return "";
+    if (Array.isArray(value)) return getText(value);
+    if (typeof value === "object") {
+        return readRecordName(value.name)
+            || readRecordName(value.Name)
+            || readRecordName(value.description)
+            || readRecordName(value.Description)
+            || readRecordName(value.TeamName)
+            || readRecordName(value.ShortClubName);
+    }
+    return String(value);
+}
+
+function readRecordNumber(row, keys) {
+    for (const key of keys) {
+        const value = row?.[key];
+        const number = typeof value === "number" ? value : Number(value);
+        if (Number.isFinite(number)) return number;
+    }
+    return 0;
+}
+
+function sumPlayerMetric(stats, key) {
+    return stats.reduce((sum, player) => sum + (Number.isFinite(player[key]) ? player[key] : 0), 0);
+}
+
+function getTopPlayerByMetric(stats, getValue) {
+    return stats
+        .map((player) => ({ ...player, recordValue: getValue(player) }))
+        .filter((player) => player.recordValue > 0)
+        .sort(sortRecordPlayers)[0] || null;
+}
+
+function formatPlayerAppearances(player) {
+    if (player.matches && player.minutes) return `${player.matches}試合 / ${player.minutes}分`;
+    if (player.matches) return `${player.matches}試合`;
+    if (player.minutes) return `${player.minutes}分`;
+    return "";
+}
+
+function formatRecordDetail(items) {
+    return items.filter(Boolean).join(" / ");
 }
 
 function renderJapanPath() {
