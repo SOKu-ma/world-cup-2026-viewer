@@ -1,5 +1,5 @@
 {
-  "fetchedAt": "2026-06-26T03:11:17.574Z",
+  "fetchedAt": "2026-06-26T06:10:54.200Z",
   "source": "FIFA.com",
   "matches": [
     {
@@ -1059,10 +1059,10 @@
       "awayCode": "USA",
       "homeSeed": "D4",
       "awaySeed": "D1",
-      "homeScore": 2,
-      "awayScore": 1,
-      "status": "live",
-      "matchTime": "48'"
+      "homeScore": 3,
+      "awayScore": 2,
+      "status": "final",
+      "matchTime": "99'"
     },
     {
       "id": "400021461",
@@ -1079,8 +1079,8 @@
       "awaySeed": "D3",
       "homeScore": 0,
       "awayScore": 0,
-      "status": "live",
-      "matchTime": "48'"
+      "status": "final",
+      "matchTime": "96'"
     },
     {
       "id": "400021489",
