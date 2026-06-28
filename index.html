@@ -2571,12 +2571,15 @@ function renderJapanPath() {
     const projectedStandings = getJapanProjectedStandings();
     const confirmedScenario = createJapanConfirmedScenario(projectedStandings);
     const route = buildJapanKnockoutRoute(JAPAN_CONFIRMED_SLOT);
+    const opponentName = confirmedScenario.opponentLabel || "未定";
+    const japanRouteHeading = opponentName !== "未定" ? `${opponentName}戦からの勝ち上がり先` : "日本の勝ち上がり先";
+    const japanRouteSummary = opponentName !== "未定" ? `${opponentName}戦から始まる山` : "日本の勝ち上がり先";
 
     app.innerHTML = `
         <div class="toolbar">
             <div class="source-line">
                 <strong>JAPAN モード</strong><br>
-                日本はグループ ${escapeHtml(JAPAN_CONFIRMED_GROUP)} 2位通過として、C組1位側の山を表示します。データ根拠:
+                日本はグループ ${escapeHtml(JAPAN_CONFIRMED_GROUP)} 2位通過として、${escapeHtml(japanRouteSummary)}を表示します。データ根拠:
                 <a href="https://digitalhub.fifa.com/m/636f5c9c6f29771f/original/FWC2026_regulations_EN.pdf" target="_blank" rel="noopener noreferrer">FIFA World Cup 2026 Regulations</a>
                 / <a href="https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026" target="_blank" rel="noopener noreferrer">FIFA.com</a>
                 / <a href="https://inside.fifa.com/fifa-world-ranking/men" target="_blank" rel="noopener noreferrer">FIFA/Coca-Cola Men's World Ranking</a>
@@ -2586,18 +2589,18 @@ function renderJapanPath() {
         <section>
             <div class="section-head">
                 <h2>日本の確定カード</h2>
-                <p class="section-note">日本はF組2位のため、ラウンド32ではC組1位と対戦します。同梱データ上のC組1位はブラジルです。</p>
+                <p class="section-note">日本はF組2位のため、ラウンド32では${escapeHtml(opponentName)}と対戦します。JAPANタブは同梱データのベスト32組み合わせを優先して表示します。</p>
             </div>
             <div class="japan-path-grid">
                 ${renderJapanConfirmedScenarioCard(confirmedScenario)}
             </div>
             <div class="japan-note-panel">
-                <strong>前提:</strong> このモードは日本を ${escapeHtml(JAPAN_CONFIRMED_SLOT)}（F組2位）に固定しています。以降の相手候補は、FACTモードと同じ現在順位表を使って、勝ち上がり先の枠を展開しています。
+                <strong>前提:</strong> このモードは日本を ${escapeHtml(JAPAN_CONFIRMED_SLOT)}（F組2位）に固定しています。ベスト32で確定しているチーム名は同梱データを優先し、以降の相手候補はFACTモードと同じ現在順位表を使って勝ち上がり先の枠を展開しています。
             </div>
         </section>
         <section>
             <div class="section-head">
-                <h2>C組1位の山と勝ち上がり先</h2>
+                <h2>${escapeHtml(japanRouteHeading)}</h2>
                 <p class="section-note">日本が各試合を勝ち上がった場合に入る次の試合と、その反対側の組み合わせを決勝まで表示します。</p>
             </div>
             ${route.length ? `
@@ -2625,6 +2628,7 @@ function renderJapanConfirmedScenarioCard(scenario) {
 function renderJapanRouteCard(step, index, projectedStandings) {
     const match = step.match;
     const title = STAGE_LABELS[match.stage] || match.stage;
+    const matchupLabel = formatJapanRouteMatchupLabel(match, step.entrySlot, projectedStandings);
     return `
         <article class="japan-route-card ${index === 0 ? "is-first" : ""}">
             <div class="route-card-head">
@@ -2634,17 +2638,17 @@ function renderJapanRouteCard(step, index, projectedStandings) {
                 </div>
                 <div class="route-step-badge">STEP ${index + 1}</div>
             </div>
-            <div class="route-match-meta">${escapeHtml(match.a)} vs ${escapeHtml(match.b)}</div>
+            <div class="route-match-meta">${escapeHtml(matchupLabel)}</div>
             <div class="route-team-list">
-                ${[match.a, match.b].map((slot) => renderJapanRouteTeamRow(slot, step.entrySlot, projectedStandings)).join("")}
+                ${[match.a, match.b].map((slot) => renderJapanRouteTeamRow(slot, step.entrySlot, match, projectedStandings)).join("")}
             </div>
             ${renderJapanRouteBranch(step.opponentSlot, projectedStandings)}
         </article>
     `;
 }
 
-function renderJapanRouteTeamRow(slot, entrySlot, projectedStandings) {
-    const view = resolveJapanRouteSlotView(slot, entrySlot, projectedStandings);
+function renderJapanRouteTeamRow(slot, entrySlot, match, projectedStandings) {
+    const view = resolveJapanRouteSlotView(slot, entrySlot, match, projectedStandings);
     const flag = view.code ? renderTeamFlagOnly(view.name, view.code) : "";
     return `
         <div class="route-team-row ${view.focus ? "is-japan" : ""}">
@@ -2675,8 +2679,8 @@ function renderJapanRouteBranch(slot, projectedStandings) {
 }
 
 function renderJapanBranchMatch(match, projectedStandings) {
-    const left = resolveProjectedSlotView(match.a, projectedStandings);
-    const right = resolveProjectedSlotView(match.b, projectedStandings);
+    const left = resolveBracketMatchSlotView(match, match.a, projectedStandings);
+    const right = resolveBracketMatchSlotView(match, match.b, projectedStandings);
     return `
         <div class="route-branch-match">
             <div class="route-branch-match-head">
@@ -3253,15 +3257,18 @@ function getAssignedThirdTeam(slot, matchNumber, entrantContext) {
 function createJapanConfirmedScenario(projectedStandings) {
     const match = findRoundOf32MatchBySlot(JAPAN_CONFIRMED_SLOT);
     const opponentSlot = getOpponentSlot(match, JAPAN_CONFIRMED_SLOT);
-    const opponent = resolveProjectedSlotView(opponentSlot, projectedStandings);
-    const expectedOpponent = resolveExpectedTeamSlot(opponentSlot, projectedStandings);
+    const opponent = resolveBracketMatchSlotView(match, opponentSlot, projectedStandings);
+    const expectedOpponent = mergeKnownOpponentIntoExpectedSlot(
+        resolveExpectedTeamSlot(opponentSlot, projectedStandings),
+        opponent
+    );
 
     return {
         title: `${JAPAN_CONFIRMED_GROUP}組${JAPAN_CONFIRMED_RANK}位通過`,
         japanSlotLabel: `${JAPAN_CONFIRMED_SLOT} / ${JAPAN_CONFIRMED_GROUP}組${JAPAN_CONFIRMED_RANK}位`,
         opponentLabel: opponent.name || "未定",
         expectedOpponent,
-        routeLabel: match ? `${match.a} vs ${match.b}` : `${JAPAN_CONFIRMED_SLOT} vs 未定`,
+        routeLabel: match ? formatJapanMatchupLabel(match, projectedStandings) : `${JAPAN_CONFIRMED_SLOT} vs 未定`,
         matchLabel: formatJapanMatchLabel(match)
     };
 }
@@ -3289,7 +3296,7 @@ function buildJapanKnockoutRoute(startSlot) {
     return route;
 }
 
-function resolveJapanRouteSlotView(slot, entrySlot, projectedStandings) {
+function resolveJapanRouteSlotView(slot, entrySlot, match, projectedStandings) {
     if (slot === entrySlot) {
         const sourceMatch = /^W(\d+)$/.exec(slot || "");
         return {
@@ -3301,7 +3308,60 @@ function resolveJapanRouteSlotView(slot, entrySlot, projectedStandings) {
         };
     }
 
-    return resolveProjectedSlotView(slot, projectedStandings);
+    return resolveBracketMatchSlotView(match, slot, projectedStandings);
+}
+
+function resolveBracketMatchSlotView(match, slot, projectedStandings) {
+    const projected = resolveProjectedSlotView(slot, projectedStandings);
+    const side = getMatchSideBySlot(match, slot);
+    const known = getKnownMatchSideView(match, side);
+    if (!known) return projected;
+
+    return {
+        ...projected,
+        ...known,
+        sub: formatRouteSlotLabel(slot),
+        slotLabel: slot,
+        known: true
+    };
+}
+
+function getMatchSideBySlot(match, slot) {
+    if (!match || !slot) return "";
+    if (match.a === slot) return "home";
+    if (match.b === slot) return "away";
+    return "";
+}
+
+function getKnownMatchSideView(match, side) {
+    if (!match || !side) return null;
+    const isHome = side === "home";
+    const name = isHome ? match.home : match.away;
+    if (!name || name === "未定") return null;
+
+    return {
+        name,
+        code: (isHome ? match.homeCode : match.awayCode) || ""
+    };
+}
+
+function mergeKnownOpponentIntoExpectedSlot(expectedOpponent, opponentView) {
+    if (!expectedOpponent || !opponentView?.known) return expectedOpponent;
+
+    const groupSnapshot = expectedOpponent.groupSnapshot || [];
+    const snapshotMatch = groupSnapshot.find((team) => team.name === opponentView.name);
+    const team = {
+        ...(snapshotMatch || expectedOpponent.team),
+        name: opponentView.name,
+        code: opponentView.code || snapshotMatch?.code || expectedOpponent.team.code || ""
+    };
+
+    return {
+        ...expectedOpponent,
+        team,
+        groupRank: snapshotMatch ? groupSnapshot.indexOf(snapshotMatch) + 1 : expectedOpponent.groupRank,
+        slotLabel: `${formatRouteSlotLabel(expectedOpponent.slot)}確定`
+    };
 }
 
 function resolveProjectedSlotView(slot, projectedStandings) {
@@ -3469,6 +3529,20 @@ function getProjectedGroupTeams(group) {
 function formatJapanMatchLabel(match) {
     if (!match) return "Match未定";
     return `M${match.number} / ${formatShortDate(match.date)}`;
+}
+
+function formatJapanMatchupLabel(match, projectedStandings) {
+    if (!match) return "未定";
+    const left = resolveBracketMatchSlotView(match, match.a, projectedStandings);
+    const right = resolveBracketMatchSlotView(match, match.b, projectedStandings);
+    return `${left.name} vs ${right.name}`;
+}
+
+function formatJapanRouteMatchupLabel(match, entrySlot, projectedStandings) {
+    if (!match) return "未定";
+    const left = resolveJapanRouteSlotView(match.a, entrySlot, match, projectedStandings);
+    const right = resolveJapanRouteSlotView(match.b, entrySlot, match, projectedStandings);
+    return `${left.name} vs ${right.name}`;
 }
 
 function formatProjectedTeamRecord(team) {
