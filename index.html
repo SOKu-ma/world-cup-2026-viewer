@@ -3047,22 +3047,23 @@ function createFactMatchView(match, entrantContext) {
     const left = resolveFactBracketSide(match, "home", entrantContext);
     const right = resolveFactBracketSide(match, "away", entrantContext);
     const hasResult = hasScore(match);
+    const winnerSide = getResolvedWinnerSide(match);
     return {
-        score: hasResult ? `${scoreValue(match.homeScore)}-${scoreValue(match.awayScore)}` : "",
+        score: hasResult ? formatFactBracketScore(match) : "",
         teams: [
             {
                 name: left.main,
                 code: left.code,
                 sub: left.sub,
                 score: hasResult ? scoreValue(match.homeScore) : "",
-                winner: hasResult && match.homeScore > match.awayScore
+                winner: winnerSide === "home"
             },
             {
                 name: right.main,
                 code: right.code,
                 sub: right.sub,
                 score: hasResult ? scoreValue(match.awayScore) : "",
-                winner: hasResult && match.awayScore > match.homeScore
+                winner: winnerSide === "away"
             }
         ]
     };
@@ -3070,6 +3071,14 @@ function createFactMatchView(match, entrantContext) {
 
 function compactScoreLabel(score) {
     return score.replace(" 延長", " 延").replace(" PK ", " PK");
+}
+
+function formatFactBracketScore(match) {
+    const baseScore = `${scoreValue(match.homeScore)}-${scoreValue(match.awayScore)}`;
+    if (Number.isFinite(match.homePenaltyScore) && Number.isFinite(match.awayPenaltyScore)) {
+        return `${baseScore} PK ${match.homePenaltyScore}-${match.awayPenaltyScore}`;
+    }
+    return baseScore;
 }
 
 function computeStandings(matches, officialOrder = {}) {
@@ -3134,6 +3143,7 @@ function ensureTeam(group, name, code, seed) {
 function buildFactEntrantContext(groupData) {
     const standings = Object.fromEntries(Object.entries(groupData).map(([group, teams]) => [group, teams]));
     const progress = getGroupProgress(state.matches);
+    const bracketByNumber = new Map(state.bracket.map((match) => [Number(match.number), match]));
     const completedGroups = new Set(GROUPS.filter((group) => isGroupComplete(group, progress)));
     const allGroupsComplete = GROUPS.every((group) => completedGroups.has(group));
     const thirdAssignments = {};
@@ -3147,7 +3157,7 @@ function buildFactEntrantContext(groupData) {
         Object.assign(thirdAssignments, assignThirdTeams(bestThirdTeams));
     }
 
-    return { standings, progress, completedGroups, allGroupsComplete, thirdAssignments };
+    return { standings, progress, completedGroups, allGroupsComplete, thirdAssignments, bracketByNumber };
 }
 
 function getGroupProgress(matches) {
@@ -3197,6 +3207,8 @@ function resolveFactBracketSide(match, side, entrantContext) {
 
 function resolveFactSlot(slot, entrantContext = {}, matchNumber = null) {
     if (!slot) return { main: "未定", sub: "" };
+    const knockoutSource = resolveCompletedKnockoutSourceSlot(slot, entrantContext);
+    if (knockoutSource) return knockoutSource;
     if (/^W\d+$/.test(slot)) return { main: `M${slot.slice(1)} 勝者`, sub: "" };
     if (/^RU\d+$/.test(slot)) return { main: `M${slot.slice(2)} 敗者`, sub: "" };
 
@@ -3244,6 +3256,49 @@ function resolveFactSlot(slot, entrantContext = {}, matchNumber = null) {
     }
 
     return { main: slot, sub: "" };
+}
+
+function resolveCompletedKnockoutSourceSlot(slot, entrantContext = {}) {
+    const winner = /^W(\d+)$/.exec(slot || "");
+    const runnerUp = /^RU(\d+)$/.exec(slot || "");
+    const matchNumber = Number(winner?.[1] || runnerUp?.[1]);
+    if (!matchNumber) return null;
+
+    const source = entrantContext.bracketByNumber?.get(matchNumber)
+        || state.bracket.find((match) => Number(match.number) === matchNumber);
+    const winnerSide = getResolvedWinnerSide(source);
+    if (!source || source.status !== "final" || !winnerSide) {
+        return null;
+    }
+
+    const useHome = winner ? winnerSide === "home" : winnerSide === "away";
+    const main = useHome ? source.home : source.away;
+    if (!main || main === "未定") return null;
+
+    return {
+        main,
+        code: (useHome ? source.homeCode : source.awayCode) || "",
+        sub: `M${matchNumber} ${winner ? "勝者" : "敗者"}`
+    };
+}
+
+function getResolvedWinnerSide(match) {
+    if (!match) return "";
+    if (match.winnerCode) {
+        if (match.winnerCode === match.homeCode) return "home";
+        if (match.winnerCode === match.awayCode) return "away";
+    }
+    if (match.winner) {
+        if (match.winner === match.home) return "home";
+        if (match.winner === match.away) return "away";
+    }
+    if (hasScore(match) && match.homeScore !== match.awayScore) {
+        return match.homeScore > match.awayScore ? "home" : "away";
+    }
+    if (Number.isFinite(match.homePenaltyScore) && Number.isFinite(match.awayPenaltyScore) && match.homePenaltyScore !== match.awayPenaltyScore) {
+        return match.homePenaltyScore > match.awayPenaltyScore ? "home" : "away";
+    }
+    return "";
 }
 
 function getAssignedThirdTeam(slot, matchNumber, entrantContext) {
