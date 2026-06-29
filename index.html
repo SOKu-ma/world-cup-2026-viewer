@@ -596,9 +596,16 @@
             align-items: center;
             gap: 5px;
             min-width: 0;
+            padding: 3px 5px;
+            border-radius: 5px;
             font-size: 12px;
             font-weight: 900;
             line-height: 1.25;
+        }
+
+        .route-branch-side.is-winner {
+            background: var(--green-soft);
+            color: var(--green);
         }
 
         .route-branch-side:last-child {
@@ -617,6 +624,25 @@
             color: var(--muted);
             font-size: 10px;
             font-weight: 900;
+        }
+
+        .route-branch-score {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 38px;
+            padding: 4px 6px;
+            border-radius: 999px;
+            background: #eef2f7;
+            color: var(--ink);
+            font-size: 11px;
+            font-weight: 900;
+            white-space: nowrap;
+        }
+
+        .route-branch-score.is-final {
+            background: var(--green-soft);
+            color: var(--green);
         }
 
         .groups-container {
@@ -2681,6 +2707,9 @@ function renderJapanRouteBranch(slot, projectedStandings) {
 function renderJapanBranchMatch(match, projectedStandings) {
     const left = resolveBracketMatchSlotView(match, match.a, projectedStandings);
     const right = resolveBracketMatchSlotView(match, match.b, projectedStandings);
+    const winnerSide = getResolvedWinnerSide(match);
+    const scoreLabel = hasScore(match) ? formatFactBracketScore(match) : "vs";
+    const scoreClass = hasScore(match) ? "route-branch-score is-final" : "route-vs";
     return `
         <div class="route-branch-match">
             <div class="route-branch-match-head">
@@ -2688,18 +2717,18 @@ function renderJapanBranchMatch(match, projectedStandings) {
                 <span>${escapeHtml(formatShortDate(match.date))}</span>
             </div>
             <div class="route-branch-sides">
-                ${renderJapanBranchSide(left)}
-                <span class="route-vs">vs</span>
-                ${renderJapanBranchSide(right)}
+                ${renderJapanBranchSide(left, winnerSide === "home")}
+                <span class="${scoreClass}">${escapeHtml(scoreLabel)}</span>
+                ${renderJapanBranchSide(right, winnerSide === "away")}
             </div>
         </div>
     `;
 }
 
-function renderJapanBranchSide(view) {
+function renderJapanBranchSide(view, isWinner = false) {
     const flag = view.code ? renderTeamFlagOnly(view.name, view.code) : "";
     return `
-        <span class="route-branch-side" title="${escapeHtml(view.sub || view.slotLabel || view.name)}">
+        <span class="route-branch-side ${isWinner ? "is-winner" : ""}" title="${escapeHtml(view.sub || view.slotLabel || view.name)}">
             ${flag}
             <span class="route-branch-side-text">${escapeHtml(view.name)}</span>
         </span>
