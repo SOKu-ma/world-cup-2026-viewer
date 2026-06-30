@@ -279,6 +279,14 @@
             border-top: 4px solid var(--red);
         }
 
+        .japan-path-card.is-advanced {
+            border-top: 4px solid var(--green);
+        }
+
+        .japan-path-card.is-eliminated {
+            border-top: 4px solid var(--navy);
+        }
+
         .path-kicker {
             color: var(--muted);
             font-size: 12px;
@@ -309,6 +317,33 @@
             width: 28px;
             height: 22px;
             font-size: 18px;
+        }
+
+        .path-result-line {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            max-width: 100%;
+            flex-wrap: wrap;
+        }
+
+        .path-result-team {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .path-score {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 52px;
+            padding: 3px 8px;
+            border-radius: 999px;
+            background: #eef2f7;
+            color: var(--ink);
+            font-size: 18px;
+            line-height: 1.1;
         }
 
         .path-route {
@@ -511,6 +546,13 @@
             font-weight: 900;
         }
 
+        .route-team-row.is-route-focus {
+            border-color: rgba(15, 138, 95, 0.45);
+            background: var(--green-soft);
+            color: var(--green);
+            font-weight: 900;
+        }
+
         .route-team-main {
             min-width: 0;
         }
@@ -555,6 +597,11 @@
         .route-team-row.is-japan .route-slot-code {
             background: #fff;
             color: #8f2424;
+        }
+
+        .route-team-row.is-route-focus .route-slot-code {
+            background: #fff;
+            color: var(--green);
         }
 
         .route-branch {
@@ -1566,7 +1613,7 @@
         <div class="header-row">
             <div>
                 <h1>World Cup 2026</h1>
-                <p class="subtitle">FACT、カレンダー、個人記録、シミュレーション、日本の勝ち上がりルートを切り替えて、グループリーグと決勝トーナメントを確認できます。</p>
+                <p class="subtitle">FACT、カレンダー、個人記録、シミュレーション、日本の結果とルートを切り替えて、グループリーグと決勝トーナメントを確認できます。</p>
             </div>
             <div class="header-controls">
                 <div class="mode-switch" role="tablist" aria-label="表示モード">
@@ -2596,16 +2643,16 @@ function renderJapanPath() {
 
     const projectedStandings = getJapanProjectedStandings();
     const confirmedScenario = createJapanConfirmedScenario(projectedStandings);
-    const route = buildJapanKnockoutRoute(JAPAN_CONFIRMED_SLOT);
+    const japanStatus = createJapanKnockoutStatus(confirmedScenario);
+    const route = buildJapanKnockoutRoute(japanStatus.routeStartSlot);
     const opponentName = confirmedScenario.opponentLabel || "未定";
-    const japanRouteHeading = opponentName !== "未定" ? `${opponentName}戦からの勝ち上がり先` : "日本の勝ち上がり先";
-    const japanRouteSummary = opponentName !== "未定" ? `${opponentName}戦から始まる山` : "日本の勝ち上がり先";
+    const japanRouteSummary = getJapanRouteSummary(japanStatus, opponentName);
 
     app.innerHTML = `
         <div class="toolbar">
             <div class="source-line">
                 <strong>JAPAN モード</strong><br>
-                日本はグループ ${escapeHtml(JAPAN_CONFIRMED_GROUP)} 2位通過として、${escapeHtml(japanRouteSummary)}を表示します。データ根拠:
+                ${escapeHtml(getJapanModeSummary(japanStatus, japanRouteSummary))}
                 <a href="https://digitalhub.fifa.com/m/636f5c9c6f29771f/original/FWC2026_regulations_EN.pdf" target="_blank" rel="noopener noreferrer">FIFA World Cup 2026 Regulations</a>
                 / <a href="https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026" target="_blank" rel="noopener noreferrer">FIFA.com</a>
                 / <a href="https://inside.fifa.com/fifa-world-ranking/men" target="_blank" rel="noopener noreferrer">FIFA/Coca-Cola Men's World Ranking</a>
@@ -2614,31 +2661,44 @@ function renderJapanPath() {
         ${state.factError ? `<div class="error-box">${escapeHtml(state.factError)}</div>` : ""}
         <section>
             <div class="section-head">
-                <h2>日本の確定カード</h2>
-                <p class="section-note">日本はF組2位のため、ラウンド32では${escapeHtml(opponentName)}と対戦します。JAPANタブは同梱データのベスト32組み合わせを優先して表示します。</p>
+                <h2>${escapeHtml(getJapanPrimarySectionTitle(japanStatus))}</h2>
+                <p class="section-note">${escapeHtml(getJapanPrimarySectionNote(japanStatus, opponentName))}</p>
             </div>
             <div class="japan-path-grid">
-                ${renderJapanConfirmedScenarioCard(confirmedScenario)}
+                ${renderJapanConfirmedScenarioCard(confirmedScenario, japanStatus)}
             </div>
             <div class="japan-note-panel">
-                <strong>前提:</strong> このモードは日本を ${escapeHtml(JAPAN_CONFIRMED_SLOT)}（F組2位）に固定しています。ベスト32で確定しているチーム名は同梱データを優先し、以降の相手候補はFACTモードと同じ現在順位表を使って勝ち上がり先の枠を展開しています。
+                <strong>前提:</strong> ${escapeHtml(getJapanAssumptionNote(japanStatus))}
             </div>
         </section>
         <section>
             <div class="section-head">
-                <h2>${escapeHtml(japanRouteHeading)}</h2>
-                <p class="section-note">日本が各試合を勝ち上がった場合に入る次の試合と、その反対側の組み合わせを決勝まで表示します。</p>
+                <h2>${escapeHtml(getJapanRouteHeading(japanStatus, opponentName))}</h2>
+                <p class="section-note">${escapeHtml(getJapanRouteNote(japanStatus))}</p>
             </div>
             ${route.length ? `
                 <div class="japan-route-grid">
-                    ${route.map((step, index) => renderJapanRouteCard(step, index, projectedStandings)).join("")}
+                    ${route.map((step, index) => renderJapanRouteCard(step, index, projectedStandings, japanStatus)).join("")}
                 </div>
-            ` : `<div class="empty-panel">日本の勝ち上がりルートを表示できませんでした。</div>`}
+            ` : `<div class="empty-panel">JAPANタブのルートを表示できませんでした。</div>`}
         </section>
     `;
 }
 
-function renderJapanConfirmedScenarioCard(scenario) {
+function renderJapanConfirmedScenarioCard(scenario, japanStatus) {
+    if (japanStatus.state === "advanced" || japanStatus.state === "eliminated") {
+        const cardClass = japanStatus.state === "advanced" ? "is-advanced" : "is-eliminated";
+        return `
+            <article class="japan-path-card ${cardClass}">
+                <div class="path-kicker">${escapeHtml(formatJapanMatchLabel(scenario.match))}</div>
+                <h3 class="path-title">${escapeHtml(getJapanResultTitle(japanStatus))}</h3>
+                <div class="path-opponent">${renderJapanResultHeadline(japanStatus)}</div>
+                <div class="path-route">${escapeHtml(scenario.routeLabel)}</div>
+                <p class="path-meta">${escapeHtml(getJapanResultMeta(japanStatus))}</p>
+            </article>
+        `;
+    }
+
     return `
         <article class="japan-path-card is-confirmed">
             <div class="path-kicker">${escapeHtml(scenario.japanSlotLabel)}</div>
@@ -2651,10 +2711,10 @@ function renderJapanConfirmedScenarioCard(scenario) {
     `;
 }
 
-function renderJapanRouteCard(step, index, projectedStandings) {
+function renderJapanRouteCard(step, index, projectedStandings, japanStatus) {
     const match = step.match;
     const title = STAGE_LABELS[match.stage] || match.stage;
-    const matchupLabel = formatJapanRouteMatchupLabel(match, step.entrySlot, projectedStandings);
+    const matchupLabel = formatJapanRouteMatchupLabel(match, step.entrySlot, projectedStandings, japanStatus);
     return `
         <article class="japan-route-card ${index === 0 ? "is-first" : ""}">
             <div class="route-card-head">
@@ -2666,18 +2726,19 @@ function renderJapanRouteCard(step, index, projectedStandings) {
             </div>
             <div class="route-match-meta">${escapeHtml(matchupLabel)}</div>
             <div class="route-team-list">
-                ${[match.a, match.b].map((slot) => renderJapanRouteTeamRow(slot, step.entrySlot, match, projectedStandings)).join("")}
+                ${[match.a, match.b].map((slot) => renderJapanRouteTeamRow(slot, step.entrySlot, match, projectedStandings, japanStatus)).join("")}
             </div>
             ${renderJapanRouteBranch(step.opponentSlot, projectedStandings)}
         </article>
     `;
 }
 
-function renderJapanRouteTeamRow(slot, entrySlot, match, projectedStandings) {
-    const view = resolveJapanRouteSlotView(slot, entrySlot, match, projectedStandings);
+function renderJapanRouteTeamRow(slot, entrySlot, match, projectedStandings, japanStatus) {
+    const view = resolveJapanRouteSlotView(slot, entrySlot, match, projectedStandings, japanStatus);
     const flag = view.code ? renderTeamFlagOnly(view.name, view.code) : "";
+    const focusClass = view.focus ? (view.focusType === "route" ? "is-route-focus" : "is-japan") : "";
     return `
-        <div class="route-team-row ${view.focus ? "is-japan" : ""}">
+        <div class="route-team-row ${focusClass}">
             <div class="route-team-main">
                 <span class="route-team-name">
                     ${flag}
@@ -3348,6 +3409,8 @@ function createJapanConfirmedScenario(projectedStandings) {
     );
 
     return {
+        match,
+        opponentSlot,
         title: `${JAPAN_CONFIRMED_GROUP}組${JAPAN_CONFIRMED_RANK}位通過`,
         japanSlotLabel: `${JAPAN_CONFIRMED_SLOT} / ${JAPAN_CONFIRMED_GROUP}組${JAPAN_CONFIRMED_RANK}位`,
         opponentLabel: opponent.name || "未定",
@@ -3355,6 +3418,151 @@ function createJapanConfirmedScenario(projectedStandings) {
         routeLabel: match ? formatJapanMatchupLabel(match, projectedStandings) : `${JAPAN_CONFIRMED_SLOT} vs 未定`,
         matchLabel: formatJapanMatchLabel(match)
     };
+}
+
+function createJapanKnockoutStatus(scenario) {
+    const match = scenario.match;
+    const japanSide = getMatchSideBySlot(match, JAPAN_CONFIRMED_SLOT);
+    const opponentSide = japanSide === "home" ? "away" : (japanSide === "away" ? "home" : "");
+    const japanTeam = getBracketMatchTeam(match, japanSide, {
+        name: JAPAN_TEAM,
+        code: FIFA_RANKINGS[JAPAN_TEAM]?.code || "JPN"
+    });
+    const opponentTeam = getBracketMatchTeam(match, opponentSide, {
+        name: scenario.opponentLabel || "未定",
+        code: scenario.expectedOpponent?.team?.code || ""
+    });
+    const winnerSide = getResolvedWinnerSide(match);
+    const hasFinalWinner = Boolean(match && match.status === "final" && japanSide && winnerSide);
+    const japanWon = hasFinalWinner && winnerSide === japanSide;
+    const eliminated = hasFinalWinner && winnerSide !== japanSide;
+    const winnerTeam = hasFinalWinner
+        ? getBracketMatchTeam(match, winnerSide, japanWon ? japanTeam : opponentTeam)
+        : japanTeam;
+
+    return {
+        state: eliminated ? "eliminated" : (japanWon ? "advanced" : "pending"),
+        match,
+        japanSide,
+        opponentSide,
+        japanTeam,
+        opponentTeam,
+        winnerTeam,
+        routeFocusTeam: eliminated ? winnerTeam : japanTeam,
+        routeStartSlot: hasFinalWinner ? `W${match.number}` : JAPAN_CONFIRMED_SLOT
+    };
+}
+
+function getBracketMatchTeam(match, side, fallback = {}) {
+    const fallbackName = fallback.name || "未定";
+    const fallbackCode = fallback.code || "";
+    if (!match || !side) {
+        return { name: fallbackName, code: fallbackCode, score: null, side };
+    }
+
+    const isHome = side === "home";
+    return {
+        name: (isHome ? match.home : match.away) || fallbackName,
+        code: (isHome ? match.homeCode : match.awayCode) || fallbackCode,
+        score: isHome ? match.homeScore : match.awayScore,
+        side
+    };
+}
+
+function getJapanRouteSummary(japanStatus, opponentName) {
+    if (japanStatus.state === "eliminated") {
+        return `${japanStatus.routeFocusTeam.name}が引き継ぐ山`;
+    }
+    if (japanStatus.state === "advanced") {
+        return "日本の次戦以降の山";
+    }
+    return opponentName !== "未定" ? `${opponentName}戦から始まる山` : "日本の勝ち上がり先";
+}
+
+function getJapanModeSummary(japanStatus, routeSummary) {
+    if (japanStatus.state === "eliminated") {
+        return `日本はグループ ${JAPAN_CONFIRMED_GROUP} 2位でラウンド32に進み、${japanStatus.opponentTeam.name}に${formatJapanPerspectiveScore(japanStatus)}で敗退しました。以降は${routeSummary}を表示します。データ根拠:`;
+    }
+    if (japanStatus.state === "advanced") {
+        return `日本はグループ ${JAPAN_CONFIRMED_GROUP} 2位でラウンド32に進み、${japanStatus.opponentTeam.name}に${formatJapanPerspectiveScore(japanStatus)}で勝利しました。以降は${routeSummary}を表示します。データ根拠:`;
+    }
+    return `日本はグループ ${JAPAN_CONFIRMED_GROUP} 2位通過として、${routeSummary}を表示します。データ根拠:`;
+}
+
+function getJapanPrimarySectionTitle(japanStatus) {
+    if (japanStatus.state === "eliminated" || japanStatus.state === "advanced") return "日本の試合結果";
+    return "日本の確定カード";
+}
+
+function getJapanPrimarySectionNote(japanStatus, opponentName) {
+    if (japanStatus.state === "eliminated") {
+        return `日本はF組2位としてラウンド32へ進み、M${japanStatus.match.number}で${japanStatus.opponentTeam.name}に${formatJapanPerspectiveScore(japanStatus)}で敗退しました。JAPANタブは同梱データの結果を優先して表示します。`;
+    }
+    if (japanStatus.state === "advanced") {
+        return `日本はF組2位としてラウンド32へ進み、M${japanStatus.match.number}で${japanStatus.opponentTeam.name}に${formatJapanPerspectiveScore(japanStatus)}で勝利しました。JAPANタブは同梱データの結果を優先して表示します。`;
+    }
+    return `日本はF組2位のため、ラウンド32では${opponentName}と対戦します。JAPANタブは同梱データのベスト32組み合わせを優先して表示します。`;
+}
+
+function getJapanAssumptionNote(japanStatus) {
+    if (japanStatus.state === "eliminated") {
+        return `このモードは日本の ${JAPAN_CONFIRMED_SLOT}（F組2位）とM${japanStatus.match.number}敗退結果を同梱データから反映しています。以降はM${japanStatus.match.number}勝者の${japanStatus.routeFocusTeam.name}を起点に、FACTモードと同じブラケットを展開しています。`;
+    }
+    if (japanStatus.state === "advanced") {
+        return `このモードは日本の ${JAPAN_CONFIRMED_SLOT}（F組2位）とM${japanStatus.match.number}勝利結果を同梱データから反映しています。以降は日本を起点に、FACTモードと同じブラケットを展開しています。`;
+    }
+    return `このモードは日本を ${JAPAN_CONFIRMED_SLOT}（F組2位）に固定しています。ベスト32で確定しているチーム名は同梱データを優先し、以降の相手候補はFACTモードと同じ現在順位表を使って勝ち上がり先の枠を展開しています。`;
+}
+
+function getJapanRouteHeading(japanStatus, opponentName) {
+    if (japanStatus.state === "eliminated") return `${japanStatus.routeFocusTeam.name}が勝ち上がる山`;
+    if (japanStatus.state === "advanced") return "日本の次戦以降";
+    return opponentName !== "未定" ? `${opponentName}戦からの勝ち上がり先` : "日本の勝ち上がり先";
+}
+
+function getJapanRouteNote(japanStatus) {
+    if (japanStatus.state === "eliminated") {
+        return `日本を破った${japanStatus.routeFocusTeam.name}がM${japanStatus.match.number}勝者として入る次の試合と、その反対側の組み合わせを決勝まで表示します。`;
+    }
+    if (japanStatus.state === "advanced") {
+        return `日本がM${japanStatus.match.number}勝者として入る次の試合と、その反対側の組み合わせを決勝まで表示します。`;
+    }
+    return "日本が各試合を勝ち上がった場合に入る次の試合と、その反対側の組み合わせを決勝まで表示します。";
+}
+
+function getJapanResultTitle(japanStatus) {
+    return japanStatus.state === "advanced" ? "ラウンド32突破" : "ラウンド32敗退";
+}
+
+function renderJapanResultHeadline(japanStatus) {
+    const home = getBracketMatchTeam(japanStatus.match, "home");
+    const away = getBracketMatchTeam(japanStatus.match, "away");
+    return `
+        <span class="path-result-line">
+            <span class="path-result-team">${renderTeamFlagOnly(home.name, home.code)}${escapeHtml(home.name)}</span>
+            <span class="path-score">${escapeHtml(scoreValue(home.score))}-${escapeHtml(scoreValue(away.score))}</span>
+            <span class="path-result-team">${renderTeamFlagOnly(away.name, away.code)}${escapeHtml(away.name)}</span>
+        </span>
+    `;
+}
+
+function getJapanResultMeta(japanStatus) {
+    const resultLabel = japanStatus.state === "advanced" ? "日本が次戦へ" : `${japanStatus.winnerTeam.name}が次戦へ`;
+    return `${JAPAN_CONFIRMED_SLOT} / F組2位 / ${resultLabel}`;
+}
+
+function formatJapanPerspectiveScore(japanStatus) {
+    if (!hasScore(japanStatus.match)) return "スコア未確定";
+    return `${scoreValue(japanStatus.japanTeam.score)}-${scoreValue(japanStatus.opponentTeam.score)}`;
+}
+
+function formatJapanRouteFocusSub(japanStatus, sourceMatch) {
+    if (!sourceMatch) return `${JAPAN_CONFIRMED_GROUP}組${JAPAN_CONFIRMED_RANK}位`;
+    const sourceNumber = Number(sourceMatch[1]);
+    if (japanStatus?.state === "eliminated" && Number(japanStatus.match?.number) === sourceNumber) {
+        return `日本を破りM${sourceNumber}勝者として勝ち上がり`;
+    }
+    return `M${sourceNumber}勝者として勝ち上がり`;
 }
 
 function buildJapanKnockoutRoute(startSlot) {
@@ -3380,15 +3588,20 @@ function buildJapanKnockoutRoute(startSlot) {
     return route;
 }
 
-function resolveJapanRouteSlotView(slot, entrySlot, match, projectedStandings) {
+function resolveJapanRouteSlotView(slot, entrySlot, match, projectedStandings, japanStatus) {
     if (slot === entrySlot) {
         const sourceMatch = /^W(\d+)$/.exec(slot || "");
-        return {
+        const focusTeam = japanStatus?.routeFocusTeam || {
             name: JAPAN_TEAM,
-            code: FIFA_RANKINGS[JAPAN_TEAM]?.code || "JPN",
-            sub: sourceMatch ? `M${sourceMatch[1]}勝者として勝ち上がり` : `${JAPAN_CONFIRMED_GROUP}組${JAPAN_CONFIRMED_RANK}位`,
+            code: FIFA_RANKINGS[JAPAN_TEAM]?.code || "JPN"
+        };
+        return {
+            name: focusTeam.name || JAPAN_TEAM,
+            code: focusTeam.code || FIFA_RANKINGS[JAPAN_TEAM]?.code || "JPN",
+            sub: formatJapanRouteFocusSub(japanStatus, sourceMatch),
             slotLabel: slot,
-            focus: true
+            focus: true,
+            focusType: japanStatus?.state === "eliminated" ? "route" : "japan"
         };
     }
 
@@ -3622,10 +3835,10 @@ function formatJapanMatchupLabel(match, projectedStandings) {
     return `${left.name} vs ${right.name}`;
 }
 
-function formatJapanRouteMatchupLabel(match, entrySlot, projectedStandings) {
+function formatJapanRouteMatchupLabel(match, entrySlot, projectedStandings, japanStatus) {
     if (!match) return "未定";
-    const left = resolveJapanRouteSlotView(match.a, entrySlot, match, projectedStandings);
-    const right = resolveJapanRouteSlotView(match.b, entrySlot, match, projectedStandings);
+    const left = resolveJapanRouteSlotView(match.a, entrySlot, match, projectedStandings, japanStatus);
+    const right = resolveJapanRouteSlotView(match.b, entrySlot, match, projectedStandings, japanStatus);
     return `${left.name} vs ${right.name}`;
 }
 
