@@ -6,6 +6,13 @@
     <meta name="robots" content="noindex,nofollow,noarchive,noimageindex">
     <meta name="googlebot" content="noindex,nofollow,noarchive,noimageindex">
     <title>World Cup 2026 FACT / Simulator</title>
+    <script>
+        try {
+            document.documentElement.dataset.theme = localStorage.getItem("worldCup2026Theme") === "light" ? "light" : "dark";
+        } catch (error) {
+            document.documentElement.dataset.theme = "dark";
+        }
+    </script>
     <style>
         :root {
             --ink: #1f2933;
@@ -22,6 +29,25 @@
             --red-soft: #ffe4e4;
             --blue-soft: #e8f1ff;
             --shadow: 0 12px 26px rgba(20, 32, 48, 0.08);
+            color-scheme: light;
+        }
+
+        :root[data-theme="dark"] {
+            --ink: #e6edf5;
+            --muted: #a3b1c2;
+            --line: #344255;
+            --panel: #18222e;
+            --canvas: #0e151e;
+            --navy: #91c7f2;
+            --green: #60d9aa;
+            --green-soft: #153c32;
+            --amber: #f4c96a;
+            --amber-soft: #453818;
+            --red: #ff747d;
+            --red-soft: #48252a;
+            --blue-soft: #1b3550;
+            --shadow: 0 12px 26px rgba(0, 0, 0, 0.24);
+            color-scheme: dark;
         }
 
         * { box-sizing: border-box; }
@@ -32,6 +58,7 @@
             color: var(--ink);
             font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
             letter-spacing: 0;
+            transition: background-color 0.2s ease, color 0.2s ease;
         }
 
         .page {
@@ -90,6 +117,7 @@
         .mode-button,
         .update-button,
         .records-language-button,
+        .theme-toggle,
         .action-button,
         .primary-button {
             min-height: 40px;
@@ -144,6 +172,7 @@
         .mode-button:focus-visible,
         .update-button:focus-visible,
         .records-language-button:focus-visible,
+        .theme-toggle:focus-visible,
         .action-button:focus-visible,
         .primary-button:focus-visible {
             outline: 3px solid rgba(23, 50, 77, 0.24);
@@ -163,6 +192,22 @@
             background: var(--panel);
             border-color: var(--line);
             color: var(--ink);
+        }
+
+        .theme-toggle {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+            background: var(--panel);
+            border-color: var(--line);
+            color: var(--ink);
+            white-space: nowrap;
+        }
+
+        .theme-toggle-icon {
+            font-size: 16px;
+            line-height: 1;
         }
 
         .primary-button {
@@ -1539,6 +1584,67 @@
             font-weight: 700;
         }
 
+        :root[data-theme="dark"] .mode-switch,
+        :root[data-theme="dark"] .update-switch,
+        :root[data-theme="dark"] .records-language-switch,
+        :root[data-theme="dark"] .path-score,
+        :root[data-theme="dark"] .path-route,
+        :root[data-theme="dark"] .route-step-badge,
+        :root[data-theme="dark"] .route-slot-code,
+        :root[data-theme="dark"] .route-branch-score,
+        :root[data-theme="dark"] .score-display,
+        :root[data-theme="dark"] .status-scheduled,
+        :root[data-theme="dark"] .calendar-weekday,
+        :root[data-theme="dark"] .calendar-result.is-empty,
+        :root[data-theme="dark"] .record-board-count {
+            background: #222e3c;
+        }
+
+        :root[data-theme="dark"] .expected-team-panel,
+        :root[data-theme="dark"] .route-team-row,
+        :root[data-theme="dark"] .route-branch-match,
+        :root[data-theme="dark"] .fact-match-row,
+        :root[data-theme="dark"] .bracket-match-card,
+        :root[data-theme="dark"] .sim-match-card,
+        :root[data-theme="dark"] .calendar-match-card,
+        :root[data-theme="dark"] .tree-node.is-third {
+            background: #141d28;
+        }
+
+        :root[data-theme="dark"] th,
+        :root[data-theme="dark"] .calendar-month-title,
+        :root[data-theme="dark"] .calendar-day.is-muted,
+        :root[data-theme="dark"] .record-board-head,
+        :root[data-theme="dark"] .bracket-tree-toolbar {
+            background: #1c2734;
+        }
+
+        :root[data-theme="dark"] .calendar-day,
+        :root[data-theme="dark"] .tree-node,
+        :root[data-theme="dark"] .tree-node.is-center,
+        :root[data-theme="dark"] .route-team-row.is-japan .route-slot-code,
+        :root[data-theme="dark"] .route-team-row.is-route-focus .route-slot-code {
+            background: var(--panel);
+        }
+
+        :root[data-theme="dark"] .bracket-tree {
+            background:
+                linear-gradient(90deg, rgba(80, 96, 116, 0.3) 1px, transparent 1px) 0 0 / 200px 100%,
+                linear-gradient(180deg, #141d28 0%, #111923 100%);
+        }
+
+        :root[data-theme="dark"] .tree-edge { stroke: #9aa9ba; }
+        :root[data-theme="dark"] .tree-score { background: #263445; }
+        :root[data-theme="dark"] .team-flag { border-color: rgba(255, 255, 255, 0.22); }
+        :root[data-theme="dark"] .route-team-row.is-japan,
+        :root[data-theme="dark"] .route-team-row.is-japan .route-slot-code,
+        :root[data-theme="dark"] .tree-team-row.is-winner,
+        :root[data-theme="dark"] .error-box { color: #ffadb3; }
+
+        :root[data-theme="dark"] .toolbar {
+            background: rgba(14, 21, 30, 0.94);
+        }
+
         @media (max-width: 720px) {
             .page { padding: 12px; }
             .toolbar { position: static; align-items: stretch; flex-direction: column; }
@@ -1577,6 +1683,7 @@
             .records-language-switch {
                 width: 100%;
             }
+            .theme-toggle { flex: 1 1 100%; }
             .update-panel {
                 justify-items: stretch;
             }
@@ -1631,6 +1738,10 @@
                     </div>
                     <div class="refresh-status" data-refresh-status>未取得</div>
                 </div>
+                <button class="theme-toggle" type="button" data-theme-toggle aria-pressed="false" aria-label="ダークモードに切り替え">
+                    <span class="theme-toggle-icon" data-theme-icon aria-hidden="true">☾</span>
+                    <span data-theme-label>ダーク</span>
+                </button>
             </div>
         </div>
     </header>
@@ -1645,6 +1756,7 @@ const SNAPSHOT_URL = "data/fifa-2026-snapshot.json";
 const AUTO_REFRESH_INTERVAL_MS = 60 * 1000;
 const UPDATE_MODE_STORAGE_KEY = "worldCup2026UpdateMode";
 const RECORDS_LANGUAGE_STORAGE_KEY = "worldCup2026RecordsLanguage";
+const THEME_STORAGE_KEY = "worldCup2026Theme";
 
 const GROUPS = "ABCDEFGHIJKL".split("");
 const THIRD_PLACE_SLOTS = new Set(["3ABCDF", "3CDFGH", "3CEFHI", "3EHIJK", "3BEFIJ", "3AEHIJ", "3EFGIJ", "3DEIJL"]);
@@ -1978,7 +2090,18 @@ let state = {
 
 const app = document.getElementById("app");
 const refreshStatus = document.querySelector("[data-refresh-status]");
+const themeToggle = document.querySelector("[data-theme-toggle]");
 let autoRefreshTimer = null;
+
+themeToggle.addEventListener("click", () => {
+    const nextTheme = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
+    applyTheme(nextTheme);
+    try {
+        localStorage.setItem(THEME_STORAGE_KEY, nextTheme);
+    } catch (error) {
+        // Ignore storage failures; switching still works for this page session.
+    }
+});
 
 document.querySelectorAll("[data-mode]").forEach((button) => {
     button.addEventListener("click", () => {
@@ -2017,8 +2140,22 @@ app.addEventListener("click", (event) => {
     }
 });
 
+syncThemeControl();
 syncUpdateControls();
 loadFactData().finally(configureAutoRefresh);
+
+function applyTheme(theme) {
+    document.documentElement.dataset.theme = theme === "dark" ? "dark" : "light";
+    syncThemeControl();
+}
+
+function syncThemeControl() {
+    const isDark = document.documentElement.dataset.theme === "dark";
+    themeToggle.setAttribute("aria-pressed", String(isDark));
+    themeToggle.setAttribute("aria-label", isDark ? "ライトモードに切り替え" : "ダークモードに切り替え");
+    themeToggle.querySelector("[data-theme-icon]").textContent = isDark ? "☀" : "☾";
+    themeToggle.querySelector("[data-theme-label]").textContent = isDark ? "ライト" : "ダーク";
+}
 
 async function loadFactData({ silent = false } = {}) {
     if (!silent) state.factLoading = true;
