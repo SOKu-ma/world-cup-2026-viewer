@@ -1430,6 +1430,18 @@
             background: #fff;
         }
 
+        .tree-node.is-center.has-champion {
+            border-color: #d99a1e;
+            background:
+                linear-gradient(135deg, rgba(217, 154, 30, 0.18), transparent 42%),
+                linear-gradient(180deg, #fff8dc 0%, #fff 68%);
+            box-shadow: 0 9px 24px rgba(217, 154, 30, 0.24);
+        }
+
+        .tree-node.is-center.has-champion .tree-center-title {
+            color: #8f5f00;
+        }
+
         .tree-node.is-third {
             border-color: #8da0b7;
             background: #fbfcfe;
@@ -1543,13 +1555,25 @@
 
         .tree-champion {
             margin-top: 4px;
-            color: var(--red);
-            font-size: 15px;
+            padding: 5px 7px;
+            border: 1px solid rgba(217, 154, 30, 0.45);
+            border-radius: 7px;
+            background: rgba(255, 248, 220, 0.9);
+            color: #8f5f00;
+            font-size: 14px;
             font-weight: 900;
             line-height: 1.15;
             overflow: hidden;
             text-overflow: ellipsis;
-            white-space: nowrap;
+            white-space: normal;
+        }
+
+        .tree-champion-kicker {
+            display: block;
+            margin-bottom: 2px;
+            color: #b27600;
+            font-size: 9px;
+            font-weight: 900;
         }
 
         .champion-panel,
@@ -3081,8 +3105,18 @@ function renderFactBracket(groupData) {
     return renderBracketTree({
         mode: "fact",
         matches: state.bracket,
+        champion: getFactChampionName(),
         getMatchView: (match) => createFactMatchView(match, entrantContext)
     });
+}
+
+function getFactChampionName() {
+    const final = state.bracket.find((match) => match.stage === "Final") || state.bracket.find((match) => Number(match.number) === 104);
+    if (!final || final.status !== "final") return "";
+    const winnerSide = getResolvedWinnerSide(final);
+    if (winnerSide === "home") return final.home || final.winner || "";
+    if (winnerSide === "away") return final.away || final.winner || "";
+    return final.winner || "";
 }
 
 function renderBracketTree({ mode, matches, getMatchView, champion = "" }) {
@@ -3236,10 +3270,11 @@ function renderTreeStageLabels() {
 
 function renderTreeNode(node, getMatchView, champion) {
     const view = getMatchView(node.match);
-    const nodeClass = node.type === "final" ? "tree-node is-center" : (node.type === "third" ? "tree-node is-third" : "tree-node");
+    const isChampionFinal = node.type === "final" && champion;
+    const nodeClass = node.type === "final" ? `tree-node is-center ${isChampionFinal ? "has-champion" : ""}` : (node.type === "third" ? "tree-node is-third" : "tree-node");
     const title = node.type === "final" ? `<div class="tree-center-title">優勝決定戦</div>` : (node.type === "third" ? `<div class="tree-center-title">3位決定戦</div>` : "");
     const score = view.score ? `<span class="tree-inline-score">${escapeHtml(compactScoreLabel(view.score))}</span>` : "";
-    const championText = node.type === "final" && champion ? `<div class="tree-champion">優勝: ${escapeHtml(champion)}</div>` : "";
+    const championText = isChampionFinal ? `<div class="tree-champion"><span class="tree-champion-kicker">WORLD CHAMPION</span>優勝: ${escapeHtml(champion)}</div>` : "";
 
     return `
         <article class="${nodeClass}" style="left: ${node.x}px; top: ${node.y}px; width: ${node.w}px; height: ${node.h}px;">
